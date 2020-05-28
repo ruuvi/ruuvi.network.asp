@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RuuviTagApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,10 +7,14 @@ using System.Web.Mvc;
 
 namespace RuuviTagApp.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
+            // tämän pitäisi luoda tietokanta
+            var tag = db.RuuviTagModels.Find(1);
             return View();
         }
 
@@ -25,6 +30,15 @@ namespace RuuviTagApp.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
