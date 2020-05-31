@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -30,6 +31,31 @@ namespace RuuviTagApp.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult AddTag(RuuviTagModel tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ActionResult GetUserTags()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ActionResult AddTagList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ActionResult AddTagAlarm()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<JsonResult> GetTagData(string macAddress)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void Dispose(bool disposing)
