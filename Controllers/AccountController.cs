@@ -84,7 +84,6 @@ namespace RuuviTagApp.Controllers
                 case SignInStatus.RequiresVerification:
                     throw new NotImplementedException();
                 case SignInStatus.Failure:
-                    return ExternalLoginFailure();
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;

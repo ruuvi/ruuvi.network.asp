@@ -15,7 +15,7 @@ namespace RuuviTagApp.Controllers
         public ActionResult Index()
         {
             // tämän pitäisi luoda tietokanta
-            var tag = db.RuuviTagModels.Find(1);
+            //var tag = db.RuuviTagModels.Find(1);
             return View();
         }
 

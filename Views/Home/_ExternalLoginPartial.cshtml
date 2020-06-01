@@ -1,0 +1,12 @@
+﻿@model RuuviTagApp.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security;
+
+@{
+    var g = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes().First();
+}
+
+@using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-default" id="@g.AuthenticationType" name="provider" value="@g.AuthenticationType" title="Log in using your @g.Caption account">@g.AuthenticationType</button>
+}
