@@ -4,34 +4,78 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    </ul>
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </div>
+        </div>*@
+    <nav class="navbar navbar-expand-lg navbar-ruuvi fixed-top">
+        <a class="navbar-brand" href="#">
+            <img src="~/Images/web-ruuvi-logo-nega.png" width="135" height="28" alt="Ruuvi logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="main-nav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Add RuuviTag</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://shop.ruuvi.com/product/ruuvitag-1-pack/" target="blank">Get a new RuuviTag</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Groups</a>
+                </li>
+            </ul>
+            @*<form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>*@
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">App settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Help</a>
+                </li>
+            </ul>
         </div>
-    </div>
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer class="footer-ruuvi text-center">
+            <div class="footer-ruuvi-logo">
+                <img src="~/Images/web-ruuvi-logo-nega.png" width="130" height="25" alt="Ruuvi logo">
+            </div>
+            <div class="footer-ruuvi-copyrights">
+                <p>RUUVI INNOVATIONS LTD (OY) / FINLAND</p>
+            </div>
+            @*<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>*@
         </footer>
     </div>
 

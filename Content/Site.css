@@ -1,6 +1,10 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    font-family: 'Muli', sans-serif;
+    /*color: #666;*/
+    color: #fff;
+    background-color: #1a1a1a;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -21,4 +25,45 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.navbar-ruuvi {
+    background-color: #1a1a1a;
+}
+
+    .navbar-ruuvi .navbar-nav .nav-link {
+        /*color: #666;*/
+        color: #fff;
+        text-align: right;
+    }
+
+        .navbar-ruuvi .navbar-nav .nav-link:hover, .navbar-ruuvi .navbar-nav .nav-link:focus {
+            color: #00a99d;
+        }
+.navbar-ruuvi .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.footer-ruuvi {
+    background-color: #1a1a1a;
+    width: 100%;
+    float: left;
+    padding: 20px 0 0 0;
+}
+
+.footer-ruuvi-logo {
+    width: 100%;
+    float: left;
+    height: 30px;
+    text-indent: -9999px;
+    background: url(/Images/web-ruuvi-logo-nega.png) center top no-repeat;
+    background-image: url(/Images/web-ruuvi-logo-nega.png), none;
+    background-size: 100px 20px;
+    opacity: 0.5;
+}
+
+.footer-ruuvi-copyrights {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #666;
 }
