@@ -59,11 +59,11 @@ namespace RuuviTagApp
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = ConfigurationManager.AppSettings["googleClientID"],
-            //    ClientSecret = ConfigurationManager.AppSettings["googleClientSecret"]
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = ConfigurationManager.AppSettings["googleClientID"],
+                ClientSecret = ConfigurationManager.AppSettings["googleClientSecret"]
+            });
         }
     }
 }
