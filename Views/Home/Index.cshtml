@@ -44,4 +44,28 @@
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
+    @if (ViewBag.RenderRegisterModal ?? false)
+    {
+        <div style="background-color:green;min-width:15px;min-height:15px">@ViewBag.LoginProvider</div>
+    }
+    else
+    {
+        <div style="background-color:red;min-width:15px;min-height:15px">@ViewBag.LoginProvider</div>
+    }
 </div>
+<div id="divRegisterModal"></div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(window).on('load', function () {
+            var renderRegisterModal = @((ViewBag.RenderRegisterModal ?? false).ToString().ToLower());
+            if (renderRegisterModal) {
+                let url = `/Account/ExternalLoginConfirmation/?provider=${'@(ViewBag.LoginProvider)'}`;
+                $.get(url, (modal) => {
+                    $('#divRegisterModal').replaceWith(modal);
+                    $('#externalRegisterModal').modal('show');
+                });
+            }
+        });
+    </script>
+}
