@@ -16,10 +16,10 @@ namespace RuuviTagApp.Controllers
         {
             // tämän pitäisi luoda tietokanta
             //var tag = db.RuuviTagModels.Find(1);
-            ViewBag.RenderRegisterModal = true;
+            //ViewBag.RenderRegisterModal = true;
             //ViewBag.LoginProvider = "Google";
-            //ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
-            //ViewBag.LoginProvider = TempData["LoginProvider"];
+            ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
+            ViewBag.LoginProvider = TempData["LoginProvider"];
             return View();
         }
 

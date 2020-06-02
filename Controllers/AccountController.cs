@@ -135,8 +135,8 @@ namespace RuuviTagApp.Controllers
                 AddErrors(result);
             }
 
-            TempData["RenderRegisterModal"] = true;
-            return RedirectToAction("Index", "Home", model);
+            ViewBag.RenderRegisterModal = true;
+            return View("../Home/Index", model);
         }
 
         //

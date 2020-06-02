@@ -1,4 +1,4 @@
-﻿@model RuuviTagApp.Models.ExternalLoginListViewModel
+﻿@model RuuviTagApp.Models.ExternalLoginConfirmationViewModel
 @using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Home Page";
@@ -21,7 +21,7 @@
                 <a class="btn btn-sm btn-default" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
             }
         }
-        @Html.Partial("_ExternalLoginPartial", new RuuviTagApp.Models.ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+        @Html.Partial("_ExternalLoginPartial", new RuuviTagApp.Models.ExternalLoginListViewModel())
     </div>
 
 <div class="row">
