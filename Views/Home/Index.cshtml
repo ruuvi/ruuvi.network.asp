@@ -54,17 +54,17 @@
     }
 </div>
 <div id="divRegisterModal"></div>
-
+@Html.Partial("~/Views/Account/ExternalLoginConfirmation.cshtml")
 @section scripts{
     <script type="text/javascript">
         $(window).on('load', function () {
             var renderRegisterModal = @((ViewBag.RenderRegisterModal ?? false).ToString().ToLower());
             if (renderRegisterModal) {
-                let url = `/Account/ExternalLoginConfirmation/?provider=${'@(ViewBag.LoginProvider)'}`;
+                $('#externalRegisterModal').modal('show');
+                @*let url = `/Account/ExternalLoginConfirmation/?provider=${'@(ViewBag.LoginProvider)'}`;
                 $.get(url, (modal) => {
                     $('#divRegisterModal').replaceWith(modal);
-                    $('#externalRegisterModal').modal('show');
-                });
+                });*@
             }
         });
     </script>
