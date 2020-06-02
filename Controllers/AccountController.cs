@@ -112,7 +112,7 @@ namespace RuuviTagApp.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser() { UserName = model.UserName, Email = model.StoreEmail ? info.Email : string.Empty };
+                var user = new ApplicationUser() { UserName = model.UserName, Email = model.StoreEmail ? info.Email : null };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
