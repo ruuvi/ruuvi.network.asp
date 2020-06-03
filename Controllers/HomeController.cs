@@ -1,4 +1,5 @@
 ﻿using RuuviTagApp.Models;
+using RuuviTagApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,18 @@ namespace RuuviTagApp.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult MacAddress() => PartialView();
+
+        [HttpPost]
+        public ActionResult MacAddress(MacAddressModel mac)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", mac);
+            }
+            return RedirectToAction("Index");
         }
 
         public ActionResult AddTag(RuuviTagModel tag)
