@@ -36,8 +36,6 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
-        public ActionResult MacAddress() => PartialView();
-
         [HttpPost]
         public ActionResult MacAddress(MacAddressModel mac)
         {

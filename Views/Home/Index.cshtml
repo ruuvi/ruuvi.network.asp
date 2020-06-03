@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity;
+@using RuuviTagApp.Models;
+@using RuuviTagApp.ViewModels;
 @{
     ViewBag.Title = "Home Page";
     if (Request.IsAuthenticated)
@@ -13,9 +15,10 @@
     <div class="row">
         <div class="col-md-6">
             <h2>Log in using Google</h2>
-            @Html.Partial("~/Views/Account/_ExternalLoginPartial.cshtml", new RuuviTagApp.Models.ExternalLoginListViewModel())
+            @Html.Partial("~/Views/Account/_ExternalLoginPartial.cshtml", new ExternalLoginListViewModel())
         </div>
-        <div class="col-md-6 mt-lg-0 mt-5"> @*This is a dummy form for presenting the search function*@
+        <div class="col-md-6 mt-lg-0 mt-5">
+            @*This is a dummy form for presenting the search function*@
             <h2>Continue without logging in</h2>
             <div class="form-group">
                 <label for="tagId">RuuviTag ID</label>
@@ -26,6 +29,9 @@
             @*<p class="mt-2">Get RuuviTag data by using the search form above. Please note that without logging ... </p>*@
         </div>
     </div>
+    ExternalLoginConfirmationViewModel elcvm = Model is ExternalLoginConfirmationViewModel ?
+        Model : new ExternalLoginConfirmationViewModel();
+    @Html.Partial("~/Views/Account/ExternalLoginConfirmation.cshtml", elcvm)
 } @*End of content visible only when user is not logged in*@
 
 @* Content visible only when user is logged in *@
@@ -42,19 +48,10 @@
         </div>
     </div>
 } @*End of content visible only when user is logged in*@
-@{ 
-    RuuviTagApp.ViewModels.MacAddressModel mac = 
-        Model is RuuviTagApp.ViewModels.MacAddressModel ? 
-        Model : new RuuviTagApp.ViewModels.MacAddressModel(); 
+@{
+    MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
 }
-@Html.Partial("~/Views/Home/MacAddress.cshtml", mac)
-@if (!Request.IsAuthenticated)
-{
-    RuuviTagApp.Models.ExternalLoginConfirmationViewModel ext = 
-        Model is RuuviTagApp.Models.ExternalLoginConfirmationViewModel ? 
-        Model : new RuuviTagApp.Models.ExternalLoginConfirmationViewModel();
-    @Html.Partial("~/Views/Account/ExternalLoginConfirmation.cshtml", ext);
-}
+@Html.Partial("~/Views/Home/MacAddress.cshtml", mam)
 @section scripts{
     <script type="text/javascript">
         $(window).on('load', function () {
