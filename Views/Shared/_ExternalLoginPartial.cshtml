@@ -8,5 +8,7 @@
 @using (Html.BeginForm("ExternalLogin", "Account"))
 {
     @Html.AntiForgeryToken()
-    <button type="submit" class="btn btn-default" id="@g.AuthenticationType" name="provider" value="@g.AuthenticationType" title="Log in using your @g.Caption account">@g.AuthenticationType</button>
+    <button type="submit" class="btn btn-general btn-block-mobile" id="@g.AuthenticationType" name="provider" value="@g.AuthenticationType" title="Log in using your @g.Caption account">Authenticate with @g.AuthenticationType</button>
 }
+<p class="mt-2">You can log in using a Google Account. By logging in you can save and display your favourite RuuviTags. Setting alerts is only available for logged users.*</p>
+<p>*<i>In order to set up alerts you have to give us permission to save your email to the database. You can choose this option only when you first authenticate with your Google account.</i></p>

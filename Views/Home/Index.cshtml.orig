@@ -8,13 +8,28 @@
     }
 }
 
+<<<<<<< HEAD
+@if (!Request.IsAuthenticated)
+{
+    @Html.Partial("_ExternalLoginPartial", new RuuviTagApp.Models.ExternalLoginListViewModel())
+}
+
+@{ 
+    RuuviTagApp.ViewModels.MacAddressModel mac = 
+        Model is RuuviTagApp.ViewModels.MacAddressModel ? 
+        Model : new RuuviTagApp.ViewModels.MacAddressModel(); 
+}
+@Html.Partial("MacAddress", mac)
+
+=======
 @* Content visible only when user is not logged in *@
 @if (!Request.IsAuthenticated)
 {
     <div class="row">
         <div class="col-md-6">
             <h2>Log in using Google</h2>
-            @Html.Partial("_ExternalLoginPartial", new RuuviTagApp.Models.ExternalLoginListViewModel())
+            <p>@ViewBag.Msg</p>
+            @Html.Partial("_ExternalLoginPartial", new RuuviTagApp.Models.ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
         </div>
         <div class="col-md-6 mt-lg-0 mt-5"> @*This is a dummy form for presenting the search function*@
             <h2>Continue without logging in</h2>
@@ -43,12 +58,9 @@
         </div>
     </div>
 } @*End of content visible only when user is logged in*@
-@{ 
-    RuuviTagApp.ViewModels.MacAddressModel mac = 
-        Model is RuuviTagApp.ViewModels.MacAddressModel ? 
-        Model : new RuuviTagApp.ViewModels.MacAddressModel(); 
-}
-@Html.Partial("MacAddress", mac)
+
+<div id="divRegisterModal"></div>
+>>>>>>> view/home
 @if (!Request.IsAuthenticated)
 {
     RuuviTagApp.Models.ExternalLoginConfirmationViewModel ext = 
