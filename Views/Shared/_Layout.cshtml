@@ -21,7 +21,7 @@
         <div class="collapse navbar-collapse" id="main-nav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/Home/Index">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/Home/Index">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Add RuuviTag</a>
@@ -33,27 +33,41 @@
                     <a class="nav-link" href="#">Groups</a>
                 </li>
             </ul>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">App settings</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Help</a>
-            </li>
-            @if (Request.IsAuthenticated)
-            {
-                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+            <ul class="navbar-nav ml-auto float-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">App settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Help</a>
+                </li>
+                @if (Request.IsAuthenticated)
                 {
-                    @Html.AntiForgeryToken()
-                    <a class="btn btn-general" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <a class="btn btn-general" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                    }
                 }
-            }
-        </ul>
+            </ul>
         </div>
     </nav>
+
+    @*<div class="container body-content">
+            @RenderBody()
+            <hr />
+            <footer class="footer-ruuvi text-center">
+                <div class="footer-ruuvi-logo">
+                    <img src="~/Images/web-ruuvi-logo-nega.png" width="130" height="25" alt="Ruuvi logo">
+                </div>
+                <div class="footer-ruuvi-copyrights">
+                    <p>RUUVI INNOVATIONS LTD (OY) / FINLAND</p>
+                </div>
+            </footer>
+        </div>*@
+
+    @RenderBody()
+    <hr />
     <div class="container body-content">
-        @RenderBody()
-        <hr />
         <footer class="footer-ruuvi text-center">
             <div class="footer-ruuvi-logo">
                 <img src="~/Images/web-ruuvi-logo-nega.png" width="130" height="25" alt="Ruuvi logo">

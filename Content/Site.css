@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 80px;
+    padding-top: 60px;
     padding-bottom: 20px;
     font-family: 'Muli', sans-serif;
     /*color: #666;*/
@@ -29,6 +29,7 @@ textarea {
 
 .navbar-ruuvi {
     background-color: #1a1a1a;
+    /*background-color: white;*/
 }
 
     .navbar-ruuvi .navbar-nav .nav-link {
@@ -130,4 +131,70 @@ textarea {
     border-bottom: 1px solid #6beae1;
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
+}
+
+.navbar-ruuvitag {
+    /*margin-top: 57px;*/
+    background-color: #1a1a1a;
+    /*background-color: red;*/
+    /*border-top: 1px solid #6beae1;*/
+}
+
+    .navbar-ruuvitag .navbar-nav .nav-link {
+        /*color: #666;*/
+        color: #fff;
+        text-align: right;
+        margin-left: 20px;
+    }
+
+        .navbar-ruuvitag .navbar-nav .nav-link:hover, .navbar-ruuvitag .navbar-nav .nav-link:focus {
+            color: #00a99d;
+        }
+
+.navbar-ruuvitag-nav {
+    margin-left: 0px;
+}
+
+.btn-tagdropdown {
+    color: #fff;
+    background-color: #333;
+    /*border-color: #6beae1;*/
+    border-radius: 20px;
+}
+
+.dropdown-item {
+    color: #fff;
+    background-color: #333;
+}
+
+.dropdown-menu {
+    color: #fff;
+    background-color: #333;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #00a99d;
+}
+
+.svg-btn-settings {
+    background: url(/SVG/icon-settings.svg) no-repeat left center;
+    height: 32px;
+    width: 32px;
+    margin-top: 5px;
+}
+
+.svg-btn-alert {
+    background: url(/SVG/icon-alert.svg) no-repeat left center;
+    height: 32px;
+    width: 32px;
+    margin-top: 5px;
+}
+
+.svg-btn-new {
+    background: url(/SVG/icon-plus.svg) no-repeat left center;
+    height: 32px;
+    width: 32px;
+    margin-top: 5px;
 }
