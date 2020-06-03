@@ -328,8 +328,11 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginPartial.cshtml" />
-    <Content Include="Views\Home\MacAddress.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\Shared\_ExternalLoginPartial.cshtml" />
+    <Content Include="Views\Shared\MacAddress.cshtml" />
+=======
+    <Content Include="Views\Home\_ExternalLoginPartial.cshtml" />
     <Content Include="web.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
@@ -337,6 +340,7 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+>>>>>>> view/home
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -89,16 +89,7 @@ namespace RuuviTagApp.Controllers
                     TempData["RenderRegisterModal"] = true;
                     TempData["LoginProvider"] = loginInfo.Login.LoginProvider;
                     return RedirectToAction("Index", "Home");
-                    //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel());
             }
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult ExternalLoginConfirmation(string provider)
-        {
-            ViewBag.LoginProvider = provider;
-            return PartialView();
         }
 
         //
