@@ -193,6 +193,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\web-ruuvi-eye.png" />
     <Content Include="Images\web-ruuvi-logo-nega.png" />
     <Content Include="Images\web-ruuvi-logo.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -302,13 +303,14 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Web.config" />
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
+    <Content Include="SVG\icon-alert.svg" />
+    <Content Include="SVG\icon-menu.svg" />
+    <Content Include="SVG\icon-plus.svg" />
+    <Content Include="SVG\icon-settings.svg" />
+    <Content Include="SVG\logo-ruuvi-network.svg" />
+    <Content Include="SVG\m-icon-air.svg" />
+    <Content Include="SVG\m-icon-hum.svg" />
+    <Content Include="SVG\m-icon-temp.svg" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -328,6 +330,13 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Home\_ExternalLoginPartial.cshtml" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

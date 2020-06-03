@@ -8,7 +8,7 @@
     }
 }
 
-    <div class="jumbotron">
+@*<div class="jumbotron">
         <h1>ASP.NET</h1>
         <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
         <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
@@ -22,26 +22,41 @@
             }
         }
         @Html.Partial("_ExternalLoginPartial", new RuuviTagApp.Models.ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-    </div>
+    </div>*@
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+@* Content visible only when user is not logged in *@
+@if (!Request.IsAuthenticated)
+{
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Log in using Google</h2>
+            <p>@ViewBag.Msg</p>
+            @Html.Partial("_ExternalLoginPartial", new RuuviTagApp.Models.ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+        </div>
+        <div class="col-md-6 mt-lg-0 mt-5">
+            <h2>Continue without logging in</h2>
+            <div class="form-group">
+                <label for="tagId">RuuviTag ID</label>
+                <input type="text" class="form-control" id="tagId" aria-describedby="tagIdHelp" placeholder="Enter RuuviTag ID">
+                <small id="tagIdHelp" class="form-text text-muted">RuuviTag ID is same as its MAC address.</small>
+            </div>
+            <button type="button" class="btn btn-general">Search</button>
+            @*<p class="mt-2">Get RuuviTag data by using the search form above. Please note that without logging ... </p>*@
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+} @*End of content visible only when user is not logged in*@
+
+@* Content visible only when user is logged in *@
+@if (Request.IsAuthenticated)
+{
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Header</h2>
+            <p>User is logged in.</p>
+        </div>
+        <div class="col-md-6 mt-lg-0 mt-5">
+            <h2>Header</h2>
+            <p>User is logged in.</p>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+} @*End of content visible only when user is logged in*@

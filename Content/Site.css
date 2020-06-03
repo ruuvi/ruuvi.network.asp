@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 80px;
     padding-bottom: 20px;
     font-family: 'Muli', sans-serif;
     /*color: #666;*/
@@ -67,3 +67,48 @@ textarea {
     font-size: 0.8rem;
     color: #666;
 }
+
+.btn-general {
+    color: #fff;
+    background-color: #00A99D;
+    border-color: #6beae1;
+}
+
+    .btn-general:hover {
+        color: #fff;
+        background-color: #6beae1;
+        border-color: #00A99D;
+    }
+
+    .btn-general:focus, .btn-general.focus {
+        color: #fff;
+        background-color: #6beae1;
+        border-color: #00A99D;
+        box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+    }
+
+    .btn-general.disabled, .btn-general:disabled {
+        color: #fff;
+        background-color: #6beae1;
+        border-color: #00A99D;
+    }
+
+    .btn-general:not(:disabled):not(.disabled):active, .btn-general:not(:disabled):not(.disabled).active,
+    .show > .btn-general.dropdown-toggle {
+        color: #fff;
+        background-color: #6beae1;
+        border-color: #00A99D;
+    }
+
+        .btn-general:not(:disabled):not(.disabled):active:focus, .btn-general:not(:disabled):not(.disabled).active:focus,
+        .show > .btn-general.dropdown-toggle:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+        }
+
+/* This is used for buttons we want to be displayed as block on mobile, but on desktop they are normal sized */
+@media all and (max-width:480px) {
+    .btn-block-mobile {
+        width: 100%;
+        display: block;
+    }
+}   

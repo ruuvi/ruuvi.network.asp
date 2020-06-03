@@ -1,11 +1,11 @@
 ﻿@model RuuviTagApp.Models.ExternalLoginConfirmationViewModel
 
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Finish authenticating with Google account";
 }
 
 <h2>@ViewBag.Title</h2>
-<h3>Associate your @ViewBag.LoginProvider account.</h3>
+@*<h2>Associate your @ViewBag.LoginProvider account.</h2>*@
 
 @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
@@ -14,7 +14,7 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
         </div>
@@ -22,7 +22,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.StoreEmail, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             <div class="checkbox">
                 @Html.EditorFor(model => model.StoreEmail)
                 @Html.ValidationMessageFor(model => model.StoreEmail, "", new { @class = "text-danger" })
@@ -31,8 +31,8 @@
     </div>
 
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Register" class="btn btn-default" />
+        <div class="col-md-6">
+            <input type="submit" value="Register" class="btn btn-general btn-block-mobile" />
         </div>
     </div>
 }

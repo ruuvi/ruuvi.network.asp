@@ -31,7 +31,8 @@
         </div>*@
     <nav class="navbar navbar-expand-lg navbar-ruuvi fixed-top">
         <a class="navbar-brand" href="#">
-            <img src="~/Images/web-ruuvi-logo-nega.png" width="135" height="28" alt="Ruuvi logo">
+            @*<img src="~/Images/web-ruuvi-logo-nega.png" width="135" height="28" alt="Ruuvi logo">*@
+            <img src="~/SVG/logo-ruuvi-network.svg" width="135" height="28" alt="Ruuvi logo">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -40,7 +41,7 @@
         <div class="collapse navbar-collapse" id="main-nav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/Home/Index">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Add RuuviTag</a>
@@ -56,14 +57,22 @@
                     <input class="form-control mr-sm-2" type="text" placeholder="Search">
                         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                 </form>*@
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">App settings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Help</a>
-                </li>
-            </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">App settings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Help</a>
+            </li>
+            @if (Request.IsAuthenticated)
+            {
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <a class="btn btn-general" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                }
+            }
+        </ul>
         </div>
     </nav>
     <div class="container body-content">
