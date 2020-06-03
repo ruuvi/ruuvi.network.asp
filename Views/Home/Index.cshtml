@@ -1,5 +1,4 @@
-﻿@model RuuviTagApp.Models.ExternalLoginListViewModel
-@using Microsoft.AspNet.Identity;
+﻿@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Home Page";
     if (Request.IsAuthenticated)
@@ -14,7 +13,7 @@
     <div class="row">
         <div class="col-md-6">
             <h2>Log in using Google</h2>
-            @Html.Partial("_ExternalLoginPartial", new RuuviTagApp.Models.ExternalLoginListViewModel())
+            @Html.Partial("~/Views/Account/_ExternalLoginPartial.cshtml", new RuuviTagApp.Models.ExternalLoginListViewModel())
         </div>
         <div class="col-md-6 mt-lg-0 mt-5"> @*This is a dummy form for presenting the search function*@
             <h2>Continue without logging in</h2>
@@ -48,7 +47,7 @@
         Model is RuuviTagApp.ViewModels.MacAddressModel ? 
         Model : new RuuviTagApp.ViewModels.MacAddressModel(); 
 }
-@Html.Partial("MacAddress", mac)
+@Html.Partial("~/Views/Home/MacAddress.cshtml", mac)
 @if (!Request.IsAuthenticated)
 {
     RuuviTagApp.Models.ExternalLoginConfirmationViewModel ext = 
