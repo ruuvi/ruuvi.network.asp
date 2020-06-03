@@ -71,19 +71,20 @@ textarea {
 .btn-general {
     color: #fff;
     background-color: #00A99D;
-    border-color: #6beae1;
+    /*border-color: #6beae1;*/
+    border-radius: 20px;
 }
 
     .btn-general:hover {
         color: #fff;
-        background-color: #6beae1;
-        border-color: #00A99D;
+        background-color: #333;
+        border-color: #333;
     }
 
     .btn-general:focus, .btn-general.focus {
         color: #fff;
-        background-color: #6beae1;
-        border-color: #00A99D;
+        background-color: #333;
+        /*border-color: #00A99D;*/
         box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
     }
 
@@ -96,8 +97,8 @@ textarea {
     .btn-general:not(:disabled):not(.disabled):active, .btn-general:not(:disabled):not(.disabled).active,
     .show > .btn-general.dropdown-toggle {
         color: #fff;
-        background-color: #6beae1;
-        border-color: #00A99D;
+        background-color: #333;
+        /*border-color: #00A99D;*/
     }
 
         .btn-general:not(:disabled):not(.disabled):active:focus, .btn-general:not(:disabled):not(.disabled).active:focus,
