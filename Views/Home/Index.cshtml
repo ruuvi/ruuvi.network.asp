@@ -1,5 +1,4 @@
-﻿@model RuuviTagApp.Models.ExternalLoginListViewModel
-@using Microsoft.AspNet.Identity;
+﻿@using Microsoft.AspNet.Identity;
 @using RuuviTagApp.Models;
 @using RuuviTagApp.ViewModels;
 @{
@@ -10,52 +9,79 @@
     }
 }
 
-    <div class="jumbotron">
-        <h1>ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-        <p>@ViewBag.Msg</p>
-        @if (Request.IsAuthenticated)
-        {
-            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-            {
-                @Html.AntiForgeryToken()
-                <a class="btn btn-sm btn-default" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-            }
-        }
-        else
-        {
-            @Html.Partial("_ExternalLoginPartial", new RuuviTagApp.Models.ExternalLoginListViewModel())
-        }
-    </div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
-<div id="divRegisterModal"></div>
-@if (!Request.IsAuthenticated)
-{
-    @Html.Partial("~/Views/Account/ExternalLoginConfirmation.cshtml")
+@{
+    MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
 }
-@Html.Partial("~/Views/Home/MacAddress.cshtml", mam)
+
+@* Tag navbar visible only when user is logged in *@
+@if (Request.IsAuthenticated)
+{
+    <div class="container-fluid pl-0">
+        <nav class="navbar navbar-ruuvitag navbar-expand">
+            <div class="collapse navbar-collapse" id="tag-nav">
+                <ul class="navbar-nav mr-auto navbar-ruuvitag-nav">
+                    <div class="dropdown">
+                        <button class="btn btn-tagdropdown dropdown-toggle" type="button" id="tagMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Choose RuuviTag">
+                            <img src="~/SVG/web-ruuvi-eye-nega.svg" width="32" height="32" alt="Ruuvi logo">
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Example Tag name 1</a>
+                            <a class="dropdown-item" href="#">Example Tag name 2</a>
+                            <a class="dropdown-item" href="#">Example Tag name 3</a>
+                        </div>
+                    </div>
+                    <li class="nav-item active">
+                        <a class="nav-link svg-btn-settings" href="#settings"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link svg-btn-alert" href="#alert"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link svg-btn-new" href="#new"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+} @*End of tag navbar*@
+
+<div class="container body-content">
+    @* Content visible only when user is not logged in *@
+    @if (!Request.IsAuthenticated)
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Log in using Google</h2>
+                @Html.Partial("~/Views/Account/_ExternalLoginPartial.cshtml", new ExternalLoginListViewModel())
+            </div>
+            <div class="col-md-6 mt-lg-0 mt-5">
+                <h2>Continue without logging in</h2>
+                <div class="form-group">
+                    @Html.Partial("~/Views/Home/MacAddress.cshtml", mam)
+                </div>
+                @*<p class="mt-2">Get RuuviTag data by using the search form above. Please note that without logging ... </p>*@
+            </div>
+        </div>
+        ExternalLoginConfirmationViewModel elcvm = Model is ExternalLoginConfirmationViewModel ?
+            Model : new ExternalLoginConfirmationViewModel();
+        @Html.Partial("~/Views/Account/ExternalLoginConfirmation.cshtml", elcvm)
+    } @*End of content visible only when user is not logged in*@
+
+    @* Content visible only when user is logged in *@
+    @if (Request.IsAuthenticated)
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Header</h2>
+                <p>User is logged in.</p>
+            </div>
+            <div class="col-md-6 mt-lg-0 mt-5">
+                <h2>Header</h2>
+                <p>User is logged in.</p>
+            </div>
+        </div>
+    } @*End of content visible only when user is logged in*@
+</div>
 @section scripts{
     <script type="text/javascript">
         $(window).on('load', function () {
