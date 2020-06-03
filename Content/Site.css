@@ -111,4 +111,22 @@ textarea {
         width: 100%;
         display: block;
     }
-}   
+}
+
+.modal-register {
+    color: #fff;
+    background-color: #1a1a1a;
+    border: 1px solid #6beae1;
+}
+
+.modal-register-footer {
+    border-top: 1px solid #6beae1;
+    border-bottom-right-radius: calc(0.3rem - 1px);
+    border-bottom-left-radius: calc(0.3rem - 1px);
+}
+
+.modal-register-header {
+    border-bottom: 1px solid #6beae1;
+    border-top-left-radius: calc(0.3rem - 1px);
+    border-top-right-radius: calc(0.3rem - 1px);
+}

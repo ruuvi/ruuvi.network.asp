@@ -2,38 +2,39 @@
 
 <div class="modal" id="externalRegisterModal">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Register</h2>
+        <div class="modal-content modal-register">
+            <div class="modal-header modal-register-header">
+                <h2>Finish authentication</h2>
             </div>
             <div class="modal-body">
-                <h3>Associate your @ViewBag.LoginProvider account.</h3>
+                @*<h3>Finish authentication with your @ViewBag.LoginProvider account.</h3>*@
+                <p>Finish authentication with your @ViewBag.LoginProvider account. Please choose a unique username, which we will use to identify you later.</p>
                 @using (Html.BeginForm("ExternalLoginConfirmation", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "externalRegisterForm" }))
                 {
                     @Html.AntiForgeryToken()
 
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
-                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.StoreEmail, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <div class="checkbox">
-                                @Html.EditorFor(model => model.StoreEmail)
-                                @Html.ValidationMessageFor(model => model.StoreEmail, "", new { @class = "text-danger" })
-                            </div>
+                    <h4 class="mt-5">Do you want to set up alerts?</h4>
+                    <p>In order to set up email alerts, we need to save your email address to the database. We don't save it by default, so we are giving you an option to do this. Without saving the email address to the database you can not setup any alerts. This is a one time chance aswell, and you can not revert this option later.</p>
+                    <div class="form-check">
+                        <div class="checkbox">
+                            <label></label>
+                            @Html.EditorFor(model => model.StoreEmail)
+                            @Html.ValidationMessageFor(model => model.StoreEmail, "", new { @class = "text-danger" })
+                            @Html.LabelFor(model => model.StoreEmail, htmlAttributes: new { @class = "form-check-label" })
                         </div>
                     </div>
                 }
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-default" type="submit" form="externalRegisterForm">Register</button>
+            <div class="modal-footer modal-register-footer">
+                <button class="btn btn-general" type="submit" form="externalRegisterForm">Register</button>
             </div>
         </div>
     </div>
