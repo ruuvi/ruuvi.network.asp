@@ -13,6 +13,8 @@ namespace RuuviTagApp.ViewModels
         [Required(ErrorMessage = "Mac address is required.")]
         [ValidMacAddress(ErrorMessage = "Invalid mac address.")]
         public string MacAddress { get; set; }
+
+        public string GetAddress() => MacAddress.Replace(":", string.Empty).Trim();
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
@@ -21,6 +23,7 @@ namespace RuuviTagApp.ViewModels
         public override bool IsValid(object value)
         {
             string macAddress = value as string;
+            macAddress = macAddress.Trim();
             bool isValid = true;
             if (string.IsNullOrEmpty(macAddress) || macAddress.Length < 12)
             {
