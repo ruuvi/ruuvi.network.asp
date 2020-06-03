@@ -56,16 +56,16 @@ namespace RuuviTagApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
+        public ActionResult ExternalLogin(string provider)
         {
             // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account"));
         }
 
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
+        public async Task<ActionResult> ExternalLoginCallback()//string returnUrl)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
@@ -78,7 +78,7 @@ namespace RuuviTagApp.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 case SignInStatus.LockedOut:
                     throw new NotImplementedException();
                 case SignInStatus.RequiresVerification:
@@ -86,10 +86,19 @@ namespace RuuviTagApp.Controllers
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
-                    ViewBag.ReturnUrl = returnUrl;
-                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel());
+                    TempData["RenderRegisterModal"] = true;
+                    TempData["LoginProvider"] = loginInfo.Login.LoginProvider;
+                    return RedirectToAction("Index", "Home");
+                    //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel());
             }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ExternalLoginConfirmation(string provider)
+        {
+            ViewBag.LoginProvider = provider;
+            return PartialView();
         }
 
         //
@@ -97,7 +106,7 @@ namespace RuuviTagApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
+        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -120,14 +129,14 @@ namespace RuuviTagApp.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 AddErrors(result);
             }
 
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
+            ViewBag.RenderRegisterModal = true;
+            return View("../Home/Index", model);
         }
 
         //
