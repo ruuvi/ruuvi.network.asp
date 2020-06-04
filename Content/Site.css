@@ -223,3 +223,21 @@ textarea {
     border: 2px solid #00A99D;
     padding: 5px;
 }
+
+help-link,
+.help-link {
+    padding-left: 5px;
+    font-size: 70%;
+    font-weight: 400;
+}
+
+a {
+    color: #00A99D;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+    a:hover {
+        color: #999;
+        text-decoration: none;
+    }
