@@ -13,15 +13,15 @@
                 {
                     @Html.AntiForgeryToken()
 
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.ValidationSummary(true, "Failed finishing authentication: ", new { @class = "text-danger" })
                     <div class="form-group">
                         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
-                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @maxlength="32" } })
                             @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                     </div>
                     <h4 class="mt-5">Do you want to set up alerts?</h4>
                     <p>In order to set up email alerts, we need to save your email address to the database. We don't save it by default, so we are giving you an option to do this. Without saving the email address to the database you can not setup any alerts. This is a one time chance aswell, and you can not revert this option later.</p>
-                    <div class="col-md-6 pl-0 text-center">
+                    <div class="col-md-8 pl-0 text-center">
                         <div class="form-check pl-0">
                             <div class="checkbox checkbox-emailstoring">
                                 @Html.EditorFor(model => model.StoreEmail)

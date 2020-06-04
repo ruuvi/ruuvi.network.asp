@@ -5,10 +5,12 @@ namespace RuuviTagApp.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
-        [Required]
-        [Display(Name = "Username")]
+        [Required(ErrorMessage = "Username is required!")]
+        [MinLength(3, ErrorMessage = "The username length has to be atleat 3 characters!")]
+        [MaxLength(32, ErrorMessage = "The username length can not be more than 32 characters!")]
+        [Display(Name = "Your username")]
         public string UserName { get; set; }
-        [Display(Name = "Store Email in Database")]
+        [Display(Name = "Save email to the database")]
         public bool StoreEmail { get; set; }
     }
 
