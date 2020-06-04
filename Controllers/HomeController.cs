@@ -53,9 +53,13 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult AddTag(RuuviTagModel tag)
+        public ActionResult AddTag(MacAddressModel mac, string userID)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return View("Index", mac);
+            }
+            return RedirectToAction("Index");
         }
 
         public ActionResult GetUserTags()

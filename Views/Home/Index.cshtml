@@ -36,6 +36,16 @@
                     <li class="nav-item">
                         <a class="nav-link svg-btn-alert" href="#alert"></a>
                     </li>
+                    <li id="addTag" class="nav-item">
+                        <div class="container">
+                            <div class="row">
+                                @Html.Partial("~/Views/Home/_AddTagPartial.cshtml", new MacAddressModel())
+                                <div class="col-3">
+                                    <button class="btn btn-general" name="userID" value="@User.Identity.GetUserId()" form="addTagForm" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link svg-btn-new" href="#new"></a>
                     </li>
@@ -90,6 +100,9 @@
             if (renderRegisterModal) {
                 $('#externalRegisterModal').modal('show');
             }
+        });
+        $('.svg-btn-new').click(function () {
+            $('#addTag').toggleClass('shown');
         });
     </script>
 }

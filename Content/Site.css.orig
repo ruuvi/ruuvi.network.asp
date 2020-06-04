@@ -225,6 +225,7 @@ textarea {
     padding: 5px;
 }
 
+<<<<<<< HEAD
 help-link,
 .help-link {
     padding-left: 5px;
@@ -326,8 +327,7 @@ h1 {
     border-radius: 4px;
     padding: 1rem 1.5rem;
     font-size: 1.5rem;
-}
-
+=======
 #addTag {
     -webkit-transition: width 0.3s ease;
     -moz-transition: width 0.3s ease;
@@ -343,4 +343,5 @@ h1 {
 
 #addTag.shown {
     width: 100%;
+>>>>>>> 08dbe52... VäliTallennus#1
 }
