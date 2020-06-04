@@ -53,13 +53,21 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        [HttpPost]
         public ActionResult AddTag(MacAddressModel mac, string userID)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View("Index", mac);
+                // Backend call
+                // if fails return View("Index", mac);
+                // else
+                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
+                db.SaveChanges();
+                // use data and tag to refresh view
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return View("Index", mac);
         }
 
         public ActionResult GetUserTags()
