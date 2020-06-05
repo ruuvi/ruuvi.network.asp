@@ -249,21 +249,31 @@ a {
     position: fixed;
     z-index: 1;
     top: 0;
-    left: -1px;
+    right: -1px;
     background-color: #1a1a1a;
     overflow-x: hidden;
     padding-top: 60px;
     transition: 0.3s;
     margin-top: 59px;
-    border-right: 1px solid #00A99D;
+    border-left: 1px solid #00A99D;
     border-top: 1px solid #00A99D;
+    border-radius: 10px 0px 0px 0px;
 }
 
     .help-slider .help-close {
         position: absolute;
         top: 0;
-        right: 25px;
-        margin-left: 50px;
+        left: 0;
+        margin-left: 15px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .help-slider .help-newtab {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-right: 15px;
         margin-top: 20px;
         margin-bottom: 30px;
     }

@@ -56,7 +56,8 @@
     </nav>
 
     <div id="helpSlider" class="help-slider">
-        <button type="button" class="btn btn-sm btn-general help-close" onclick="closeHelpSlider()">Close window</button>
+        <button type="button" class="btn btn-general help-close" onclick="closeHelpSlider()">Close window</button>
+        <a class="btn btn-general help-newtab" onclick="closeHelpSlider()" href="/Home/Help" role="button">Open on new tab</a>
         @Html.Partial("~/Views/Home/Help.cshtml")
     </div>
 
