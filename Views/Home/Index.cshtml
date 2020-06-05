@@ -40,7 +40,7 @@
                         <div class="container">
                             <div class="row">
                                 @Html.Partial("~/Views/Home/_AddTagPartial.cshtml", new MacAddressModel())
-                                <div class="col-3">
+                                <div id="addTagBtn" class="col-3">
                                     <button class="btn btn-general" name="userID" value="@User.Identity.GetUserId()" form="addTagForm" type="submit">Search</button>
                                 </div>
                             </div>

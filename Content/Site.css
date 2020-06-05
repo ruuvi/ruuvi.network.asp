@@ -335,13 +335,55 @@ h1 {
     transition: width 0.3s ease;
     overflow: hidden;
     white-space: nowrap;
-    vertical-align: middle;
+/*    vertical-align: middle;*/
     width: 0px;
     height: 32px;
-    margin-top: 5px;
+/*    margin-top: 5px;*/
 }
 
 #addTag.shown {
-    width: 100%;
+    width: 45vh;
+    height: 55px;
+}
+
+#addTagForm, #addTagBtn {
+    position: relative;
     height: 100%;
+}
+
+#addTagForm {
+    width: 30vh;
+}
+
+#addTagBtn button {
+    right: 0px;
+    width: 10vh;
+}
+
+#addTagGroup {
+    position: absolute;
+}
+
+#addTagGroup input {
+    height: 100%;
+    width: 100%;
+    padding-top: 5px;
+}
+
+#addTagGroup label {
+    position: absolute;
+    top: 0px;
+    left: 5px;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    font-size: 21px;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+#addTagGroup input:focus + #addTagLabel,
+#addTagGroup input:valid + #addTagLabel {
+    font-size: 10px;
+    color: #00a99d;
 }
