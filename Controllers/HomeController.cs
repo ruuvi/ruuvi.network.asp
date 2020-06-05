@@ -36,6 +36,13 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
+        public ActionResult Help()
+        {
+            ViewBag.Message = "Your help page.";
+
+            return View();
+        }
+
         [HttpPost]
         public ActionResult MacAddress(MacAddressModel mac)
         {

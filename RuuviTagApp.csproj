@@ -331,6 +331,7 @@
     <Content Include="Views\Account\_ExternalLoginPartial.cshtml" />
     <Content Include="Views\Home\MacAddress.cshtml" />
     <Content Include="web.config" />
+    <Content Include="Views\Home\Help.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
