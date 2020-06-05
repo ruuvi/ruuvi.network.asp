@@ -1,7 +1,7 @@
 ﻿@model RuuviTagApp.ViewModels.MacAddressModel
 
 
-@using (Html.BeginForm("AddTag", "Home", FormMethod.Post, new { @id = "addTagForm", @class = "col-9" })) 
+@using (Html.BeginForm("AddTag", "Home", FormMethod.Post, new { @id = "addTagForm" })) 
 {
     @Html.AntiForgeryToken()
     
@@ -10,7 +10,7 @@
         @*@Html.LabelFor(model => model.MacAddress, htmlAttributes: new { @class = "control-label col-md-2" })*@
         @Html.EditorFor(model => model.MacAddress, new { htmlAttributes = new { @class = "form-control", required = true } })
         <label id="addTagLabel" for="tagId">RuuviTag ID</label>
-        <small id="tagIdHelp" class="form-text text-muted">RuuviTag ID is same as its MAC address.</small>
+        @*<small id="tagIdHelp" class="form-text text-muted">RuuviTag ID is same as its MAC address.</small>*@
         @Html.ValidationMessageFor(model => model.MacAddress, "", new { @class = "text-danger" })
     </div>
 }

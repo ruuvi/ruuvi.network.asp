@@ -37,14 +37,17 @@
                         <a class="nav-link svg-btn-alert" href="#alert"></a>
                     </li>
                     <li id="addTag" class="nav-item">
-                        <div class="container">
-                            <div class="row">
+                        <ul class="navbar-nav mr-auto navbar-ruuvitag-nav">
+                            <li class="nav-item">
                                 @Html.Partial("~/Views/Home/_AddTagPartial.cshtml", new MacAddressModel())
-                                <div id="addTagBtn" class="col-3">
+                            </li>
+                            <li class="nav-item">
+                                <div id="addTagBtn">
+                                    <button class="btn btn-general" data-container="body" data-toggle="popover" data-placement="bottom" data-content="RuuviTag ID is same as its MAC address. Please enter the ID with or without colons or spaces.">i</button>
                                     <button class="btn btn-general" name="userID" value="@User.Identity.GetUserId()" form="addTagForm" type="submit">Search</button>
                                 </div>
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link svg-btn-new" href="#new"></a>
@@ -104,5 +107,8 @@
         $('.svg-btn-new').click(function () {
             $('#addTag').toggleClass('shown');
         });
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
     </script>
 }
