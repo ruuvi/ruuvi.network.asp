@@ -28,8 +28,8 @@ textarea {
 }
 
 .navbar-ruuvi {
-    /*background-color: #1a1a1a;*/
-    background-color: red;
+    background-color: #1a1a1a;
+    /*background-color: red;*/
 }
 
     .navbar-ruuvi .navbar-nav .nav-link {
@@ -243,61 +243,77 @@ a {
         text-decoration: none;
     }
 
-/* The side navigation menu */
 .help-slider {
-    height: 100%; /* 100% Full-height */
+    height: 100%;
     width: 0; /* 0 width - change this with JavaScript */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
+    position: fixed;
+    z-index: 1;
+    top: 0;
     left: -1px;
     background-color: #1a1a1a;
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-    margin-top: 57px;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.3s;
+    margin-top: 59px;
     border-right: 1px solid #00A99D;
+    border-top: 1px solid #00A99D;
 }
 
-    /* The navigation menu links */
-    .help-slider a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #818181;
-        display: block;
-        transition: 0.3s;
-    }
-
-        /* When you mouse over the navigation links, change their color */
-        .help-slider a:hover {
-            color: #f1f1f1;
-        }
-
-    /* Position and style the close button (top right corner) */
     .help-slider .help-close {
         position: absolute;
         top: 0;
         right: 25px;
-        /*font-size: 36px;*/
         margin-left: 50px;
         margin-top: 20px;
-        /*color: white;*/
+        margin-bottom: 30px;
     }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-    transition: margin-left .5s;
-    padding: 20px;
+.card-ruuvi {
+    color: #fff;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    margin-bottom: 30px;
 }
 
-/* On screens that are less than 450px, */
-@media screen and (max-height: 450px) {
-    .sidenav {
-    }
+h1 {
+    text-transform: uppercase;
 }
-/* On screens that are less than 700px wide */
-@media screen and (max-width: 700px) {
-    .sidenav {
-    }
+
+.card-title-ruuvi {
+    margin-bottom: 0.75rem;
+    color: #00A99D;
+}
+
+.col-help {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.btn-up {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+
+    opacity: 0.5;
+    color: #fff;
+    background-color: #00A99D;
+    /*border-color: #6beae1;*/
+    border-radius: 5px;
+}
+
+.btn-up:hover {
+    opacity: 1;
+    /*background-color: #333;*/
+    color: #fff;
+}
+
+.box {
+    margin: 1rem auto 1rem auto;
+    max-width: 300px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    font-size: 1.5rem;
 }

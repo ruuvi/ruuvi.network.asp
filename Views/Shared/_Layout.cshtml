@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/chart")
 </head>
 <body>
+    <button onclick="topFunction()" id="btn-up" class="btn btn-up" title="Go to top">Up</button>
+
     <nav class="navbar navbar-expand-lg navbar-ruuvi fixed-top">
         <a class="navbar-brand" href="#">
             <img src="~/SVG/logo-ruuvi-network.svg" width="135" height="28" alt="Ruuvi logo">
@@ -38,7 +41,7 @@
                     <a class="nav-link" href="#">App settings</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="openHelpSlider()">Help</a>
+                    <a class="nav-link" href="#" id="openHelpSliderButton" onclick="openHelpSlider()">Help</a>
                 </li>
                 @if (Request.IsAuthenticated)
                 {
@@ -52,18 +55,10 @@
         </div>
     </nav>
 
-    @*<div class="container body-content">
-            @RenderBody()
-            <hr />
-            <footer class="footer-ruuvi text-center">
-                <div class="footer-ruuvi-logo">
-                    <img src="~/Images/web-ruuvi-logo-nega.png" width="130" height="25" alt="Ruuvi logo">
-                </div>
-                <div class="footer-ruuvi-copyrights">
-                    <p>RUUVI INNOVATIONS LTD (OY) / FINLAND</p>
-                </div>
-            </footer>
-        </div>*@
+    <div id="helpSlider" class="help-slider">
+        <button type="button" class="btn btn-sm btn-general help-close" onclick="closeHelpSlider()">Close window</button>
+        @Html.Partial("~/Views/Home/Help.cshtml")
+    </div>
 
     @RenderBody()
     <hr />
@@ -77,6 +72,54 @@
             </div>
         </footer>
     </div>
+
+    <script>
+        //Get the button
+        var mybutton = document.getElementById("btn-up");
+
+        // When the user scrolls down xx px from the top of the document, show the button
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 60 || document.documentElement.scrollTop > 60) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+
+    <script>
+        // Check window width to choose helpSlider width
+        var helpSliderWidth;
+
+        $(window).on('load', function () {
+            if ($(window).width() < 451) {
+                helpSliderWidth = "100%";
+            }
+            else {
+                helpSliderWidth = "50%";
+
+            }
+        });
+
+        /* Open the helpSlider */
+        function openHelpSlider() {
+            document.getElementById("helpSlider").style.width = helpSliderWidth;
+        }
+
+        /* Close/hide the helpSlider */
+        function closeHelpSlider() {
+            document.getElementById("helpSlider").style.width = "0";
+
+        }
+    </script>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

@@ -45,11 +45,6 @@
     </div>
 } @*End of tag navbar*@
 
-<div id="helpSlider" class="help-slider">
-    <button type="button" class="btn btn-sm btn-general help-close" onclick="closeHelpSlider()">Close</button>
-    @Html.Partial("~/Views/Home/Help.cshtml")
-</div>
-
 <div class="container body-content">
     @* Content visible only when user is not logged in *@
     @if (!Request.IsAuthenticated)
@@ -83,11 +78,11 @@
             <div class="col-md-6 mt-lg-0 mt-5">
                 <h2>Header</h2>
                 <p>User is logged in.</p>
-                <span style="font-size:30px;cursor:pointer" onclick="openHelpSlider()">&#9776; open</span>
             </div>
         </div>
     } @*End of content visible only when user is logged in*@
 </div>
+
 @section scripts{
     <script type="text/javascript">
         $(window).on('load', function () {
@@ -96,31 +91,5 @@
                 $('#externalRegisterModal').modal('show');
             }
         });
-
-
-    </script>
-
-    <script>
-        // Check window width to choose helpSlider width
-        var helpSliderWidth;
-        $(window).on('load', function () {
-            if ($(window).width() < 451) {
-                helpSliderWidth = "100%";
-            }
-            else {
-                helpSliderWidth = "50%";
-
-            }
-        });
-
-        /* Open the sidenav */
-        function openHelpSlider() {
-            document.getElementById("helpSlider").style.width = helpSliderWidth;
-        }
-
-        /* Close/hide the sidenav */
-        function closeHelpSlider() {
-            document.getElementById("helpSlider").style.width = "0";
-        }
     </script>
 }
