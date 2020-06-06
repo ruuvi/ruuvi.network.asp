@@ -78,23 +78,7 @@
                 <p>User is logged in.</p>
             </div>
         </div>
-
-        <div class="modal" id="addTagModal">
-            <div class="modal-dialog">
-                <div class="modal-content modal-register">
-                    <div class="modal-header modal-register-header">
-                        <h2>Add a RuuviTag</h2>
-                    </div>
-                    <div class="modal-body">
-                        @Html.Partial("~/Views/Home/_AddTagPartial.cshtml", mam)
-                    </div>
-                    <div class="modal-footer modal-register-footer">
-                        <button class="btn btn-general" data-dismiss="modal">Close</button>
-                        <button class="btn btn-general" name="userID" value="@User.Identity.GetUserId()" form="addTagForm" type="submit">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @Html.Partial("~/Views/Home/_AddTagModal.cshtml", mam)
     } @*End of content visible only when user is logged in*@
 </div>
 

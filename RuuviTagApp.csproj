@@ -333,7 +333,7 @@
     <Content Include="Views\Home\_SearchTagPartial.cshtml" />
     <Content Include="web.config" />
     <Content Include="Views\Home\Help.cshtml" />
-    <Content Include="Views\Home\_AddTagPartial.cshtml" />
+    <Content Include="Views\Home\_AddTagModal.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
