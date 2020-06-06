@@ -62,6 +62,12 @@ namespace RuuviTagApp.Controllers
                 // Backend call
                 // if fails return View("Index", mac);
                 // else
+                string macAddress = mac.GetAddress();
+                if (db.RuuviTagModels.Any(t => t.UserId == userID && t.TagMacAddress == macAddress))
+                {
+                    // show error message somewhere?
+                    return View("Index");
+                }
                 var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
                 db.SaveChanges();
                 // use data and tag to refresh view
