@@ -369,6 +369,8 @@ h1 {
     font-size: 21px;
     color: black;
     transition: all 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 #addTagGroup input:focus + #addTagLabel,

@@ -10,7 +10,7 @@
         <div class="form-group">
             @*@Html.LabelFor(model => model.MacAddress, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label for="tagId">RuuviTag ID <a class="help-link" onclick="openHelpSlider()" href="#ruuvitag-id">Need help?</a> </label>
-            @Html.EditorFor(model => model.MacAddress, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.MacAddress, new { htmlAttributes = new { @class = "form-control", required = true } })
             <small id="tagIdHelp" class="form-text text-muted">RuuviTag ID is same as its MAC address.</small>
             <small id="tagIdFormInfo" class="form-text text-muted">Please enter the ID with or without colons or spaces.</small>
             @Html.ValidationMessageFor(model => model.MacAddress, "", new { @class = "text-danger" })

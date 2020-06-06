@@ -99,9 +99,13 @@
 @section scripts{
     <script type="text/javascript">
         $(window).on('load', function () {
-            var renderRegisterModal = @((ViewBag.RenderRegisterModal ?? false).ToString().ToLower());
+            let renderRegisterModal = @((ViewBag.RenderRegisterModal ?? false).ToString().ToLower());
             if (renderRegisterModal) {
                 $('#externalRegisterModal').modal('show');
+            }
+            let showAddTag = @((ViewBag.ShowAddTag ?? false).ToString().ToLower());
+            if (showAddTag) {
+                $('#addTag').toggleClass('shown');
             }
         });
         $('.svg-btn-new').click(function () {

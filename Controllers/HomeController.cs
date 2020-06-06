@@ -67,6 +67,7 @@ namespace RuuviTagApp.Controllers
                 // use data and tag to refresh view
                 return RedirectToAction("Index");
             }
+            ViewBag.ShowAddTag = true;
             return View("Index", mac);
         }
 
