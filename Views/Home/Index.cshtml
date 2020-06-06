@@ -62,7 +62,7 @@
         </div>
         ExternalLoginConfirmationViewModel elcvm = Model is ExternalLoginConfirmationViewModel ?
             Model : new ExternalLoginConfirmationViewModel();
-        @Html.Partial("~/Views/Account/ExternalLoginConfirmation.cshtml", elcvm)
+        @Html.Partial("~/Views/Account/_ExternalLoginConfirmationModal.cshtml", elcvm)
     } @*End of content visible only when user is not logged in*@
 
     @* Content visible only when user is logged in *@

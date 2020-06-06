@@ -328,9 +328,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginConfirmationModal.cshtml" />
     <Content Include="Views\Account\_ExternalLoginPartial.cshtml" />
-    <Content Include="Views\Home\MacAddress.cshtml" />
+    <Content Include="Views\Home\_SearchTagPartial.cshtml" />
     <Content Include="web.config" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\_AddTagPartial.cshtml" />
