@@ -7,11 +7,9 @@
     {
         ViewBag.Msg = $"Hello {User.Identity.GetUserName()}!";
     }
-}
-
-@{
     MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
 }
+
 
 @* Tag navbar visible only when user is logged in *@
 @if (Request.IsAuthenticated)
@@ -36,21 +34,8 @@
                     <li class="nav-item">
                         <a class="nav-link svg-btn-alert" href="#alert"></a>
                     </li>
-                    <li id="addTag" class="nav-item">
-                        <ul class="navbar-nav mr-auto navbar-ruuvitag-nav">
-                            <li class="nav-item">
-                                @Html.Partial("~/Views/Home/_AddTagPartial.cshtml", new MacAddressModel())
-                            </li>
-                            <li class="nav-item">
-                                <div id="addTagBtn">
-                                    <button class="btn btn-general" data-container="body" data-toggle="popover" data-placement="bottom" data-content="RuuviTag ID is same as its MAC address. Please enter the ID with or without colons or spaces.">i</button>
-                                    <button class="btn btn-general" name="userID" value="@User.Identity.GetUserId()" form="addTagForm" type="submit">Search</button>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
                     <li class="nav-item">
-                        <a class="nav-link svg-btn-new" href="#new"></a>
+                        <a class="nav-link svg-btn-new" data-toggle="modal" data-target="#addTagModal"></a>
                     </li>
                 </ul>
             </div>
@@ -70,7 +55,7 @@
             <div class="col-md-6 mt-lg-0 mt-5">
                 <h2>Continue without logging in</h2>
                 <div class="form-group">
-                    @Html.Partial("~/Views/Home/MacAddress.cshtml", mam)
+                    @Html.Partial("~/Views/Home/_SearchTagPartial.cshtml", mam)
                 </div>
                 @*<p class="mt-2">Get RuuviTag data by using the search form above. Please note that without logging ... </p>*@
             </div>
@@ -93,6 +78,23 @@
                 <p>User is logged in.</p>
             </div>
         </div>
+
+        <div class="modal" id="addTagModal">
+            <div class="modal-dialog">
+                <div class="modal-content modal-register">
+                    <div class="modal-header modal-register-header">
+                        <h2>Add a RuuviTag</h2>
+                    </div>
+                    <div class="modal-body">
+                        @Html.Partial("~/Views/Home/_AddTagPartial.cshtml", mam)
+                    </div>
+                    <div class="modal-footer modal-register-footer">
+                        <button class="btn btn-general" data-dismiss="modal">Close</button>
+                        <button class="btn btn-general" name="userID" value="@User.Identity.GetUserId()" form="addTagForm" type="submit">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     } @*End of content visible only when user is logged in*@
 </div>
 
@@ -105,14 +107,11 @@
             }
             let showAddTag = @((ViewBag.ShowAddTag ?? false).ToString().ToLower());
             if (showAddTag) {
-                $('#addTag').toggleClass('shown');
+                $('#addTagModal').modal('show');
             }
         });
         $('.svg-btn-new').click(function () {
             $('#addTag').toggleClass('shown');
-        });
-        $(function () {
-            $('[data-toggle="popover"]').popover()
         });
     </script>
 }

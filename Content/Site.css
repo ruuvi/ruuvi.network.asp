@@ -328,54 +328,6 @@ h1 {
     font-size: 1.5rem;
 }
 
-#addTag {
-    -webkit-transition: width 0.3s ease;
-    -moz-transition: width 0.3s ease;
-    -o-transition: width 0.3s ease;
-    transition: width 0.3s ease;
-    overflow: hidden;
-    white-space: nowrap;
-    vertical-align: middle;
-    width: 0px;
-    height: 46px;
-}
-
-#addTag.shown {
-    width: 100%;
-}
-
-#addTagForm,
-#addTagBtn {
-    height: 100%;
-    padding: 5px 0px 0px 20px;
-}
-
-#addTagGroup {
-    position: relative;
-}
-
-#addTagGroup input {
-    height: 38px;
-    width: 100%;
-}
-
-#addTagGroup label {
-    position: absolute;
-    top: 5px;
-    left: 13px;
-    height: 100%;
-    width: 100%;
-    pointer-events: none;
-    font-size: 21px;
-    color: black;
-    transition: all 0.3s ease;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-#addTagGroup input:focus + #addTagLabel,
-#addTagGroup input:valid + #addTagLabel {
-    transform: translateY(-10%);
-    font-size: 10px;
-    color: #00a99d;
+.svg-btn-new {
+    cursor: pointer;
 }

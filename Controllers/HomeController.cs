@@ -44,7 +44,7 @@ namespace RuuviTagApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult MacAddress(MacAddressModel mac)
+        public ActionResult SearchTag(MacAddressModel mac)
         {
             if (!ModelState.IsValid)
             {
