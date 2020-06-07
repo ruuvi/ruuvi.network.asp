@@ -14,33 +14,8 @@
 @* Tag navbar visible only when user is logged in *@
 @if (Request.IsAuthenticated)
 {
-    <div class="container-fluid pl-0">
-        <nav class="navbar navbar-ruuvitag navbar-expand">
-            <div class="collapse navbar-collapse" id="tag-nav">
-                <ul class="navbar-nav mr-auto navbar-ruuvitag-nav">
-                    <div class="dropdown">
-                        <button class="btn btn-tagdropdown dropdown-toggle" type="button" id="tagMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Choose RuuviTag">
-                            <img src="~/SVG/web-ruuvi-eye-nega.svg" width="32" height="32" alt="Ruuvi logo">
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Example Tag name 1</a>
-                            <a class="dropdown-item" href="#">Example Tag name 2</a>
-                            <a class="dropdown-item" href="#">Example Tag name 3</a>
-                        </div>
-                    </div>
-                    <li class="nav-item active">
-                        <a class="nav-link svg-btn-settings" href="#settings"></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link svg-btn-alert" href="#alert"></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link svg-btn-new" data-toggle="modal" data-target="#addTagModal" title="Add new RuuviTag"></a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+    @Html.Partial("~/Views/Home/_TagNavbar.cshtml")
+
 } @*End of tag navbar*@
 
 <div class="container body-content">

@@ -26,15 +26,21 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/Home/Index">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Add RuuviTag</a>
-                </li>
+                @if (Request.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Add RuuviTag</a>
+                    </li>
+                }
                 <li class="nav-item">
                     <a class="nav-link" href="https://shop.ruuvi.com/product/ruuvitag-1-pack/" target="blank">Get a new RuuviTag</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Groups</a>
-                </li>
+                @if (Request.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Groups</a>
+                    </li>
+                }
             </ul>
             <ul class="navbar-nav ml-auto float-right">
                 <li class="nav-item">
