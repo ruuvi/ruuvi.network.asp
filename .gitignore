@@ -341,3 +341,6 @@ healthchecksdb
 
 # Web config to store secret data
 Web.config
+
+# Migrations folder
+Migrations/
