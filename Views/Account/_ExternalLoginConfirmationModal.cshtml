@@ -2,9 +2,12 @@
 
 <div class="modal" id="externalRegisterModal">
     <div class="modal-dialog">
-        <div class="modal-content modal-register">
-            <div class="modal-header modal-register-header">
+        <div class="modal-content modal-ruuvi">
+            <div class="modal-header modal-ruuvi-header">
                 <h2>Finish authentication</h2>
+                <button type="button" class="ruuvi-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 @*<h3>Finish authentication with your @ViewBag.LoginProvider account.</h3>*@
@@ -33,7 +36,7 @@
                     </div>
                 }
             </div>
-            <div class="modal-footer modal-register-footer">
+            <div class="modal-footer modal-ruuvi-footer">
                 <button class="btn btn-general" type="submit" form="externalRegisterForm">Register</button>
             </div>
         </div>

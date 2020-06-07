@@ -63,15 +63,19 @@ namespace RuuviTagApp.Controllers
                 // if fails return View("Index", mac);
                 // else
                 string macAddress = mac.GetAddress();
+                // Check if this tag has been added by this user
                 if (db.RuuviTagModels.Any(t => t.UserId == userID && t.TagMacAddress == macAddress))
                 {
-                    // show error message somewhere?
-                    return View("Index");
+                    ViewBag.TagAlreadyExists = "Couldn't add this tag, since you have already added it!";
+                    ViewBag.ShowAddTag = true;
                 }
-                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
-                db.SaveChanges();
-                // use data and tag to refresh view
-                return RedirectToAction("Index");
+                else
+                {
+                    var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
+                    db.SaveChanges();
+                    // use data and tag to refresh view
+                    return RedirectToAction("Index");
+                }
             }
             ViewBag.ShowAddTag = true;
             return View("Index", mac);
