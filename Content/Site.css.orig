@@ -29,11 +29,9 @@ textarea {
 
 .navbar-ruuvi {
     background-color: #1a1a1a;
-    /*background-color: red;*/
 }
 
     .navbar-ruuvi .navbar-nav .nav-link {
-        /*color: #666;*/
         color: #fff;
         text-align: right;
     }
@@ -43,7 +41,7 @@ textarea {
         }
 
     .navbar-ruuvi .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
     }
 
 .footer-ruuvi {
@@ -73,7 +71,6 @@ textarea {
 .btn-general {
     color: #fff;
     background-color: #00A99D;
-    /*border-color: #6beae1;*/
     border-radius: 20px;
 }
 
@@ -86,7 +83,6 @@ textarea {
     .btn-general:focus, .btn-general.focus {
         color: #fff;
         background-color: #333;
-        /*border-color: #00A99D;*/
         box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
     }
 
@@ -100,7 +96,6 @@ textarea {
     .show > .btn-general.dropdown-toggle {
         color: #fff;
         background-color: #333;
-        /*border-color: #00A99D;*/
     }
 
         .btn-general:not(:disabled):not(.disabled):active:focus, .btn-general:not(:disabled):not(.disabled).active:focus,
@@ -116,36 +111,32 @@ textarea {
     }
 }
 
-.modal-register {
+.modal-ruuvi {
     color: #fff;
     background-color: #1a1a1a;
     border: 1px solid #333;
 }
 
-.modal-register-footer {
+.modal-ruuvi-footer {
     border-top: 1px solid #333;
     border-bottom-right-radius: calc(0.3rem - 1px);
     border-bottom-left-radius: calc(0.3rem - 1px);
 }
 
-.modal-register-header {
+.modal-ruuvi-header {
     border-bottom: 1px solid #333;
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
 }
 
 .navbar-ruuvitag {
-    /*margin-top: 57px;*/
     background-color: #1a1a1a;
-    /*background-color: red;*/
-    /*border-top: 1px solid #6beae1;*/
 }
 
     .navbar-ruuvitag .navbar-nav .nav-link {
-        /*color: #666;*/
         color: #fff;
         text-align: right;
-        margin-left: 20px;
+        margin-left: 15px;
     }
 
         .navbar-ruuvitag .navbar-nav .nav-link:hover, .navbar-ruuvitag .navbar-nav .nav-link:focus {
@@ -157,23 +148,34 @@ textarea {
 }
 
 .btn-tagdropdown {
-    color: #fff;
+    color: #6beae1;
     background-color: #333;
-    /*border-color: #6beae1;*/
     border-radius: 20px;
 }
 
-.dropdown-item {
+    .btn-tagdropdown:hover {
+        background-color: #333;
+    }
+
+    .btn-tagdropdown:focus, .btn-tagdropdown.focus {
+        color: #fff;
+        background-color: #333;
+        box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+    }
+
+.dropdown-item-ruuvi {
     color: #fff;
     background-color: #333;
 }
 
-.dropdown-menu {
+.dropdown-menu-ruuvi {
     color: #fff;
     background-color: #333;
+    text-align: right;
+    margin-top: 10px;
 }
 
-.dropdown-item:hover, .dropdown-item:focus {
+.dropdown-item-ruuvi:hover, .dropdown-item-ruuvi:focus {
     color: #fff;
     text-decoration: none;
     background-color: #00a99d;
@@ -181,23 +183,42 @@ textarea {
 
 .svg-btn-settings {
     background: url(/SVG/icon-settings.svg) no-repeat left center;
-    height: 32px;
-    width: 32px;
+    height: 28px;
+    width: 28px;
     margin-top: 5px;
+    -webkit-transition: 1s;
 }
+
 
 .svg-btn-alert {
     background: url(/SVG/icon-alert.svg) no-repeat left center;
-    height: 32px;
-    width: 32px;
+    height: 28px;
+    width: 28px;
     margin-top: 5px;
+    -webkit-transition: 1s;
 }
 
 .svg-btn-new {
     background: url(/SVG/icon-plus.svg) no-repeat left center;
-    height: 32px;
-    width: 32px;
+    height: 28px;
+    width: 28px;
     margin-top: 5px;
+    -webkit-transition: 1s;
+}
+
+.svg-btn-alert:hover, .svg-btn-alert:focus {
+    transform: scale(1.2);
+    transition: 0.1s;
+}
+
+.svg-btn-settings:hover, .svg-btn-settings:focus {
+    transform: scale(1.2) rotate(360deg);
+    transition: 1s;
+}
+
+.svg-btn-new:hover, .svg-btn-new:focus {
+    transform: scale(1.2);
+    transition: 0.3s;
 }
 
 .form-control {
@@ -225,7 +246,6 @@ textarea {
     padding: 5px;
 }
 
-<<<<<<< HEAD
 help-link,
 .help-link {
     padding-left: 5px;
@@ -256,8 +276,8 @@ a {
     padding-top: 60px;
     transition: 0.3s;
     margin-top: 59px;
-    border-left: 1px solid #00A99D;
-    border-top: 1px solid #00A99D;
+    border-left: 1px solid #333;
+    border-top: 1px solid #333;
     border-radius: 10px 0px 0px 0px;
 }
 
@@ -306,42 +326,52 @@ h1 {
     bottom: 20px;
     right: 30px;
     z-index: 99;
-
     opacity: 0.5;
     color: #fff;
     background-color: #00A99D;
-    /*border-color: #6beae1;*/
     border-radius: 5px;
 }
 
-.btn-up:hover {
-    opacity: 1;
-    /*background-color: #333;*/
-    color: #fff;
+    .btn-up:hover {
+        opacity: 1;
+        color: #fff;
+    }
+
+.svg-btn-new {
+    cursor: pointer;
 }
 
-.box {
-    margin: 1rem auto 1rem auto;
-    max-width: 300px;
-    border: 1px solid #555;
-    border-radius: 4px;
-    padding: 1rem 1.5rem;
+.ruuvi-close {
+    float: right;
     font-size: 1.5rem;
-=======
-#addTag {
-    -webkit-transition: width 0.3s ease;
-    -moz-transition: width 0.3s ease;
-    -o-transition: width 0.3s ease;
-    transition: width 0.3s ease;
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    vertical-align: middle;
-    width: 0px;
-    height: inherit;
+    font-weight: 700;
+    line-height: 1;
+    color: #00A99D;
 }
 
-#addTag.shown {
-    width: 100%;
->>>>>>> 08dbe52... VäliTallennus#1
+    .ruuvi-close:hover {
+        color: #333;
+        text-decoration: none;
+    }
+
+button.ruuvi-close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
 }
+<<<<<<< HEAD
+=======
+
+#helpSlider {
+    opacity: 0;
+}
+
+@keyframes helpFade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+>>>>>>> 90117e0... fade test
