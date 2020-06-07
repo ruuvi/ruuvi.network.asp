@@ -359,3 +359,11 @@ button.ruuvi-close {
     background-color: transparent;
     border: 0;
 }
+
+.datavalue-temp {
+    background: url(/SVG/m-icon-temp.svg) no-repeat left center;
+    height: 28px;
+    width: 28px;
+    /*margin-top: 5px;
+    -webkit-transition: 1s;*/
+}

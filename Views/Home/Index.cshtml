@@ -42,14 +42,9 @@
     @* Content visible only when user is logged in *@
     @if (Request.IsAuthenticated)
     {
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Header</h2>
-                <p>User is logged in.</p>
-            </div>
-            <div class="col-md-6 mt-lg-0 mt-5">
-                <h2>Header</h2>
-                <p>User is logged in.</p>
+        <div class="row" id="ruuviTagData">
+            <div class="col-md-12">
+                <a class="btn datavalue-temp" href="#" title="Tag temperature"></a>
             </div>
         </div>
         @Html.Partial("~/Views/Home/_AddTagModal.cshtml", mam)
