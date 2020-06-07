@@ -143,14 +143,14 @@
         /* Close/hide the helpSlider */
         function closeHelpSlider() {
             document.getElementById("helpSlider").style.width = "0";
-            helpSlider.style.animation = "helpFade .3s ease backwards .3s";
+            helpSlider.style.animation = "";
         }
 
         //Toggle the helpSlider
         function toggleHelpSlider() {
             if (helpSlider.style.width > "0px") { // If it is hidden = 0px
                 helpSlider.style.width = "0px";
-                helpSlider.style.animation = "helpFade .3s ease backwards .3s";
+                helpSlider.style.animation = "";
             } else {
                 document.getElementById("helpSlider").style.width = helpSliderWidth;
                 helpSlider.style.animation = "helpFade .3s ease forwards .3s";
