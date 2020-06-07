@@ -197,13 +197,16 @@ textarea {
     height: 28px;
     width: 28px;
     margin-top: 5px;
+    -webkit-transition: 1s;
 }
+
 
 .svg-btn-alert {
     background: url(/SVG/icon-alert.svg) no-repeat left center;
     height: 28px;
     width: 28px;
     margin-top: 5px;
+    -webkit-transition: 1s;
 }
 
 .svg-btn-new {
@@ -211,6 +214,22 @@ textarea {
     height: 28px;
     width: 28px;
     margin-top: 5px;
+    -webkit-transition: 1s;
+}
+
+.svg-btn-alert:hover, .svg-btn-alert:focus {
+    transform: scale(1.2);
+    transition: 0.1s;
+}
+
+.svg-btn-settings:hover, .svg-btn-settings:focus {
+    transform: scale(1.2) rotate(360deg);
+    transition: 1s;
+}
+
+.svg-btn-new:hover, .svg-btn-new:focus {
+    transform: scale(1.2);
+    transition: 0.3s;
 }
 
 .form-control {
