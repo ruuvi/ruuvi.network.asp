@@ -29,11 +29,9 @@ textarea {
 
 .navbar-ruuvi {
     background-color: #1a1a1a;
-    /*background-color: red;*/
 }
 
     .navbar-ruuvi .navbar-nav .nav-link {
-        /*color: #666;*/
         color: #fff;
         text-align: right;
     }
@@ -73,7 +71,6 @@ textarea {
 .btn-general {
     color: #fff;
     background-color: #00A99D;
-    /*border-color: #6beae1;*/
     border-radius: 20px;
 }
 
@@ -86,7 +83,6 @@ textarea {
     .btn-general:focus, .btn-general.focus {
         color: #fff;
         background-color: #333;
-        /*border-color: #00A99D;*/
         box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
     }
 
@@ -100,7 +96,6 @@ textarea {
     .show > .btn-general.dropdown-toggle {
         color: #fff;
         background-color: #333;
-        /*border-color: #00A99D;*/
     }
 
         .btn-general:not(:disabled):not(.disabled):active:focus, .btn-general:not(:disabled):not(.disabled).active:focus,
@@ -135,14 +130,10 @@ textarea {
 }
 
 .navbar-ruuvitag {
-    /*margin-top: 57px;*/
     background-color: #1a1a1a;
-    /*background-color: red;*/
-    /*border-top: 1px solid #6beae1;*/
 }
 
     .navbar-ruuvitag .navbar-nav .nav-link {
-        /*color: #666;*/
         color: #fff;
         text-align: right;
         margin-left: 15px;
@@ -159,7 +150,6 @@ textarea {
 .btn-tagdropdown {
     color: #6beae1;
     background-color: #333;
-    /*border-color: #6beae1;*/
     border-radius: 20px;
 }
 
@@ -170,7 +160,6 @@ textarea {
     .btn-tagdropdown:focus, .btn-tagdropdown.focus {
         color: #fff;
         background-color: #333;
-        /*border-color: #00A99D;*/
         box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
     }
 
@@ -287,8 +276,8 @@ a {
     padding-top: 60px;
     transition: 0.3s;
     margin-top: 59px;
-    border-left: 1px solid #00A99D;
-    border-top: 1px solid #00A99D;
+    border-left: 1px solid #333;
+    border-top: 1px solid #333;
     border-radius: 10px 0px 0px 0px;
 }
 
@@ -340,13 +329,11 @@ h1 {
     opacity: 0.5;
     color: #fff;
     background-color: #00A99D;
-    /*border-color: #6beae1;*/
     border-radius: 5px;
 }
 
     .btn-up:hover {
         opacity: 1;
-        /*background-color: #333;*/
         color: #fff;
     }
 
@@ -360,8 +347,6 @@ h1 {
     font-weight: 700;
     line-height: 1;
     color: #00A99D;
-    /*text-shadow: 0 1px 0 #fff;*/
-    /*opacity*/: .5;
 }
 
     .ruuvi-close:hover {
