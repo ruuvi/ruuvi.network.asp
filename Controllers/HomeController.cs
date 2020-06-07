@@ -19,6 +19,8 @@ namespace RuuviTagApp.Controllers
             //var tag = db.RuuviTagModels.Find(1);
             ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
             ViewBag.LoginProvider = TempData["LoginProvider"];
+
+            //ViewBag.UserTagsDropdownList = new SelectList(db.RuuviTagModels.Any(t => t.UserId == userID));
             return View();
         }
 
@@ -94,6 +96,11 @@ namespace RuuviTagApp.Controllers
         public ActionResult AddTagAlarm()
         {
             throw new NotImplementedException();
+        }
+
+        public ActionResult TagNav()
+        {
+            return View();
         }
 
         public async Task<JsonResult> GetTagData(string macAddress)
