@@ -41,7 +41,7 @@
                     <a class="nav-link" href="#">App settings</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="openHelpSliderButton" onclick="openHelpSlider()">Help</a>
+                    <a class="nav-link" href="#" id="openHelpSliderButton" onclick="toggleHelpSlider()">Help</a>
                 </li>
                 @if (Request.IsAuthenticated)
                 {
@@ -98,6 +98,7 @@
 
     <script>
         // Check window width to choose helpSlider width
+        var helpSlider = document.getElementById("helpSlider");
         var helpSliderWidth;
 
         $(window).on('load', function () {
@@ -110,15 +111,24 @@
             }
         });
 
-        /* Open the helpSlider */
-        function openHelpSlider() {
-            document.getElementById("helpSlider").style.width = helpSliderWidth;
-        }
-
         /* Close/hide the helpSlider */
         function closeHelpSlider() {
             document.getElementById("helpSlider").style.width = "0";
 
+        }
+
+        //Toggle the helpSlider
+        function toggleHelpSlider() {
+            if (helpSlider.style.width > "0px") { // If it is hidden = 0px
+                helpSlider.style.width = "0px";
+            } else {
+                document.getElementById("helpSlider").style.width = helpSliderWidth;
+
+                let navbarPulled = $("#main-nav").is(":visible");
+                if (helpSliderWidth == "100%" && navbarPulled) { // If mobile (help slider width 100%), make sure navbar is hidden if it has been pulled down
+                    $('.navbar-toggler').click();
+                }
+            }
         }
     </script>
 
