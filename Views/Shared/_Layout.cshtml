@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/chart")
 </head>
-<body>
+<body class="d-flex flex-column">
     <button onclick="topFunction()" id="btn-up" class="btn btn-up" title="Go to top">Up</button>
 
     <nav class="navbar navbar-expand-lg navbar-ruuvi fixed-top">
         <a class="navbar-brand" href="/Home/Index">
-            <img src="~/SVG/logo-ruuvi-network.svg" height="30" alt="Ruuvi logo">
+            <img class="d-none d-md-block" src="~/SVG/logo-ruuvi-network.svg" height="30" alt="Ruuvi logo">
+            <img class="d-sm-none" src="~/SVG/logo-ruuvi-network.svg" height="25" alt="Ruuvi logo">
         </a>
 
         @*Note: Please leave this commented out navbar-toggler in case mobile-dropdown menu will be deprecated*@
@@ -93,7 +96,7 @@
     @RenderBody()
     <hr />
     <div class="container body-content">
-        <footer class="footer-ruuvi text-center">
+        <footer class="footer-ruuvi text-center" id="footer-ruuvi">
             <div class="footer-ruuvi-logo">
                 <img src="~/Images/web-ruuvi-logo-nega.png" width="130" height="25" alt="Ruuvi logo">
             </div>

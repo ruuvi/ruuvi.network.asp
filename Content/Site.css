@@ -45,10 +45,10 @@ textarea {
     }
 
 .footer-ruuvi {
+    bottom: 0;
     background-color: #1a1a1a;
     width: 100%;
-    float: left;
-    padding: 20px 0 0 0;
+    padding: 0 0 0 0;
 }
 
 .footer-ruuvi-logo {
@@ -360,10 +360,152 @@ button.ruuvi-close {
     border: 0;
 }
 
-.datavalue-temp {
-    background: url(/SVG/m-icon-temp.svg) no-repeat left center;
-    height: 28px;
-    width: 28px;
-    /*margin-top: 5px;
-    -webkit-transition: 1s;*/
+.tagdata-value {
+    /*font-family: 'Montserrat', sans-serif;*/
+    font-family: 'Oswald', sans-serif;
+    display: inline-block;
+    vertical-align: bottom;
+    text-align: left;
+    font-size: 2.5rem;
+    font-weight: bolder;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    margin-left: 0;
 }
+
+.tagdata-header {
+    font-family: 'Montserrrat', sans-serif;
+    /*font-family: 'Oswald', sans-serif;*/
+    vertical-align: bottom;
+    text-align: left;
+    font-size: 1.0rem;
+    font-weight: bolder;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    text-transform: uppercase;
+}
+
+
+.btn-tagdata-temp {
+    background: url(/SVG/m-icon-temp.svg) no-repeat left center;
+    background-position: center;
+    height: 42px;
+    width: 42px;
+    margin-bottom: 10px;
+    -webkit-transition: 2s;
+    margin-right: 0;
+}
+
+    .btn-tagdata-temp:hover, .btn-tagdata-temp:focus {
+        transform: scale(1.0);
+        transition: 0.1s;
+        border: none;
+        box-shadow: none;
+        border: 1px solid #00A99D;
+    }
+
+.btn-tagdata-hum {
+    background: url(/SVG/m-icon-hum.svg) no-repeat left center;
+    background-position: center;
+    height: 42px;
+    width: 42px;
+    margin-bottom: 10px;
+    -webkit-transition: 2s;
+    margin-right: 0;
+}
+
+    .btn-tagdata-hum:hover, .btn-tagdata-hum:focus {
+        transform: scale(1.0);
+        transition: 0.1s;
+        border: none;
+        box-shadow: none;
+        border: 1px solid #00A99D;
+    }
+
+.btn-tagdata-air {
+    background: url(/SVG/m-icon-air.svg) no-repeat left center;
+    background-position: center;
+    height: 42px;
+    width: 42px;
+    margin-bottom: 10px;
+    -webkit-transition: 2s;
+    margin-right: 0;
+}
+
+    .btn-tagdata-air:hover, .btn-tagdata-air:focus {
+        transform: scale(1.0);
+        transition: 0.1s;
+        border: none;
+        box-shadow: none;
+        border: 1px solid #00A99D;
+    }
+
+.tagdata-hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid #333;
+}
+
+.celsius {
+    /*font-family: 'Montserrrat', sans-serif;*/
+    position: absolute;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    margin-bottom: 0;
+    margin-top: 6px;
+    padding-top: 0;
+    margin-left: 5px;
+}
+
+.percent {
+    /*font-family: 'Montserrrat', sans-serif;*/
+    position: absolute;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    margin-bottom: 0;
+    margin-top: 6px;
+    padding-top: 0;
+    margin-left: 5px;
+}
+
+.hpa {
+    /*font-family: 'Montserrrat', sans-serif;*/
+    position: absolute;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    margin-bottom: 0;
+    margin-top: 6px;
+    padding-top: 0;
+    margin-left: 5px;
+}
+
+.RuuviTagData {
+    bottom: 100px;
+    top: auto;
+}
+
+/*html,
+body {
+    height: 100%;
+}
+
+#body-content {
+    flex: 1 0 auto;
+    bottom: 0;
+    left: 0;
+}
+
+#footer-ruuvi {
+    flex-shrink: none;
+}
+
+.RuuviTagData {
+    /*position: absolute;*/
+    bottom: 120px;
+    width: 80%;
+}*/ 
