@@ -359,3 +359,15 @@ button.ruuvi-close {
     background-color: transparent;
     border: 0;
 }
+
+#helpSlider {
+    opacity: 0;
+}
+@keyframes helpFade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
