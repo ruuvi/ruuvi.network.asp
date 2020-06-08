@@ -18,7 +18,7 @@
 
 } @*End of tag navbar*@
 
-<div class="container body-content">
+<div class="container body-content" id="body-content">
     @* Content visible only when user is not logged in *@
     @if (!Request.IsAuthenticated)
     {
@@ -41,15 +41,32 @@
 
     @* Content visible only when user is logged in *@
     @if (Request.IsAuthenticated)
-    {
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Header</h2>
-                <p>User is logged in.</p>
+        {
+        //Example data
+        <div class="RuuviTagData"> 
+            <div class="row" id="ruuviTagTemperature">
+                <div class="col-lg-4 col-sm-12">
+                    <a class="btn btn-tagdata-temp" href="#" title="Tag temperature"></a>
+                    <p class="tagdata-value">38.26</p> <span class="celsius">&#176;C</span>
+                    <p class="tagdata-header">Temperature</p>
+                    <hr class="tagdata-hr" />
+                </div>
             </div>
-            <div class="col-md-6 mt-lg-0 mt-5">
-                <h2>Header</h2>
-                <p>User is logged in.</p>
+            <div class="row" id="ruuviTagHumidity">
+                <div class="col-lg-4 col-sm-12">
+                    <a class="btn btn-tagdata-hum" href="#" title="Tag humidity"></a>
+                    <p class="tagdata-value">85.5</p> <span class="percent">%</span>
+                    <p class="tagdata-header">Humidity</p>
+                    <hr class="tagdata-hr" />
+                </div>
+            </div>
+            <div class="row" id="ruuviTagAirPressure">
+                <div class="col-lg-4 col-sm-12">
+                    <a class="btn btn-tagdata-air" href="#" title="Tag air pressure"></a>
+                    <p class="tagdata-value">1015.36</p> <span class="hpa">hPa</span>
+                    <p class="tagdata-header">Air pressure</p>
+                    <hr class="tagdata-hr" />
+                </div>
             </div>
         </div>
         @Html.Partial("~/Views/Home/_AddTagModal.cshtml", mam)
