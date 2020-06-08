@@ -37,6 +37,7 @@
         ExternalLoginConfirmationViewModel elcvm = Model is ExternalLoginConfirmationViewModel ?
             Model : new ExternalLoginConfirmationViewModel();
         @Html.Partial("~/Views/Account/_ExternalLoginConfirmationModal.cshtml", elcvm)
+
         <div>
             @if (ViewBag.TagData != null) 
             {

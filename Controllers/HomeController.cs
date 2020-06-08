@@ -1,8 +1,10 @@
-﻿using RuuviTagApp.Models;
+﻿using Microsoft.AspNet.Identity;
+using RuuviTagApp.Models;
 using RuuviTagApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,7 +39,7 @@ namespace RuuviTagApp.Controllers
                     };
                     var context = new ValidationContext(mac);
                     var results = new List<ValidationResult>();
-                    var isValid = Validator.TryValidateObject(mac, context, results);
+                    var isValid = Validator.TryValidateObject(mac, context, results, true);
                     if (isValid)
                     {
                         return await SearchTag(mac);
@@ -46,7 +48,15 @@ namespace RuuviTagApp.Controllers
                 }
             }
 
-            //ViewBag.UserTagsDropdownList = new SelectList(db.RuuviTagModels.Any(t => t.UserId == userID));
+            if (Request.IsAuthenticated)
+            {
+                string userID = User.Identity.GetUserId();
+                List<RuuviTagModel> userTags = (from t in db.RuuviTagModels
+                                            where t.UserId == userID
+                                            select t).ToList();
+                ViewBag.UserTagsDropdownList = new SelectList(userTags, "TagId", "TagMacAddress");
+                ViewBag.UserTagsList = userTags;
+            }
             return View();
         }
 
