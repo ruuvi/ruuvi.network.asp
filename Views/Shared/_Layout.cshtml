@@ -133,16 +133,44 @@
         var helpSlider = document.getElementById("helpSlider");
         const helpSliderDivs = document.querySelectorAll("#helpSlider div, #helpSlider a, #helpSlider button");
         var helpSliderWidth;
+        var displayChartsAsModal = true;
 
         $(window).on('load', function () {
+            let desktopChartRow = document.getElementById("desktopChartRow");
+            let btnTagTemp = this.document.getElementById("btn-TagTemp");
+            let btnTagHum = this.document.getElementById("btn-TagHum");
+            let btnTagAir = this.document.getElementById("btn-TagAir");
+
             if ($(window).width() < 451) {
                 helpSliderWidth = "100%";
             }
             else {
                 helpSliderWidth = "50%";
+                displayChartsAsModal = false;
+            }
 
+            // Choose wether to display charts as modals or not
+            if (displayChartsAsModal) {
+                desktopChartRow.style.display = "none";
+                console.log("Not displaying desktopChartRow");
+            } else {
+                desktopChartRow.style.display = "block";
+                console.log("Displaying desktopChartRow");
+                btnTagTemp.classList.add("disabled");
+                btnTagHum.classList.add("disabled");
+                btnTagAir.classList.add("disabled");
             }
         });
+        //        $(window).on('load', function () {
+        //    if ($(window).width() < 451) {
+        //        helpSliderWidth = "100%";
+        //    }
+        //    else {
+        //        helpSliderWidth = "50%";
+        //        displayChartsAsModal = false;
+        //    }
+        //    console.log("Boolean status on layout is :" + displayChartsAsModal) // Debug
+        //});
 
         /* Close/hide the helpSlider */
         function closeHelpSlider() {

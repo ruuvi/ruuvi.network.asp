@@ -41,12 +41,12 @@
 
     @* Content visible only when user is logged in *@
     @if (Request.IsAuthenticated)
-        {
+    {
         //Example data
-        <div class="RuuviTagData"> 
+        <div class="RuuviTagData">
             <div class="row" id="ruuviTagTemperature">
                 <div class="col-lg-4 col-sm-12">
-                    <a class="btn btn-tagdata-temp" href="#" title="Tag temperature"></a>
+                    <a class="btn btn-tagdata-temp" id="btn-TagTemp" href="#" title="Tag temperature"></a>
                     <p class="tagdata-value">38.26</p> <span class="celsius">&#176;C</span>
                     <p class="tagdata-header">Temperature</p>
                     <hr class="tagdata-hr" />
@@ -54,7 +54,7 @@
             </div>
             <div class="row" id="ruuviTagHumidity">
                 <div class="col-lg-4 col-sm-12">
-                    <a class="btn btn-tagdata-hum" href="#" title="Tag humidity"></a>
+                    <a class="btn btn-tagdata-hum" id="btn-TagHum" href="#" title="Tag humidity"></a>
                     <p class="tagdata-value">85.5</p> <span class="percent">%</span>
                     <p class="tagdata-header">Humidity</p>
                     <hr class="tagdata-hr" />
@@ -62,11 +62,16 @@
             </div>
             <div class="row" id="ruuviTagAirPressure">
                 <div class="col-lg-4 col-sm-12">
-                    <a class="btn btn-tagdata-air" href="#" title="Tag air pressure"></a>
+                    <a class="btn btn-tagdata-air" id="btn-TagAir" href="#" title="Tag air pressure"></a>
                     <p class="tagdata-value">1015.36</p> <span class="hpa">hPa</span>
                     <p class="tagdata-header">Air pressure</p>
                     <hr class="tagdata-hr" />
                 </div>
+            </div>
+        </div>
+        <div class="row" id="desktopChartRow">
+            <div class="col-lg-12">
+                <p>Hello :D</p>
             </div>
         </div>
         @Html.Partial("~/Views/Home/_AddTagModal.cshtml", mam)

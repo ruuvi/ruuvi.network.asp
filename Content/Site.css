@@ -457,6 +457,10 @@ button.ruuvi-close {
         border: 1px solid #00A99D;
     }
 
+.btn-tagdata-temp.disabled, .btn-tagdata-air.disabled, .btn-tagdata-hum.disabled {
+    opacity: 1;
+}
+
 .tagdata-hr {
     margin-top: 1rem;
     margin-bottom: 1rem;
