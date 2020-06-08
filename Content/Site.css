@@ -299,6 +299,22 @@ a {
         margin-bottom: 30px;
     }
 
+#helpSlider div,
+#helpSlider button,
+#helpSlider a {
+    opacity: 0;
+}
+
+@keyframes helpFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 .card-ruuvi {
     color: #fff;
     background-color: #1a1a1a;
