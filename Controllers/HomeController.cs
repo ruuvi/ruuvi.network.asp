@@ -13,13 +13,16 @@ namespace RuuviTagApp.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
-        public ActionResult Index()
+        public ActionResult Index(string tagMac)
         {
             // tämän pitäisi luoda tietokanta
             //var tag = db.RuuviTagModels.Find(1);
             ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
             ViewBag.LoginProvider = TempData["LoginProvider"];
-
+            if (!string.IsNullOrWhiteSpace(tagMac))
+            {
+                ViewBag.TagData = ""; // backendcall
+            }
             //ViewBag.UserTagsDropdownList = new SelectList(db.RuuviTagModels.Any(t => t.UserId == userID));
             return View();
         }
@@ -48,11 +51,11 @@ namespace RuuviTagApp.Controllers
         [HttpPost]
         public ActionResult SearchTag(MacAddressModel mac)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View("Index", mac);
+                return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
-            return RedirectToAction("Index");
+            return View("Index", mac);
         }
 
         [Authorize]
