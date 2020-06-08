@@ -23,23 +23,9 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
         public ActionResult Help()
         {
-            ViewBag.Message = "Your help page.";
+            ViewBag.Message = "Help page";
 
             return View();
         }
@@ -114,6 +100,21 @@ namespace RuuviTagApp.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult TemperatureChart()
+        {
+            return View();
+        }
+
+        public ActionResult HumidityChart()
+        {
+            return View();
+        }
+
+        public ActionResult AirpressureChart()
+        {
+            return View();
         }
     }
 }

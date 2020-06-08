@@ -107,10 +107,6 @@
     </div>
 
     <script>
-
-    </script>
-
-    <script>
         // Check window width to choose helpSlider width
         var helpSlider = document.getElementById("helpSlider");
         const helpSliderDivs = document.querySelectorAll("#helpSlider div, #helpSlider a, #helpSlider button");
@@ -134,15 +130,13 @@
 
             // Choose wether to display charts as modals or not
             if (desktopCharts != null) { // Basically checking if the user has logged in or not
-                if (displayChartsAsModal) {
+                if (displayChartsAsModal) { // If the device screen is small enough, we'll show charts as modals which can be opened by clicking the tag value icon
                     desktopCharts.style.display = "none";
-                    console.log("Not displaying desktopChartRow");
                     btnTagTemp.classList.remove("disabled");
                     btnTagHum.classList.remove("disabled");
                     btnTagAir.classList.remove("disabled");
-                } else {
+                } else { // If the device screen is wider than medium, disable modal popup buttons and display the charts immediately
                     desktopCharts.style.display = "block";
-                    console.log("Displaying desktopChartRow");
                     btnTagTemp.classList.add("disabled");
                     btnTagHum.classList.add("disabled");
                     btnTagAir.classList.add("disabled");
@@ -158,11 +152,11 @@
         };
 
         function resizeEnd() {
-            console.log("Resize ended.");
+            console.log("DEBUG: Resize ended."); // For debugging
             onLoad();
         }
 
-        //Close/hide the helpSlider
+        // Close or hide the helpSlider
         function closeHelpSlider() {
             document.getElementById("helpSlider").style.width = "0";
             helpSliderDivs.forEach(element => {
@@ -170,7 +164,7 @@
             });
         }
 
-        //Toggle the helpSlider
+        // Toggle the helpSlider
         function toggleHelpSlider() {
             if (helpSlider.style.width > "0px") { // If it is hidden = 0px
                 helpSlider.style.width = "0px";
@@ -189,7 +183,7 @@
             }
         }
 
-        //Get the button
+        // Get the button
         var mybutton = document.getElementById("btn-up");
 
         // When the user scrolls down xx px from the top of the document, show the button
