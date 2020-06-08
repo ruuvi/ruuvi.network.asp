@@ -20,7 +20,6 @@ namespace RuuviTagApp.Controllers
             ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
             ViewBag.LoginProvider = TempData["LoginProvider"];
 
-            //ViewBag.UserTagsDropdownList = new SelectList(db.RuuviTagModels.Any(t => t.UserId == userID));
             return View();
         }
 
