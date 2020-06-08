@@ -49,7 +49,7 @@ else
                 Model : new ExternalLoginConfirmationViewModel();
             @Html.Partial("~/Views/Account/_ExternalLoginConfirmationModal.cshtml", elcvm)
 
-            <div>
+            @*<div>
                 @if (ViewBag.TagData != null)
                 {
                     <table>
@@ -80,7 +80,7 @@ else
                         }
                     </table>
                 }
-            </div>
+            </div>*@
         } @*End of content visible only when user is not logged in*@
 
         @* Content visible only when user is logged in *@
