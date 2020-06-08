@@ -360,9 +360,12 @@ button.ruuvi-close {
     border: 0;
 }
 
-#helpSlider {
+#helpSlider div,
+#helpSlider button,
+#helpSlider a {
     opacity: 0;
 }
+
 @keyframes helpFade {
     from {
         opacity: 0;

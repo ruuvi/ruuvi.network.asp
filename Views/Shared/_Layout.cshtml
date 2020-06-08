@@ -128,6 +128,7 @@
     <script>
         // Check window width to choose helpSlider width
         var helpSlider = document.getElementById("helpSlider");
+        const helpSliderDivs = document.querySelectorAll("#helpSlider div, #helpSlider a, #helpSlider button");
         var helpSliderWidth;
 
         $(window).on('load', function () {
@@ -143,17 +144,23 @@
         /* Close/hide the helpSlider */
         function closeHelpSlider() {
             document.getElementById("helpSlider").style.width = "0";
-            helpSlider.style.animation = "";
+            helpSliderDivs.forEach(element => {
+                element.style.animation = "";
+            });
         }
 
         //Toggle the helpSlider
         function toggleHelpSlider() {
             if (helpSlider.style.width > "0px") { // If it is hidden = 0px
                 helpSlider.style.width = "0px";
-                helpSlider.style.animation = "";
+                helpSliderDivs.forEach(element => {
+                    element.style.animation = "";
+                });
             } else {
                 document.getElementById("helpSlider").style.width = helpSliderWidth;
-                helpSlider.style.animation = "helpFade .3s ease forwards .3s";
+                helpSliderDivs.forEach(element => {
+                    element.style.animation = "helpFade 0.3s ease forwards 0.3s";
+                });
                 let navbarPulled = $("#main-nav").is(":visible");
                 if (helpSliderWidth == "100%" && navbarPulled) { // If mobile (help slider width 100%), make sure navbar is hidden if it has been pulled down
                     $('.navbar-toggler').click();
