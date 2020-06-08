@@ -1,4 +1,9 @@
-﻿<div class="container-fluid pl-0">
+﻿@{
+    int selectedTagId;
+    string selectedTagMac;
+}
+
+<div class="container-fluid pl-0">
     <nav class="navbar navbar-ruuvitag navbar-expand">
         <div class="collapse navbar-collapse" id="tag-nav">
             <ul class="navbar-nav mr-auto navbar-ruuvitag-nav">
@@ -10,11 +15,14 @@
                     <div class="dropdown-menu dropdown-menu-ruuvi" aria-labelledby="dropdownMenuButton">
                         @foreach (var tag in ViewBag.UserTagsList)
                         {
-                            <a class="dropdown-item dropdown-item-ruuvi" href="/Home/SomeMethod/@tag.TagId">@tag.TagMacAddress</a>
+                            <a class="dropdown-item dropdown-item-ruuvi" href="#@tag.TagId">@tag.TagMacAddress</a>
+                            selectedTagId = tag.TagId;
+                            selectedTagMac = tag.TagMacAddress;
+
                         }
                         @if (ViewBag.UserTagsListError != null)
                         {
-                            <a class="dropdown-item dropdown-item-ruuvi disabled" href="#" disabled>@ViewBag.UserTagsListError</a>
+                            <a class="dropdown-item dropdown-item-ruuvi disabled" href="#">@ViewBag.UserTagsListError</a>
                         }
                     </div>
                 </div>
