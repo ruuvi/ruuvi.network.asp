@@ -507,5 +507,6 @@ body {
 .RuuviTagData {
     /*position: absolute;
     bottom: 120px;
-    width: 80%;
-}*/ 
+    width: 80%;*/
+    margin-top: 30px;
+}
