@@ -2,6 +2,7 @@
 using RuuviTagApp.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,17 +21,31 @@ namespace RuuviTagApp.Controllers
             //var tag = db.RuuviTagModels.Find(1);
             ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
             ViewBag.LoginProvider = TempData["LoginProvider"];
+
             if (!string.IsNullOrWhiteSpace(tagMac))
             {
                 if (TempData["ApiResponse"] != null)
                 {
-                    ViewBag.TagData = TempData["ApiResponse"]; // backendcall 
+                    ViewBag.TagData = TempData["ApiResponse"];
                 }
                 else
                 {
-                    ViewBag.TagData = await Task.Run(() => SimulateApiCallResponse(tagMac));
+                    //ViewBag.TagData = await Task.Run(() => SimulateApiCallResponse(tagMac));
+                    var mac = new MacAddressModel
+                    {
+                        MacAddress = tagMac
+                    };
+                    var context = new ValidationContext(mac);
+                    var results = new List<ValidationResult>();
+                    var isValid = Validator.TryValidateObject(mac, context, results);
+                    if (isValid)
+                    {
+                        return await SearchTag(mac);
+                    }
+                    ViewBag.TagError = results;
                 }
             }
+
             //ViewBag.UserTagsDropdownList = new SelectList(db.RuuviTagModels.Any(t => t.UserId == userID));
             return View();
         }
