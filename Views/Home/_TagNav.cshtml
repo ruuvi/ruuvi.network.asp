@@ -12,9 +12,10 @@
                         {
                             <a class="dropdown-item dropdown-item-ruuvi" href="/Home/SomeMethod/@tag.TagId">@tag.TagMacAddress</a>
                         }
-                        <a class="dropdown-item dropdown-item-ruuvi" href="#">Example Tag name 1</a>
-                        <a class="dropdown-item dropdown-item-ruuvi" href="#">Example Tag name 2</a>
-                        <a class="dropdown-item dropdown-item-ruuvi" href="#">Example Tag name 3</a>
+                        @if (ViewBag.UserTagsListError != null)
+                        {
+                            <a class="dropdown-item dropdown-item-ruuvi disabled" href="#" disabled>@ViewBag.UserTagsListError</a>
+                        }
                     </div>
                 </div>
                 <li class="nav-item active">
@@ -24,9 +25,29 @@
                     <a class="nav-link svg-btn-alert" href="#alert" title="Manage alerts"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link svg-btn-new" data-toggle="modal" data-target="#addTagModal" title="Add new RuuviTag"></a>
+                    <a class="nav-link svg-btn-new" id="btn-addNewTag" data-toggle="modal" data-target="#addTagModal" title="Add new RuuviTag"></a>
                 </li>
             </ul>
         </div>
     </nav>
 </div>
+
+<script>
+    // Highlight Add new Ruuvitag
+    function highlightPlus() {
+        let plus = document.getElementById("btn-addNewTag");
+        plus.classList.add("highlight");
+        var t = setTimeout(function () {
+            plus.classList.remove("highlight");
+        }, 1000);
+    }
+</script>
+
+@if (ViewBag.UserTagsListError != null) // If user hasn't added any tags, highlight Add button
+{
+    <script>
+        let dropDownBtn = document.getElementById("tagMenuButton");
+        dropDownBtn.setAttribute("onclick", "highlightPlus()");
+        highlightPlus();
+    </script>
+}

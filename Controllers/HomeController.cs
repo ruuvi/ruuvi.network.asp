@@ -56,6 +56,12 @@ namespace RuuviTagApp.Controllers
                                             select t).ToList();
                 ViewBag.UserTagsDropdownList = new SelectList(userTags, "TagId", "TagMacAddress");
                 ViewBag.UserTagsList = userTags;
+
+                // Add error message in case user hasn't added any tags
+                if (userTags == null || !userTags.Any() || userTags.Count == 0)
+                {
+                    ViewBag.UserTagsListError = "Zero RuuviTags saved.";
+                }
             }
             return View();
         }

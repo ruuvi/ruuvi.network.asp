@@ -50,7 +50,7 @@ else
         @Html.Partial("~/Views/Account/_ExternalLoginConfirmationModal.cshtml", elcvm)
 
         <div>
-            @if (ViewBag.TagData != null) 
+            @if (ViewBag.TagData != null)
             {
                 <table>
                     <tr>
@@ -64,20 +64,20 @@ else
                         <th>TX Power</th>
                         <th>Voltage</th>
                     </tr>
-                @foreach (var item in ViewBag.TagData)
-                {
-                    <tr>
-                        <td>@item.Time</td>
-                        <td>@item.Data.Temperature</td>
-                        <td>@item.Data.Pressure</td>
-                        <td>@item.Data.Humidity</td>
-                        <td>@item.Data.Acc_X</td>
-                        <td>@item.Data.Acc_Y</td>
-                        <td>@item.Data.Acc_Z</td>
-                        <td>@item.Data.TXPower</td>
-                        <td>@item.Data.Voltage</td>
-                    </tr>
-                }
+                    @foreach (var item in ViewBag.TagData)
+                    {
+                        <tr>
+                            <td>@item.Time</td>
+                            <td>@item.Data.Temperature</td>
+                            <td>@item.Data.Pressure</td>
+                            <td>@item.Data.Humidity</td>
+                            <td>@item.Data.Acc_X</td>
+                            <td>@item.Data.Acc_Y</td>
+                            <td>@item.Data.Acc_Z</td>
+                            <td>@item.Data.TXPower</td>
+                            <td>@item.Data.Voltage</td>
+                        </tr>
+                    }
                 </table>
             }
         </div>

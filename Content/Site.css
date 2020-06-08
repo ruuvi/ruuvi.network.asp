@@ -221,6 +221,11 @@ textarea {
     transition: 0.3s;
 }
 
+.svg-btn-new.highlight {
+    transform: rotate(360deg);
+    transition: 1s;
+}
+
 .form-control {
     display: block;
     width: 100%;
