@@ -12,7 +12,7 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/chart")
 </head>
-<body class="d-flex flex-column">
+<body class="d-flex flex-column" onload="onLoad()">
     <button onclick="topFunction()" id="btn-up" class="btn btn-up" title="Go to top">Up</button>
 
     <nav class="navbar navbar-expand-lg navbar-ruuvi fixed-top">
@@ -107,25 +107,7 @@
     </div>
 
     <script>
-        //Get the button
-        var mybutton = document.getElementById("btn-up");
 
-        // When the user scrolls down xx px from the top of the document, show the button
-        window.onscroll = function () { scrollFunction() };
-
-        function scrollFunction() {
-            if (document.body.scrollTop > 60 || document.documentElement.scrollTop > 60) {
-                mybutton.style.display = "block";
-            } else {
-                mybutton.style.display = "none";
-            }
-        }
-
-        // When the user clicks on the button, scroll to the top of the document
-        function topFunction() {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-        }
     </script>
 
     <script>
@@ -133,15 +115,16 @@
         var helpSlider = document.getElementById("helpSlider");
         const helpSliderDivs = document.querySelectorAll("#helpSlider div, #helpSlider a, #helpSlider button");
         var helpSliderWidth;
-        var displayChartsAsModal = true;
 
-        $(window).on('load', function () {
-            let desktopChartRow = document.getElementById("desktopChartRow");
+        function onLoad() {
+            var displayChartsAsModal = true;
+
+            let desktopCharts = document.getElementById("desktopCharts");
             let btnTagTemp = this.document.getElementById("btn-TagTemp");
             let btnTagHum = this.document.getElementById("btn-TagHum");
             let btnTagAir = this.document.getElementById("btn-TagAir");
 
-            if ($(window).width() < 451) {
+            if ($(window).width() < 991.98) {
                 helpSliderWidth = "100%";
             }
             else {
@@ -150,29 +133,36 @@
             }
 
             // Choose wether to display charts as modals or not
-            if (displayChartsAsModal) {
-                desktopChartRow.style.display = "none";
-                console.log("Not displaying desktopChartRow");
-            } else {
-                desktopChartRow.style.display = "block";
-                console.log("Displaying desktopChartRow");
-                btnTagTemp.classList.add("disabled");
-                btnTagHum.classList.add("disabled");
-                btnTagAir.classList.add("disabled");
+            if (desktopCharts != null) { // Basically checking if the user has logged in or not
+                if (displayChartsAsModal) {
+                    desktopCharts.style.display = "none";
+                    console.log("Not displaying desktopChartRow");
+                    btnTagTemp.classList.remove("disabled");
+                    btnTagHum.classList.remove("disabled");
+                    btnTagAir.classList.remove("disabled");
+                } else {
+                    desktopCharts.style.display = "block";
+                    console.log("Displaying desktopChartRow");
+                    btnTagTemp.classList.add("disabled");
+                    btnTagHum.classList.add("disabled");
+                    btnTagAir.classList.add("disabled");
+                }
             }
-        });
-        //        $(window).on('load', function () {
-        //    if ($(window).width() < 451) {
-        //        helpSliderWidth = "100%";
-        //    }
-        //    else {
-        //        helpSliderWidth = "50%";
-        //        displayChartsAsModal = false;
-        //    }
-        //    console.log("Boolean status on layout is :" + displayChartsAsModal) // Debug
-        //});
+        }
 
-        /* Close/hide the helpSlider */
+        // Checking resizing event to make charts responsive real time
+        var resizingChecker;
+        window.onresize = function () {
+            clearTimeout(resizingChecker);
+            resizingChecker = setTimeout(resizeEnd, 200);
+        };
+
+        function resizeEnd() {
+            console.log("Resize ended.");
+            onLoad();
+        }
+
+        //Close/hide the helpSlider
         function closeHelpSlider() {
             document.getElementById("helpSlider").style.width = "0";
             helpSliderDivs.forEach(element => {
@@ -197,6 +187,26 @@
                     $('.navbar-toggler').click();
                 }
             }
+        }
+
+        //Get the button
+        var mybutton = document.getElementById("btn-up");
+
+        // When the user scrolls down xx px from the top of the document, show the button
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 60 || document.documentElement.scrollTop > 60) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }
     </script>
 
