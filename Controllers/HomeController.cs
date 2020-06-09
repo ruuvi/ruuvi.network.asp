@@ -4,6 +4,7 @@ using RuuviTagApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Threading;
@@ -32,7 +33,6 @@ namespace RuuviTagApp.Controllers
                 }
                 else
                 {
-                    //ViewBag.TagData = await Task.Run(() => SimulateApiCallResponse(tagMac));
                     var mac = new MacAddressModel
                     {
                         MacAddress = tagMac
@@ -50,10 +50,7 @@ namespace RuuviTagApp.Controllers
 
             if (Request.IsAuthenticated)
             {
-                string userID = User.Identity.GetUserId();
-                List<RuuviTagModel> userTags = (from t in db.RuuviTagModels
-                                            where t.UserId == userID
-                                            select t).ToList();
+                List<RuuviTagModel> userTags = await GetUserTagsAsync(User.Identity.GetUserId());
                 ViewBag.UserTagsDropdownList = new SelectList(userTags, "TagId", "TagMacAddress");
                 ViewBag.UserTagsList = userTags;
 
@@ -112,10 +109,9 @@ namespace RuuviTagApp.Controllers
             return View("Index", mac);
         }
 
-        public ActionResult GetUserTags()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<List<RuuviTagModel>> GetUserTagsAsync(string userID) => await (from t in db.RuuviTagModels
+                                                                                         where t.UserId == userID
+                                                                                         select t).ToListAsync();
 
         public ActionResult AddTagList()
         {
