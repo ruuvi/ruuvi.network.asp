@@ -24,8 +24,10 @@ namespace RuuviTagApp.Controllers
             //var tag = db.RuuviTagModels.Find(1);
             ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
             ViewBag.LoginProvider = TempData["LoginProvider"];
+            ViewBag.ShowAddTag = TempData["ShowAddTag"];
+            ViewBag.TagAlreadyExists = TempData["TagAlreadyExists"];
 
-            if (!string.IsNullOrWhiteSpace(tagMac))
+            if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
                 if (TempData["ApiResponse"] != null)
                 {
@@ -47,11 +49,9 @@ namespace RuuviTagApp.Controllers
                     ViewBag.TagError = results;
                 }
             }
-
-            if (Request.IsAuthenticated)
+            else if (Request.IsAuthenticated)
             {
                 List<RuuviTagModel> userTags = await GetUserTagsAsync(User.Identity.GetUserId());
-                ViewBag.UserTagsDropdownList = new SelectList(userTags, "TagId", "TagMacAddress");
                 ViewBag.UserTagsList = userTags;
 
                 // Add error message in case user hasn't added any tags
@@ -59,6 +59,11 @@ namespace RuuviTagApp.Controllers
                 {
                     ViewBag.UserTagsListError = "Zero RuuviTags saved.";
                 }
+            }
+
+            if (TempData["MacModel"] != null)
+            {
+                return View(TempData["MacModel"] as MacAddressModel);
             }
             return View();
         }
@@ -94,16 +99,15 @@ namespace RuuviTagApp.Controllers
                 // Check if this tag has been added by this user
                 if (db.RuuviTagModels.Any(t => t.UserId == userID && t.TagMacAddress == macAddress))
                 {
-                    ViewBag.TagAlreadyExists = "Couldn't add this tag, since you have already added it!";
-                    ViewBag.ShowAddTag = true;
-                }
-                else
-                {
-                    var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
-                    db.SaveChanges();
-                    // use data and tag to refresh view
+                    TempData["TagAlreadyExists"] = "Couldn't add this tag, since you have already added it!";
+                    TempData["ShowAddTag"] = true;
+                    TempData["MacModel"] = mac;
                     return RedirectToAction("Index");
                 }
+                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
+                db.SaveChanges();
+                // use data and tag to refresh view
+                return RedirectToAction("Index");
             }
             ViewBag.ShowAddTag = true;
             return View("Index", mac);
