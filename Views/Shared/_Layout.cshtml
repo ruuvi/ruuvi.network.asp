@@ -12,13 +12,13 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/chart")
 </head>
-<body class="d-flex flex-column">
+<body class="d-flex flex-column" onload="onLoad()">
     <button onclick="topFunction()" id="btn-up" class="btn btn-up" title="Go to top">Up</button>
 
     <nav class="navbar navbar-expand-lg navbar-ruuvi fixed-top">
         <a class="navbar-brand" href="/Home/Index">
             <img class="d-none d-md-block" src="~/SVG/logo-ruuvi-network.svg" height="30" alt="Ruuvi logo">
-            <img class="d-sm-none" src="~/SVG/logo-ruuvi-network.svg" height="25" alt="Ruuvi logo">
+            <img class="d-md-none" src="~/SVG/logo-ruuvi-network.svg" height="25" alt="Ruuvi logo">
         </a>
 
         @*Note: Please leave this commented out navbar-toggler in case mobile-dropdown menu will be deprecated*@
@@ -107,7 +107,83 @@
     </div>
 
     <script>
-        //Get the button
+        // Check window width to choose helpSlider width
+        var helpSlider = document.getElementById("helpSlider");
+        const helpSliderDivs = document.querySelectorAll("#helpSlider div, #helpSlider a, #helpSlider button");
+        var helpSliderWidth;
+
+        function onLoad() {
+            var displayChartsAsModal = true;
+
+            let desktopCharts = document.getElementById("desktopCharts");
+            let btnTagTemp = this.document.getElementById("btn-TagTemp");
+            let btnTagHum = this.document.getElementById("btn-TagHum");
+            let btnTagAir = this.document.getElementById("btn-TagAir");
+
+            if ($(window).width() < 991.98) {
+                helpSliderWidth = "100%";
+            }
+            else {
+                helpSliderWidth = "50%";
+                displayChartsAsModal = false;
+            }
+
+            // Choose wether to display charts as modals or not
+            if (desktopCharts != null) { // Basically checking if the user has logged in or not
+                if (displayChartsAsModal) { // If the device screen is small enough, we'll show charts as modals which can be opened by clicking the tag value icon
+                    desktopCharts.style.display = "none";
+                    btnTagTemp.classList.remove("disabled");
+                    btnTagHum.classList.remove("disabled");
+                    btnTagAir.classList.remove("disabled");
+                } else { // If the device screen is wider than medium, disable modal popup buttons and display the charts immediately
+                    desktopCharts.style.display = "block";
+                    btnTagTemp.classList.add("disabled");
+                    btnTagHum.classList.add("disabled");
+                    btnTagAir.classList.add("disabled");
+                }
+            }
+        }
+
+        // Checking resizing event to make charts responsive real time
+        var resizingChecker;
+        window.onresize = function () {
+            clearTimeout(resizingChecker);
+            resizingChecker = setTimeout(resizeEnd, 200);
+        };
+
+        function resizeEnd() {
+            console.log("DEBUG: Resize ended."); // For debugging
+            onLoad();
+        }
+
+        // Close or hide the helpSlider
+        function closeHelpSlider() {
+            document.getElementById("helpSlider").style.width = "0";
+            helpSliderDivs.forEach(element => {
+                element.style.animation = "";
+            });
+        }
+
+        // Toggle the helpSlider
+        function toggleHelpSlider() {
+            if (helpSlider.style.width > "0px") { // If it is hidden = 0px
+                helpSlider.style.width = "0px";
+                helpSliderDivs.forEach(element => {
+                    element.style.animation = "";
+                });
+            } else {
+                document.getElementById("helpSlider").style.width = helpSliderWidth;
+                helpSliderDivs.forEach(element => {
+                    element.style.animation = "helpFade 0.3s ease forwards 0.3s";
+                });
+                let navbarPulled = $("#main-nav").is(":visible");
+                if (helpSliderWidth == "100%" && navbarPulled) { // If mobile (help slider width 100%), make sure navbar is hidden if it has been pulled down
+                    $('.navbar-toggler').click();
+                }
+            }
+        }
+
+        // Get the button
         var mybutton = document.getElementById("btn-up");
 
         // When the user scrolls down xx px from the top of the document, show the button
@@ -125,50 +201,6 @@
         function topFunction() {
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
-        }
-    </script>
-
-    <script>
-        // Check window width to choose helpSlider width
-        var helpSlider = document.getElementById("helpSlider");
-        const helpSliderDivs = document.querySelectorAll("#helpSlider div, #helpSlider a, #helpSlider button");
-        var helpSliderWidth;
-
-        $(window).on('load', function () {
-            if ($(window).width() < 451) {
-                helpSliderWidth = "100%";
-            }
-            else {
-                helpSliderWidth = "50%";
-
-            }
-        });
-
-        /* Close/hide the helpSlider */
-        function closeHelpSlider() {
-            document.getElementById("helpSlider").style.width = "0";
-            helpSliderDivs.forEach(element => {
-                element.style.animation = "";
-            });
-        }
-
-        //Toggle the helpSlider
-        function toggleHelpSlider() {
-            if (helpSlider.style.width > "0px") { // If it is hidden = 0px
-                helpSlider.style.width = "0px";
-                helpSliderDivs.forEach(element => {
-                    element.style.animation = "";
-                });
-            } else {
-                document.getElementById("helpSlider").style.width = helpSliderWidth;
-                helpSliderDivs.forEach(element => {
-                    element.style.animation = "helpFade 0.3s ease forwards 0.3s";
-                });
-                let navbarPulled = $("#main-nav").is(":visible");
-                if (helpSliderWidth == "100%" && navbarPulled) { // If mobile (help slider width 100%), make sure navbar is hidden if it has been pulled down
-                    $('.navbar-toggler').click();
-                }
-            }
         }
     </script>
 

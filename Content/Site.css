@@ -221,6 +221,11 @@ textarea {
     transition: 0.3s;
 }
 
+.svg-btn-new.highlight {
+    transform: rotate(360deg);
+    transition: 1s;
+}
+
 .form-control {
     display: block;
     width: 100%;
@@ -262,6 +267,16 @@ a {
     a:hover {
         color: #999;
         text-decoration: none;
+    }
+
+link,
+.link {
+    color: #00A99D !important;
+}
+
+    .link:hover {
+        color: #999 !important;
+        text-decoration: none !important;
     }
 
 .help-slider {
@@ -457,6 +472,18 @@ button.ruuvi-close {
         border: 1px solid #00A99D;
     }
 
+    .btn-tagdata-temp.disabled, .btn-tagdata-air.disabled, .btn-tagdata-hum.disabled {
+        opacity: 1;
+    }
+
+    .btn-tagdata-temp.highlight, .btn-tagdata-hum.highlight, .btn-tagdata-air.highlight {
+        transform: scale(1.2);
+        transition: 0.1s;
+        border: none;
+        box-shadow: none;
+        border: 2px solid #00A99D;
+    }
+
 .tagdata-hr {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -526,3 +553,19 @@ body {
     width: 80%;*/
     margin-top: 30px;
 }
+
+.tip {
+    color: #666;
+}
+
+.ruuvi-eye-home {
+    background: url(/Images/web-ruuvi-eye-nega.png) no-repeat left center;
+    background-size: 35%;
+    background-position: center center;
+    opacity: 0.2;
+    transition: opacity 1s;
+}
+
+    .ruuvi-eye-home.fade {
+        opacity: 0.5;
+    }
