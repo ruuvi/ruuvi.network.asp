@@ -177,6 +177,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\RuuviTagModel.cs" />
     <Compile Include="Models\TagListRowModel.cs" />
+    <Compile Include="Models\UnpackRawData.cs" />
     <Compile Include="Models\UserTagListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
