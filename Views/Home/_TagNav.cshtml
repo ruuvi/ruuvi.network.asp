@@ -1,0 +1,61 @@
+﻿@{
+    int selectedTagId;
+    string selectedTagMac;
+}
+
+<div class="container-fluid pl-0">
+    <nav class="navbar navbar-ruuvitag navbar-expand">
+        <div class="collapse navbar-collapse" id="tag-nav">
+            <ul class="navbar-nav mr-auto navbar-ruuvitag-nav">
+                @*@Html.DropDownList("UserTagsDropdownList", null, htmlAttributes: new { @class = "dropdown" })*@
+                <div class="dropdown">
+                    <button class="btn btn-tagdropdown dropdown-toggle btn-sm" type="button" id="tagMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Choose RuuviTag">
+                        <img src="~/SVG/web-ruuvi-eye-nega.svg" width="28" height="28" alt="Ruuvi logo">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-ruuvi" id="TagListDropDown" aria-labelledby="dropdownMenuButton">
+                        @foreach (var tag in ViewBag.UserTagsList)
+                        {
+                            <a class="dropdown-item dropdown-item-ruuvi" href="#@tag.TagId">@tag.TagMacAddress</a>
+                            selectedTagId = tag.TagId;
+                            selectedTagMac = tag.TagMacAddress;
+
+                        }
+                        @if (ViewBag.UserTagsListError != null)
+                        {
+                            <a class="dropdown-item dropdown-item-ruuvi disabled" href="#">@ViewBag.UserTagsListError</a>
+                        }
+                    </div>
+                </div>
+                <li class="nav-item active">
+                    <a class="nav-link svg-btn-settings" href="#settings" title="Tag settings"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link svg-btn-alert" href="#alert" title="Manage alerts"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link svg-btn-new" id="btn-addNewTag" data-toggle="modal" data-target="#addTagModal" title="Add new RuuviTag"></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<script>
+    // Highlight Add new Ruuvitag
+    function highlightPlus() {
+        let plus = document.getElementById("btn-addNewTag");
+        plus.classList.add("highlight");
+        var t = setTimeout(function () {
+            plus.classList.remove("highlight");
+        }, 1000);
+    }
+</script>
+
+@if (ViewBag.UserTagsListError != null) // If user hasn't added any tags, highlight Add button
+{
+    <script>
+        let dropDownBtn = document.getElementById("tagMenuButton");
+        dropDownBtn.setAttribute("onclick", "highlightPlus()");
+        highlightPlus();
+    </script>
+}

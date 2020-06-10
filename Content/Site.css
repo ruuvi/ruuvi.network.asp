@@ -1,0 +1,571 @@
+﻿body {
+    padding-top: 60px;
+    padding-bottom: 20px;
+    font-family: 'Muli', sans-serif;
+    /*color: #666;*/
+    color: #fff;
+    background-color: #1a1a1a;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.navbar-ruuvi {
+    background-color: #1a1a1a;
+}
+
+    .navbar-ruuvi .navbar-nav .nav-link {
+        color: #fff;
+        text-align: right;
+    }
+
+        .navbar-ruuvi .navbar-nav .nav-link:hover, .navbar-ruuvi .navbar-nav .nav-link:focus {
+            color: #00a99d;
+        }
+
+    .navbar-ruuvi .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+.footer-ruuvi {
+    bottom: 0;
+    background-color: #1a1a1a;
+    width: 100%;
+    padding: 0 0 0 0;
+}
+
+.footer-ruuvi-logo {
+    width: 100%;
+    float: left;
+    height: 30px;
+    text-indent: -9999px;
+    background: url(/Images/web-ruuvi-logo-nega.png) center top no-repeat;
+    background-image: url(/Images/web-ruuvi-logo-nega.png), none;
+    background-size: 100px 20px;
+    opacity: 0.5;
+}
+
+.footer-ruuvi-copyrights {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.btn-general {
+    color: #fff;
+    background-color: #00A99D;
+    border-radius: 20px;
+}
+
+    .btn-general:hover {
+        color: #fff;
+        background-color: #333;
+        border-color: #333;
+    }
+
+    .btn-general:focus, .btn-general.focus {
+        color: #fff;
+        background-color: #333;
+        box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+    }
+
+    .btn-general.disabled, .btn-general:disabled {
+        color: #fff;
+        background-color: #6beae1;
+        border-color: #00A99D;
+    }
+
+    .btn-general:not(:disabled):not(.disabled):active, .btn-general:not(:disabled):not(.disabled).active,
+    .show > .btn-general.dropdown-toggle {
+        color: #fff;
+        background-color: #333;
+    }
+
+        .btn-general:not(:disabled):not(.disabled):active:focus, .btn-general:not(:disabled):not(.disabled).active:focus,
+        .show > .btn-general.dropdown-toggle:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+        }
+
+/* This is used for buttons we want to be displayed as block on mobile, but on desktop they are normal sized */
+@media all and (max-width:480px) {
+    .btn-block-mobile {
+        width: 100%;
+        display: block;
+    }
+}
+
+.modal-ruuvi {
+    color: #fff;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+}
+
+.modal-ruuvi-footer {
+    border-top: 1px solid #333;
+    border-bottom-right-radius: calc(0.3rem - 1px);
+    border-bottom-left-radius: calc(0.3rem - 1px);
+}
+
+.modal-ruuvi-header {
+    border-bottom: 1px solid #333;
+    border-top-left-radius: calc(0.3rem - 1px);
+    border-top-right-radius: calc(0.3rem - 1px);
+}
+
+.navbar-ruuvitag {
+    background-color: #1a1a1a;
+}
+
+    .navbar-ruuvitag .navbar-nav .nav-link {
+        color: #fff;
+        text-align: right;
+        margin-left: 15px;
+    }
+
+        .navbar-ruuvitag .navbar-nav .nav-link:hover, .navbar-ruuvitag .navbar-nav .nav-link:focus {
+            color: #00a99d;
+        }
+
+.navbar-ruuvitag-nav {
+    margin-left: 0px;
+}
+
+.btn-tagdropdown {
+    color: #6beae1;
+    background-color: #333;
+    border-radius: 20px;
+}
+
+    .btn-tagdropdown:hover {
+        background-color: #333;
+    }
+
+    .btn-tagdropdown:focus, .btn-tagdropdown.focus {
+        color: #fff;
+        background-color: #333;
+        box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+    }
+
+.dropdown-item-ruuvi {
+    color: #fff;
+    background-color: #333;
+}
+
+.dropdown-menu-ruuvi {
+    color: #fff;
+    background-color: #333;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.dropdown-item-ruuvi:hover, .dropdown-item-ruuvi:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #00a99d;
+}
+
+.svg-btn-settings {
+    background: url(/SVG/icon-settings.svg) no-repeat left center;
+    height: 28px;
+    width: 28px;
+    margin-top: 5px;
+    -webkit-transition: 1s;
+}
+
+
+.svg-btn-alert {
+    background: url(/SVG/icon-alert.svg) no-repeat left center;
+    height: 28px;
+    width: 28px;
+    margin-top: 5px;
+    -webkit-transition: 1s;
+}
+
+.svg-btn-new {
+    background: url(/SVG/icon-plus.svg) no-repeat left center;
+    height: 28px;
+    width: 28px;
+    margin-top: 5px;
+    -webkit-transition: 1s;
+}
+
+.svg-btn-alert:hover, .svg-btn-alert:focus {
+    transform: scale(1.2);
+    transition: 0.1s;
+}
+
+.svg-btn-settings:hover, .svg-btn-settings:focus {
+    transform: scale(1.2) rotate(360deg);
+    transition: 1s;
+}
+
+.svg-btn-new:hover, .svg-btn-new:focus {
+    transform: scale(1.2);
+    transition: 0.3s;
+}
+
+.svg-btn-new.highlight {
+    transform: rotate(360deg);
+    transition: 1s;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #e1e1e1;
+    border-radius: 0.0rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+    .form-control:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+    }
+
+.checkbox-emailstoring {
+    border: 2px solid #00A99D;
+    padding: 5px;
+}
+
+help-link,
+.help-link {
+    padding-left: 5px;
+    font-size: 70%;
+    font-weight: 400;
+}
+
+a {
+    color: #00A99D;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+    a:hover {
+        color: #999;
+        text-decoration: none;
+    }
+
+link,
+.link {
+    color: #00A99D !important;
+}
+
+    .link:hover {
+        color: #999 !important;
+        text-decoration: none !important;
+    }
+
+.help-slider {
+    height: 100%;
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: -1px;
+    background-color: #1a1a1a;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.3s;
+    margin-top: 59px;
+    border-left: 1px solid #333;
+    border-top: 1px solid #333;
+    border-radius: 10px 0px 0px 0px;
+}
+
+    .help-slider .help-close {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin-left: 15px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .help-slider .help-newtab {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-right: 15px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+#helpSlider div,
+#helpSlider button,
+#helpSlider a {
+    opacity: 0;
+}
+
+@keyframes helpFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.card-ruuvi {
+    color: #fff;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    margin-bottom: 30px;
+}
+
+h1 {
+    text-transform: uppercase;
+}
+
+.card-title-ruuvi {
+    margin-bottom: 0.75rem;
+    color: #00A99D;
+}
+
+.col-help {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.btn-up {
+    display: none;
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+    z-index: 99;
+    opacity: 0.5;
+    color: #fff;
+    background-color: #00A99D;
+    border-radius: 5px;
+}
+
+    .btn-up:hover {
+        opacity: 1;
+        color: #fff;
+    }
+
+.svg-btn-new {
+    cursor: pointer;
+}
+
+.ruuvi-close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #00A99D;
+}
+
+    .ruuvi-close:hover {
+        color: #333;
+        text-decoration: none;
+    }
+
+button.ruuvi-close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+}
+
+.tagdata-value {
+    /*font-family: 'Montserrat', sans-serif;*/
+    font-family: 'Oswald', sans-serif;
+    display: inline-block;
+    vertical-align: bottom;
+    text-align: left;
+    font-size: 2.5rem;
+    font-weight: bolder;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+}
+
+.tagdata-header {
+    font-family: 'Montserrrat', sans-serif;
+    /*font-family: 'Oswald', sans-serif;*/
+    vertical-align: bottom;
+    text-align: left;
+    font-size: 1.0rem;
+    font-weight: bolder;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    text-transform: uppercase;
+}
+
+
+.btn-tagdata-temp {
+    background: url(/SVG/m-icon-temp.svg) no-repeat left center;
+    background-position: center;
+    height: 42px;
+    width: 42px;
+    margin-bottom: 10px;
+    -webkit-transition: 2s;
+    margin-right: 0;
+}
+
+    .btn-tagdata-temp:hover, .btn-tagdata-temp:focus {
+        transform: scale(1.0);
+        transition: 0.1s;
+        border: none;
+        box-shadow: none;
+        border: 1px solid #00A99D;
+    }
+
+.btn-tagdata-hum {
+    background: url(/SVG/m-icon-hum.svg) no-repeat left center;
+    background-position: center;
+    height: 42px;
+    width: 42px;
+    margin-bottom: 10px;
+    -webkit-transition: 2s;
+    margin-right: 0;
+}
+
+    .btn-tagdata-hum:hover, .btn-tagdata-hum:focus {
+        transform: scale(1.0);
+        transition: 0.1s;
+        border: none;
+        box-shadow: none;
+        border: 1px solid #00A99D;
+    }
+
+.btn-tagdata-air {
+    background: url(/SVG/m-icon-air.svg) no-repeat left center;
+    background-position: center;
+    height: 42px;
+    width: 42px;
+    margin-bottom: 10px;
+    -webkit-transition: 2s;
+    margin-right: 0;
+}
+
+    .btn-tagdata-air:hover, .btn-tagdata-air:focus {
+        transform: scale(1.0);
+        transition: 0.1s;
+        border: none;
+        box-shadow: none;
+        border: 1px solid #00A99D;
+    }
+
+    .btn-tagdata-temp.disabled, .btn-tagdata-air.disabled, .btn-tagdata-hum.disabled {
+        opacity: 1;
+    }
+
+    .btn-tagdata-temp.highlight, .btn-tagdata-hum.highlight, .btn-tagdata-air.highlight {
+        transform: scale(1.2);
+        transition: 0.1s;
+        border: none;
+        box-shadow: none;
+        border: 2px solid #00A99D;
+    }
+
+.tagdata-hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid #333;
+}
+
+.celsius {
+    /*font-family: 'Montserrrat', sans-serif;*/
+    position: absolute;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    margin-bottom: 0;
+    margin-top: 6px;
+    padding-top: 0;
+    margin-left: 5px;
+}
+
+.percent {
+    /*font-family: 'Montserrrat', sans-serif;*/
+    position: absolute;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    margin-bottom: 0;
+    margin-top: 6px;
+    padding-top: 0;
+    margin-left: 5px;
+}
+
+.hpa {
+    /*font-family: 'Montserrrat', sans-serif;*/
+    position: absolute;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    margin-bottom: 0;
+    margin-top: 6px;
+    padding-top: 0;
+    margin-left: 5px;
+}
+
+.RuuviTagData {
+    bottom: 100px;
+    top: auto;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+#body-content {
+    flex: 1 0 auto;
+    bottom: 0;
+    left: 0;
+}
+
+#footer-ruuvi {
+    flex-shrink: none;
+}
+
+.RuuviTagData {
+    /*position: absolute;
+    bottom: 120px;
+    width: 80%;*/
+    margin-top: 30px;
+}
+
+.tip {
+    color: #666;
+}
+
+.ruuvi-eye-home {
+    background: url(/Images/web-ruuvi-eye-nega.png) no-repeat left center;
+    background-size: 35%;
+    background-position: center center;
+    opacity: 0.2;
+    transition: opacity 1s;
+}
+
+    .ruuvi-eye-home.fade {
+        opacity: 0.5;
+    }

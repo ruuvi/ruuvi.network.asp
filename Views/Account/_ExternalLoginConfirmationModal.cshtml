@@ -1,0 +1,48 @@
+﻿@model RuuviTagApp.Models.ExternalLoginConfirmationViewModel
+
+<div class="modal" id="externalRegisterModal">
+    <div class="modal-dialog">
+        <div class="modal-content modal-ruuvi">
+            <div class="modal-header modal-ruuvi-header">
+                <h2>Finish authentication</h2>
+                <button type="button" class="ruuvi-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @*<h3>Finish authentication with your @ViewBag.LoginProvider account.</h3>*@
+                <p>Finish authentication with your @ViewBag.LoginProvider account. Please choose a unique username, which we will use to identify you later.</p>
+                @using (Html.BeginForm("ExternalLoginConfirmation", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "externalRegisterForm" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.ValidationSummary(true, "Failed finishing authentication: ", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @maxlength="32", required = true } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+                    <h4 class="mt-5">Do you want to set up alerts?</h4>
+                    <p>In order to set up email alerts, we need to save your email address to the database. We don't save it by default, so we are giving you an option to do this. Without saving the email address to the database you can not setup any alerts. This is a one time chance aswell, and you can not revert this option later.</p>
+                    <div class="col-md-8 pl-0 text-center">
+                        <div class="form-check pl-0">
+                            <div class="checkbox checkbox-emailstoring">
+                                @Html.EditorFor(model => model.StoreEmail)
+                                @Html.ValidationMessageFor(model => model.StoreEmail, "", new { @class = "text-danger" })
+                                @Html.LabelFor(model => model.StoreEmail, htmlAttributes: new { @class = "form-check-label" })
+                            </div>
+                            <small id="saveEmailHelpText" class="form-text text-muted">By giving us this permission you agree to Ruuvi <a href="https://shop.ruuvi.com/terms/" target="blank">terms and conditions</a>.</small>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer modal-ruuvi-footer">
+                <button class="btn btn-general" type="submit" form="externalRegisterForm">Register</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
