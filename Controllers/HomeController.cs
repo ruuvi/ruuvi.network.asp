@@ -88,16 +88,15 @@ namespace RuuviTagApp.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult AddTag(MacAddressModel mac, string userID)
+        public async Task<ActionResult> AddTag(MacAddressModel mac, string userID)
         {
             if (ModelState.IsValid)
             {
                 // Backend call
                 // if fails return View("Index", mac);
                 // else
-                string macAddress = mac.GetAddress();
                 // Check if this tag has been added by this user
-                if (db.RuuviTagModels.Any(t => t.UserId == userID && t.TagMacAddress == macAddress))
+                if (await UserHasTag(userID, mac.GetAddress()))
                 {
                     TempData["TagAlreadyExists"] = "Couldn't add this tag, since you have already added it!";
                     TempData["ShowAddTag"] = true;
@@ -105,7 +104,7 @@ namespace RuuviTagApp.Controllers
                     return RedirectToAction("Index");
                 }
                 var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 // use data and tag to refresh view
                 return RedirectToAction("Index");
             }
@@ -113,10 +112,13 @@ namespace RuuviTagApp.Controllers
             return View("Index", mac);
         }
 
-        public async Task<List<RuuviTagModel>> GetUserTagsAsync(string userID) => await (from t in db.RuuviTagModels
-                                                                                         where t.UserId == userID
-                                                                                         select t).ToListAsync();
+        private async Task<List<RuuviTagModel>> GetUserTagsAsync(string userID) => await (from t in db.RuuviTagModels
+                                                                                          where t.UserId == userID
+                                                                                          select t).ToListAsync();
 
+        private async Task<bool> UserHasTag(string userID, string mac) => await (from t in db.RuuviTagModels
+                                                                                 where t.UserId == userID && t.TagMacAddress == mac
+                                                                                 select t).FirstOrDefaultAsync() != null;
         public ActionResult AddTagList()
         {
             throw new NotImplementedException();
