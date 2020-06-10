@@ -78,7 +78,7 @@ namespace RuuviTagApp.Controllers
 
         public ActionResult Help()
         {
-            ViewBag.Message = "Help page";
+            ViewBag.Message = "Help";
 
             return View();
         }
