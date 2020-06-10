@@ -25,7 +25,7 @@ namespace RuuviTagApp.Controllers
             ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
             ViewBag.LoginProvider = TempData["LoginProvider"];
             ViewBag.ShowAddTag = TempData["ShowAddTag"];
-            ViewBag.TagAlreadyExists = TempData["TagAlreadyExists"];
+            ViewBag.MacErrors = TempData["MacErrorList"];
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
@@ -46,7 +46,11 @@ namespace RuuviTagApp.Controllers
                     {
                         return await SearchTag(mac);
                     }
-                    ViewBag.TagError = results;
+                    foreach (var e in results)
+                    {
+                        ModelState.AddModelError("MacAddress", e.ErrorMessage);
+                    }
+                    return View(mac);
                 }
             }
             else if (Request.IsAuthenticated)
@@ -61,9 +65,13 @@ namespace RuuviTagApp.Controllers
                 }
             }
 
-            if (TempData["MacModel"] != null)
+            if (TempData["MacAddressModel"] is MacAddressModel macAddress)
             {
-                return View(TempData["MacModel"] as MacAddressModel);
+                foreach (var e in ViewBag.MacErrors)
+                {
+                    ModelState.AddModelError("MacAddress", e);
+                }
+                return View(macAddress);
             }
             return View();
         }
@@ -98,9 +106,9 @@ namespace RuuviTagApp.Controllers
                 // Check if this tag has been added by this user
                 if (await UserHasTag(userID, mac.GetAddress()))
                 {
-                    TempData["TagAlreadyExists"] = "Couldn't add this tag, since you have already added it!";
+                    TempData["MacErrorList"] = new List<string> { "Couldn't add this tag, since you have already added it!" };
                     TempData["ShowAddTag"] = true;
-                    TempData["MacModel"] = mac;
+                    TempData["MacAddressModel"] = mac;
                     return RedirectToAction("Index");
                 }
                 var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
@@ -108,8 +116,10 @@ namespace RuuviTagApp.Controllers
                 // use data and tag to refresh view
                 return RedirectToAction("Index");
             }
-            ViewBag.ShowAddTag = true;
-            return View("Index", mac);
+            TempData["MacErrorList"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            TempData["ShowAddTag"] = true;
+            TempData["MacAddressModel"] = mac;
+            return RedirectToAction("Index");
         }
 
         private async Task<List<RuuviTagModel>> GetUserTagsAsync(string userID) => await (from t in db.RuuviTagModels
