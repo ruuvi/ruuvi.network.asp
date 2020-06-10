@@ -206,5 +206,13 @@ else
             let eye = document.getElementById("RuuviEyeBg");
             eye.classList.toggle('fade');
         }
+
+        // Get user selection from _TagNav dropdown list
+        $(document).ready(function () {
+            $('#TagListDropDown a').on('click', function () {
+                var select = ($(this).text());
+                console.log("Selected " + select);
+            });
+        });
     </script>
 }
