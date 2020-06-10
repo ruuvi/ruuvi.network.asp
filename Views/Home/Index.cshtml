@@ -48,39 +48,6 @@ else
             ExternalLoginConfirmationViewModel elcvm = Model is ExternalLoginConfirmationViewModel ?
                 Model : new ExternalLoginConfirmationViewModel();
             @Html.Partial("~/Views/Account/_ExternalLoginConfirmationModal.cshtml", elcvm)
-
-            @*<div>
-                @if (ViewBag.TagData != null)
-                {
-                    <table>
-                        <tr>
-                            <th>Time</th>
-                            <th>Temperature</th>
-                            <th>Pressure</th>
-                            <th>Humidity</th>
-                            <th>Accelaration X</th>
-                            <th>Accelaration Y</th>
-                            <th>Accelaration Z</th>
-                            <th>TX Power</th>
-                            <th>Voltage</th>
-                        </tr>
-                        @foreach (var item in ViewBag.TagData)
-                        {
-                            <tr>
-                                <td>@item.Time</td>
-                                <td>@item.Data.Temperature</td>
-                                <td>@item.Data.Pressure</td>
-                                <td>@item.Data.Humidity</td>
-                                <td>@item.Data.Acc_X</td>
-                                <td>@item.Data.Acc_Y</td>
-                                <td>@item.Data.Acc_Z</td>
-                                <td>@item.Data.TXPower</td>
-                                <td>@item.Data.Voltage</td>
-                            </tr>
-                        }
-                    </table>
-                }
-            </div>*@
         } @*End of content visible only when user is not logged in*@
 
         @* Content visible only when user is logged in *@
@@ -211,7 +178,7 @@ else
         $(document).ready(function () {
             $('#TagListDropDown a').on('click', function () {
                 var select = ($(this).text());
-                console.log("Selected " + select);
+                console.log("Debug: Selected " + select); // Debug
             });
         });
     </script>
