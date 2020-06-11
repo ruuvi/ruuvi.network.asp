@@ -18,6 +18,8 @@ namespace RuuviTagApp.Models
         public string TagMacAddress { get; set; }
         [Required]
         public bool TagActive { get; set; } = true;
+        [StringLength(50)]
+        public string TagName { get; set; }
         [StringLength(128)]
         public string UserId { get; set; }
         [ForeignKey("UserId")]
