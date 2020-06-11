@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
 using RuuviTagApp.Models;
 using RuuviTagApp.ViewModels;
 using System;
@@ -7,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Data.Entity.Core.Mapping;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -144,9 +146,31 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetTagData(string macAddress)
+        public async Task<UnpackRawData> GetTagData(string macAddress)
         {
-            throw new NotImplementedException();
+            string url = "";
+            if (macAddress != null)
+            {
+                url = ApiHelper.ApiClient.BaseAddress + macAddress;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    UnpackRawData data = await response.Content.ReadAsAsync<UnpackRawData>();
+
+                    return data;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
         }
 
         public List<SimulatedData> SimulateApiCallResponse(string mac)
