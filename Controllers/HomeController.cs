@@ -91,8 +91,16 @@ namespace RuuviTagApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var d = await GetTagData(mac.GetAddress());
-                TempData["ApiResponse"] = await GetTagData(mac.GetAddress());
+                List<WhereOSApiRuuvi> apiResponse = await GetTagData(mac.GetAddress());
+                if (apiResponse.Count == 0)
+                {
+                    ModelState.AddModelError("MacAddress", "No data found with that mac address.");
+                    return View("Index", mac);
+                }
+
+                // DECODE DATA HERE ?
+                
+                TempData["ApiResponse"] = apiResponse;
                 return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
             return View("Index", mac);
@@ -100,21 +108,27 @@ namespace RuuviTagApp.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> AddTag(MacAddressModel mac, string userID)
+        public async Task<ActionResult> AddTag(MacAddressModel mac)
         {
             if (ModelState.IsValid)
             {
-                // Backend call
-                // if fails return View("Index", mac);
-                // else
-                // Check if this tag has been added by this user
-                if (await UserHasTag(userID, mac.GetAddress()))
+                string userID = User.Identity.GetUserId();
+                List<WhereOSApiRuuvi> apiResponse = await GetTagData(mac.GetAddress());
+                bool userHasTag = await UserHasTag(userID, mac.GetAddress());
+                if (apiResponse.Count == 0 || userHasTag)
                 {
-                    TempData["MacErrorList"] = new List<string> { "Couldn't add this tag, since you have already added it!" };
+                    List<string> tagErrors = new List<string>
+                    {
+                        userHasTag ? "Couldn't add this tag, since you have already added it!" : "No data found with that mac address."
+                    };
+                    TempData["MacErrorList"] = tagErrors;
                     TempData["ShowAddTag"] = true;
                     TempData["MacAddressModel"] = mac;
                     return RedirectToAction("Index");
                 }
+
+                // DECODE DATA HERE ?
+
                 var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
                 await db.SaveChangesAsync();
                 // use data and tag to refresh view
@@ -150,11 +164,7 @@ namespace RuuviTagApp.Controllers
 
         private async Task<List<WhereOSApiRuuvi>> GetTagData(string macAddress)
         {
-            string url = "";
-            url = ApiHelper.ApiClient.BaseAddress + macAddress;
-            
-
-
+            string url = ApiHelper.ApiClient.BaseAddress + macAddress;
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
                 if (response.IsSuccessStatusCode)
@@ -169,60 +179,6 @@ namespace RuuviTagApp.Controllers
                     throw new Exception(response.ReasonPhrase);
                 }
             }
-        }
-
-        public List<SimulatedData> SimulateApiCallResponse(string mac)
-        {
-            Random rng = new Random();
-            Thread.Sleep(rng.Next(500, 2500));
-            List<SimulatedData> simDat = new List<SimulatedData>();
-            DateTime now = DateTime.Now;
-            for (int i = 0; i < 20; i++)
-            {
-                simDat.Add(new SimulatedData
-                {
-                    Id = mac,
-                    Time = now - TimeSpan.FromHours(i),
-                    Data = new TagData
-                    {
-                        Temperature = rng.Next(-20, 20) / 100D,
-                        Pressure = rng.Next(100000, 100100),
-                        Humidity = rng.Next(50000, 60000) / 1000D,
-                        Acc_X = rng.Next(-10, 10) / 1000D,
-                        Acc_Y = rng.Next(-10, 10) / 1000D,
-                        Acc_Z = rng.Next(1000, 1100) / 1000D,
-                        TXPower = rng.Next(0, 10),
-                        Voltage = rng.Next(2000, 2500) / 1000D,
-                        SeqNum = 200 - i
-                    }
-                });
-            }
-            return simDat;
-        }
-
-        public class SimulatedData
-        {
-            public string Id { get; set; }
-            public TagData Data { get; set; }
-            public DateTime Time { get; set; }
-            //public string Coordinates { get; set; }
-            //public string Gwmac { get; set; }
-            //public int Rssi { get; set; }
-            //public int Rssi_max { get; set; }
-            //public int Rssi_min { get; set; }
-        }
-
-        public class TagData
-        {
-            public double Temperature { get; set; }
-            public int Pressure { get; set; }
-            public double Humidity { get; set; }
-            public double Acc_X { get; set; }
-            public double Acc_Y { get; set; }
-            public double Acc_Z { get; set; }
-            public int TXPower { get; set; }
-            public double Voltage { get; set; }
-            public int SeqNum { get; set; }
         }
 
         protected override void Dispose(bool disposing)
