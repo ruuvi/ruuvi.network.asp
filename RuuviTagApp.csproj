@@ -174,11 +174,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModel.cs" />
+    <Compile Include="Models\ApiHelper.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\RuuviTagModel.cs" />
     <Compile Include="Models\TagListRowModel.cs" />
     <Compile Include="Models\UnpackRawData.cs" />
     <Compile Include="Models\UserTagListModel.cs" />
+    <Compile Include="Models\WhereOSApiRuuvi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\MacAddressModel.cs" />

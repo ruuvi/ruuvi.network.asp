@@ -1,5 +1,6 @@
 ﻿using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using RuuviTagApp.Models;
 using RuuviTagApp.ViewModels;
 using System;
@@ -90,7 +91,8 @@ namespace RuuviTagApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                TempData["ApiResponse"] = await Task.Run(() => SimulateApiCallResponse(mac.GetAddress()));
+                var d = await GetTagData(mac.GetAddress());
+                TempData["ApiResponse"] = await GetTagData(mac.GetAddress());
                 return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
             return View("Index", mac);
@@ -146,23 +148,19 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
-        public async Task<UnpackRawData> GetTagData(string macAddress)
+        private async Task<List<WhereOSApiRuuvi>> GetTagData(string macAddress)
         {
             string url = "";
-            if (macAddress != null)
-            {
-                url = ApiHelper.ApiClient.BaseAddress + macAddress;
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            url = ApiHelper.ApiClient.BaseAddress + macAddress;
+            
+
 
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    UnpackRawData data = await response.Content.ReadAsAsync<UnpackRawData>();
+                    var json = await response.Content.ReadAsStringAsync();
+                    var data = JsonConvert.DeserializeObject<List<WhereOSApiRuuvi>>(json);
 
                     return data;
                 }
