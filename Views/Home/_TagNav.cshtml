@@ -15,7 +15,7 @@
                     <div class="dropdown-menu dropdown-menu-ruuvi" id="TagListDropDown" aria-labelledby="dropdownMenuButton">
                         @foreach (var tag in ViewBag.UserTagsList)
                         {
-                            <a class="dropdown-item dropdown-item-ruuvi" href="#@tag.TagId">@tag.TagMacAddress</a>
+                            <a class="dropdown-item dropdown-item-ruuvi" href="#@tag.TagId">@(tag.TagName ?? tag.TagMacAddress)</a>
                             selectedTagId = tag.TagId;
                             selectedTagMac = tag.TagMacAddress;
 
