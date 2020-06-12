@@ -169,10 +169,27 @@ namespace RuuviTagApp.Controllers
         private async Task<bool> TagNameTaken(string userID, string name) => await (from t in db.RuuviTagModels
                                                                                     where t.UserId == userID && t.TagName == name
                                                                                     select t).FirstOrDefaultAsync() != null;
+        
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> AddUserTagList(NameModel list)
 
-        public ActionResult AddTagList()
         {
-            throw new NotImplementedException();
+            if (ModelState.IsValid)
+            {
+                string userID = User.Identity.GetUserId();
+                var userLists = await db.UserTagListModels.Where(l => l.UserId == userID).ToListAsync();
+                if (userLists.Select(l => l.ListName).Contains(list.ListName))
+                {
+                    // TempData error list = You already have a list with that name.
+                    return RedirectToAction("Index");
+                }
+                db.UserTagListModels.Add(new UserTagListModel { ListName = list.ListName, UserId = userID });
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            // TempData error list = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return RedirectToAction("Index");
         }
 
         public ActionResult AddTagAlarm()
