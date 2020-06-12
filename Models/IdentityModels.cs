@@ -43,5 +43,7 @@ namespace RuuviTagApp.Models
         public DbSet<RuuviTagModel> RuuviTagModels { get; set; }
         public DbSet<UserTagListModel> UserTagListModels { get; set; }
         public DbSet<TagListRowModel> TagListRowModels { get; set; }
+        public DbSet<TagAlertType> TagAlertTypes { get; set; }
+        public DbSet<TagAlertModel> TagAlertModels { get; set; }
     }
 }
