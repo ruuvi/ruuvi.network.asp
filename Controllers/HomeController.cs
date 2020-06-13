@@ -214,5 +214,10 @@ namespace RuuviTagApp.Controllers
         {
             return View();
         }
+
+        public ActionResult TagAlerts()
+        {
+            return View();
+        }
     }
 }

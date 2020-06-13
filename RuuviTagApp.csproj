@@ -354,6 +354,8 @@
     <Content Include="Views\Home\AppSettings.cshtml" />
     <Content Include="Views\Home\_TagSettingsModal.cshtml" />
     <Content Include="Views\Home\_TagSettings.cshtml" />
+    <Content Include="Views\Home\_TagAlerts.cshtml" />
+    <Content Include="Views\Home\_TagAlertsModal.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
