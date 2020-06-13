@@ -589,7 +589,7 @@ body {
     opacity: 1;
 }
 
-    .tagsettings-tagheader h4, .h4 {
+    .tagsettings-tagheader h4 {
         margin-left: 25px;
     }
 
@@ -632,6 +632,6 @@ body {
     background-position: left top 3px;
     opacity: 1;
 }
-    .home-selectedTag h4, .h4, h3, h2 {
+    .home-selectedTag h2 {
         margin-left: 35px;
     }
