@@ -108,6 +108,7 @@ namespace RuuviTagApp.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddTag(MacAddressModel mac)
         {
             if (ModelState.IsValid)
@@ -235,7 +236,8 @@ namespace RuuviTagApp.Controllers
         
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> _TagSettingsModal([Bind(Include = "TagName,TagActive", Exclude = "TagId,TagMacAddress,UserId")] RuuviTagModel tag)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> _TagSettingsModal([Bind(Include = "TagId,TagMacAddress,TagActive,TagName,UserId")] RuuviTagModel tag)
         {
             if (ModelState.IsValid)
             {
