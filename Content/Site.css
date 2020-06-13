@@ -132,6 +132,12 @@ textarea {
     border-bottom: 1px solid #333;
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
+    padding-left: 0;
+    text-align: left;
+}
+
+.modal-ruuvi-header h2 {
+    margin-left: 1rem;
 }
 
 .navbar-ruuvitag {
@@ -608,7 +614,7 @@ body {
 
 /*Can be removed after publish*/
 #alphaInfo {
-    font-size: 2rem;
+    font-size: 1rem;
     opacity: 0.5;
     cursor: default;
     pointer-events: none;
@@ -619,3 +625,13 @@ body {
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
+
+.home-selectedTag {
+    background: url(/Images/web-ruuvi-eye-nega.png) no-repeat left center;
+    background-size: 30px;
+    background-position: left top 3px;
+    opacity: 1;
+}
+    .home-selectedTag h4, .h4, h3, h2 {
+        margin-left: 35px;
+    }
