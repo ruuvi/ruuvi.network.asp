@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity;
-@model RuuviTagApp.ViewModels.MacAddressModel
+@model RuuviTagApp.ViewModels.AddTagModel
 
 <div class="modal" id="addTagModal">
     <div class="modal-dialog">
@@ -23,6 +23,9 @@
                         <small id="tagIdHelp" class="form-text text-muted">RuuviTag ID is same as its MAC address.</small>
                         <small id="tagIdFormInfo" class="form-text text-muted">Please enter the ID with or without colons or spaces.</small>
                         @Html.ValidationMessageFor(model => model.MacAddress, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.TagName, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.TagName)
+                        @Html.ValidationMessageFor(model => model.TagName, "", new { @class = "text-danger" })
                         <h4 class="mt-5">Read and display the data from your RuuviTag</h4>
                         <p>Once you add a RuuviTag to your collection, you can instantly view the data it has collected without having to search it manually.</p>
                     </div>

@@ -68,7 +68,7 @@ namespace RuuviTagApp.Controllers
                 }
             }
 
-            if (TempData["MacAddressModel"] is MacAddressModel macAddress)
+            if (TempData["MacAddressModel"] is AddTagModel macAddress)
             {
                 foreach (var e in ViewBag.MacErrors)
                 {
@@ -109,13 +109,13 @@ namespace RuuviTagApp.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddTag(MacAddressModel mac)
+        public async Task<ActionResult> AddTag(AddTagModel tag)
         {
             if (ModelState.IsValid)
             {
                 string userID = User.Identity.GetUserId();
-                List<WhereOSApiRuuvi> apiResponse = await GetTagData(mac.GetAddress());
-                bool userHasTag = await UserHasTag(userID, mac.GetAddress());
+                List<WhereOSApiRuuvi> apiResponse = await GetTagData(tag.GetAddress());
+                bool userHasTag = await UserHasTag(userID, tag.GetAddress());
                 if (apiResponse.Count == 0 || userHasTag)
                 {
                     List<string> tagErrors = new List<string>
@@ -124,20 +124,20 @@ namespace RuuviTagApp.Controllers
                     };
                     TempData["MacErrorList"] = tagErrors;
                     TempData["ShowAddTag"] = true;
-                    TempData["MacAddressModel"] = mac;
+                    TempData["MacAddressModel"] = tag;
                     return RedirectToAction("Index");
                 }
 
                 // DECODE DATA HERE ?
 
-                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
+                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.TagName });
                 await db.SaveChangesAsync();
                 // use data and tag to refresh view
                 return RedirectToAction("Index");
             }
             TempData["MacErrorList"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
             TempData["ShowAddTag"] = true;
-            TempData["MacAddressModel"] = mac;
+            TempData["MacAddressModel"] = tag;
             return RedirectToAction("Index");
         }
 

@@ -8,6 +8,7 @@
         ViewBag.Msg = $"Hello {User.Identity.GetUserName()}!";
     }
     MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
+    AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
     string containerType;
 }
 
