@@ -352,6 +352,8 @@
     <Content Include="Views\Home\_HumidityModal.cshtml" />
     <Content Include="Views\Home\_AirpressureModal.cshtml" />
     <Content Include="Views\Home\AppSetup.cshtml" />
+    <Content Include="Views\Home\_TagSettingsModal.cshtml" />
+    <Content Include="Views\Home\_TagSettings.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

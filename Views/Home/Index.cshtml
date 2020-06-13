@@ -54,6 +54,7 @@ else
         @if (Request.IsAuthenticated)
         {
             @Html.Partial("~/Views/Home/_AddTagModal.cshtml", mam)
+            @Html.Partial("~/Views/Home/_TagSettingsModal.cshtml")
         }@*End of content visible only when user is logged in*@
 
         @if (ViewBag.TagData != null)
@@ -112,7 +113,7 @@ else
                 {
                     <a class="btn btn-general mt-5" href="/Home/Index">Sign in or search another RuuviTag</a>
                 }
-                </div>
+            </div>
 
             // Partial views
             @Html.Partial("~/Views/Home/_TemperatureModal.cshtml")
@@ -150,6 +151,11 @@ else
         // Air pressure chart Modal
         function openAirChartModal() {
             $('#airpressureChartModal').modal('show')
+        }
+
+        // Tag settings Modal
+        function openTagSettingsModal() {
+            $('#tagSettingsModal').modal('show')
         }
 
         // Highight icons when user presses the tip (if user is lost)
