@@ -605,6 +605,7 @@ body {
     user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
+/*Can be removed after publish*/
 #alphaInfo {
     font-size: 2rem;
     opacity: 0.5;
