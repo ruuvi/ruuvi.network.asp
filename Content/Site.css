@@ -659,3 +659,14 @@ body {
 .navbar-group-nav {
     margin-left: 0px;
 }
+
+.table-ruuvi {
+    color: inherit;
+}
+
+    .table-ruuvi th,
+    .table-ruuvi td,
+    .table-ruuvi thead th,
+    .table-ruuvi tbody + tbody {
+        border-color: #333;
+    }
