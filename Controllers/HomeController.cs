@@ -204,5 +204,10 @@ namespace RuuviTagApp.Controllers
         {
             return View();
         }
+
+        public ActionResult AppSetup()
+        {
+            return View();
+        }
     }
 }

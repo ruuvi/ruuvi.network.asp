@@ -351,6 +351,7 @@
     <Content Include="Views\Home\_AirpressureChart.cshtml" />
     <Content Include="Views\Home\_HumidityModal.cshtml" />
     <Content Include="Views\Home\_AirpressureModal.cshtml" />
+    <Content Include="Views\Home\AppSetup.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -360,7 +361,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
