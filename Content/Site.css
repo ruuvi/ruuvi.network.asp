@@ -136,9 +136,9 @@ textarea {
     text-align: left;
 }
 
-.modal-ruuvi-header h2 {
-    margin-left: 1rem;
-}
+    .modal-ruuvi-header h2 {
+        margin-left: 1rem;
+    }
 
 .navbar-ruuvitag {
     background-color: #1a1a1a;
@@ -632,6 +632,30 @@ body {
     background-position: left top 3px;
     opacity: 1;
 }
+
     .home-selectedTag h2 {
         margin-left: 35px;
     }
+
+.navbar-group {
+    background-color: #1a1a1a;
+}
+
+    .navbar-group .navbar-nav .nav-link {
+        color: #fff;
+        text-align: right;
+        margin-right: 15px;
+    }
+
+        .navbar-group .navbar-nav .nav-link:hover, .navbar-group .navbar-nav .nav-link:focus {
+            color: #00a99d;
+        }
+
+        .navbar-group .nav-item {
+            padding: 0;
+            margin: 0;
+        }
+
+.navbar-group-nav {
+    margin-left: 0px;
+}

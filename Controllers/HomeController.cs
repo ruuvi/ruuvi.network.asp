@@ -285,5 +285,14 @@ namespace RuuviTagApp.Controllers
         {
             return View();
         }
+
+        public ActionResult Groups()
+        {
+            if (!Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
     }
 }
