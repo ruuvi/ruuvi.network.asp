@@ -108,6 +108,7 @@ namespace RuuviTagApp.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddTag(MacAddressModel mac)
         {
             if (ModelState.IsValid)
@@ -210,10 +211,44 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
-        public ActionResult TagSettings()
+        [Authorize]
+        public async Task<ActionResult> _TagSettingsModal(int? tagID)
         {
-            return View();
+            if (tagID == null)
+            {
+                // error in call
+                return RedirectToAction("Index");
+            }
+            RuuviTagModel tag = await db.RuuviTagModels.FindAsync(tagID);
+            if (tag == null)
+            {
+                // tag not found error
+                return RedirectToAction("Index");
+            }
+            string userID = User.Identity.GetUserId();
+            if (tag.UserId != userID)
+            {
+                // tag is not users tag error
+                return RedirectToAction("Index");
+            }
+            return PartialView(tag);
         }
+        
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> _TagSettingsModal([Bind(Include = "TagId,TagMacAddress,TagActive,TagName,UserId")] RuuviTagModel tag)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(tag).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            // some error
+            return RedirectToAction("Index");
+        }
+
 
         public ActionResult TagAlerts()
         {
