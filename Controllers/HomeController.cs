@@ -94,7 +94,7 @@ namespace RuuviTagApp.Controllers
                 List<WhereOSApiRuuvi> apiResponse = await GetTagData(mac.GetAddress());
                 if (apiResponse.Count == 0)
                 {
-                    ModelState.AddModelError("MacAddress", "No data found with that mac address.");
+                    ModelState.AddModelError("MacAddress", "No data found, check RuuviTag ID. See Help -section for more information.");
                     return View("Index", mac);
                 }
 
@@ -119,7 +119,7 @@ namespace RuuviTagApp.Controllers
                 {
                     List<string> tagErrors = new List<string>
                     {
-                        userHasTag ? "Couldn't add this tag, since you have already added it!" : "No data found with that mac address."
+                        userHasTag ? "Couldn't add this tag, since you have already added it!" : "No data found, check RuuviTag ID. See Help -section for more information."
                     };
                     TempData["MacErrorList"] = tagErrors;
                     TempData["ShowAddTag"] = true;
