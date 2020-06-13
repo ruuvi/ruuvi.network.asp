@@ -53,6 +53,10 @@ else
         @* Content visible only when user is logged in *@
         @if (Request.IsAuthenticated)
         {
+            <div id="infoSelectTag">
+                <p>To display data please choose or add a RuuviTag</p>
+            </div>
+
             @Html.Partial("~/Views/Home/_AddTagModal.cshtml", mam)
             <div id="tagSettingsModal"></div>
             @*@Html.Partial("~/Views/Home/_TagSettingsModal.cshtml")*@
@@ -182,14 +186,17 @@ else
             $('#TagListDropDown a').on('click', function () {
                 var select = ($(this).text());
                 console.log("Debug: Selected " + select); // Debug
+                document.getElementById("btn-tagSettings").classList.remove("disabled"); // Enable button. Otherwise disabled
+                document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
+                document.getElementById("infoSelectTag").style.display = "none";
             });
         });
 
         var selectedTagId, tagIdInModal;
         $('#btn-tagSettings').click(function () {
-            if (selectedTagId == null) {
-                return alert('Select a tag!');
-            }
+            //if (selectedTagId == null) {
+            //    return alert('Select a tag!');
+            //}
 
             if (selectedTagId === tagIdInModal) {
                 $('#tagSettingsModal').modal('show');
