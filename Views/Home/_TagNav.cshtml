@@ -7,7 +7,6 @@
     <nav class="navbar navbar-ruuvitag navbar-expand">
         <div class="collapse navbar-collapse" id="tag-nav">
             <ul class="navbar-nav mr-auto navbar-ruuvitag-nav">
-                @*@Html.DropDownList("UserTagsDropdownList", null, htmlAttributes: new { @class = "dropdown" })*@
                 <div class="dropdown">
                     <button class="btn btn-tagdropdown dropdown-toggle btn-sm" type="button" id="tagMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Choose RuuviTag">
                         <img src="~/SVG/web-ruuvi-eye-nega.svg" width="28" height="28" alt="Ruuvi logo">
@@ -15,7 +14,7 @@
                     <div class="dropdown-menu dropdown-menu-ruuvi" id="TagListDropDown" aria-labelledby="dropdownMenuButton">
                         @foreach (var tag in ViewBag.UserTagsList)
                         {
-                            <a class="dropdown-item dropdown-item-ruuvi" onmousedown="window.selTagId='@tag.TagId'" href="#@tag.TagId">@(tag.TagName ?? tag.TagMacAddress)</a>
+                            <a class="dropdown-item dropdown-item-ruuvi" onclick="setSelectedTagId('@tag.TagId')">@(tag.TagName ?? tag.TagMacAddress)</a>
                             selectedTagId = tag.TagId;
                             selectedTagMac = tag.TagMacAddress;
                         }

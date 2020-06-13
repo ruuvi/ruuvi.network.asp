@@ -185,16 +185,27 @@ else
             });
         });
 
+        var selectedTagId, tagIdInModal;
         $('#btn-tagSettings').click(function () {
-            let tagID = window.selTagId;
-            if (tagID == null) {
+            if (selectedTagId == null) {
                 return alert('Select a tag!');
             }
-            let url = '/Home/_TagSettingsModal/?tagID=' + tagID;
+
+            if (selectedTagId === tagIdInModal) {
+                $('#tagSettingsModal').modal('show');
+                return;
+            }
+
+            let url = '/Home/_TagSettingsModal/?tagID=' + selectedTagId;
             $.get(url, (data) => {
                 $('#tagSettingsModal').replaceWith(data);
+                tagIdInModal = selectedTagId;
                 $('#tagSettingsModal').modal('show');
-            })
+            });
         });
+
+        function setSelectedTagId(tagid) {
+            selectedTagId = tagid;
+        }
     </script>
 }
