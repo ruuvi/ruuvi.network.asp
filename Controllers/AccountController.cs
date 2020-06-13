@@ -86,7 +86,7 @@ namespace RuuviTagApp.Controllers
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
-                    TempData["RenderRegisterModal"] = true;
+                    TempData["ShowRegisterModal"] = true;
                     TempData["LoginProvider"] = loginInfo.Login.LoginProvider;
                     return RedirectToAction("Index", "Home");
             }
@@ -126,7 +126,7 @@ namespace RuuviTagApp.Controllers
                 AddErrors(result);
             }
 
-            ViewBag.RenderRegisterModal = true;
+            ViewBag.ShowRegisterModal = true;
             return View("../Home/Index", model);
         }
 

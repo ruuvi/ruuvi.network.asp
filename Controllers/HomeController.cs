@@ -1,5 +1,4 @@
-﻿using Microsoft.Ajax.Utilities;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using RuuviTagApp.Models;
 using RuuviTagApp.ViewModels;
@@ -7,12 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
-using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace RuuviTagApp.Controllers
@@ -23,12 +19,12 @@ namespace RuuviTagApp.Controllers
         private readonly ApplicationDbContext db = new ApplicationDbContext();
         public async Task<ActionResult> Index(string tagMac)
         {
-            // tämän pitäisi luoda tietokanta
-            //var tag = db.RuuviTagModels.Find(1);
-            ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
+            ViewBag.ShowRegisterModal = TempData["ShowRegisterModal"];
             ViewBag.LoginProvider = TempData["LoginProvider"];
             ViewBag.ShowAddTag = TempData["ShowAddTag"];
-            ViewBag.MacErrors = TempData["MacErrorList"];
+            ViewBag.ShowTagSettings = TempData["ShowTagSettings"];
+            ViewBag.TagErrors = TempData["TagErrorList"];
+            ViewBag.GeneralError = TempData["GeneralError"];
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
@@ -68,14 +64,24 @@ namespace RuuviTagApp.Controllers
                 }
             }
 
-            if (TempData["MacAddressModel"] is MacAddressModel macAddress)
+            if (TempData["TagModel"] is AddTagModel addTag)
             {
-                foreach (var e in ViewBag.MacErrors)
+                foreach (var e in ViewBag.TagErrors)
                 {
-                    ModelState.AddModelError("MacAddress", e);
+                    ModelState.AddModelError(string.Empty, e);
                 }
-                return View(macAddress);
+                return View(addTag);
             }
+            else if (TempData["TagModel"] is RuuviTagModel tag)
+            {
+                foreach (var e in ViewBag.TagErrors)
+                {
+                    // When more thigs are added to settings "TagName" will need to be changed to 'string.Empty'.
+                    ModelState.AddModelError("TagName", e);
+                }
+                return View(tag);
+            }
+
             return View();
         }
 
@@ -99,7 +105,7 @@ namespace RuuviTagApp.Controllers
                 }
 
                 // DECODE DATA HERE ?
-                
+
                 TempData["ApiResponse"] = apiResponse;
                 return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
@@ -109,35 +115,46 @@ namespace RuuviTagApp.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddTag(MacAddressModel mac)
+        public async Task<ActionResult> AddTag(AddTagModel tag)
         {
             if (ModelState.IsValid)
             {
                 string userID = User.Identity.GetUserId();
-                List<WhereOSApiRuuvi> apiResponse = await GetTagData(mac.GetAddress());
-                bool userHasTag = await UserHasTag(userID, mac.GetAddress());
-                if (apiResponse.Count == 0 || userHasTag)
+                List<WhereOSApiRuuvi> apiResponse = await GetTagData(tag.GetAddress());
+                bool userHasTag = await UserHasTag(userID, tag.GetAddress());
+                bool tagNameTaken = !string.IsNullOrEmpty(tag.AddTagName) && await TagNameTaken(userID, tag.AddTagName);
+                if (apiResponse.Count == 0 || userHasTag || tagNameTaken)
                 {
-                    List<string> tagErrors = new List<string>
+                    List<string> tagErrors = new List<string>();
+                    if (userHasTag)
                     {
-                        userHasTag ? "Couldn't add this tag, since you have already added it!" : "No data found, check RuuviTag ID. See Help -section for more information."
-                    };
-                    TempData["MacErrorList"] = tagErrors;
+                        tagErrors.Add("Couldn't add this tag, since you have already added it!");
+                    }
+                    if (tagNameTaken)
+                    {
+                        tagErrors.Add("Couldn't add this tag, since you have a tag with that name already!");
+                    }
+                    if (apiResponse.Count == 0)
+                    {
+                        tagErrors.Add("No data found, check RuuviTag ID. See Help -section for more information.");
+                    }
+                    TempData["TagErrorList"] = tagErrors;
                     TempData["ShowAddTag"] = true;
-                    TempData["MacAddressModel"] = mac;
+                    TempData["TagModel"] = tag;
                     return RedirectToAction("Index");
                 }
 
                 // DECODE DATA HERE ?
 
-                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
+                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
                 await db.SaveChangesAsync();
                 // use data and tag to refresh view
                 return RedirectToAction("Index");
             }
-            TempData["MacErrorList"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+
+            TempData["TagErrorList"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
             TempData["ShowAddTag"] = true;
-            TempData["MacAddressModel"] = mac;
+            TempData["TagModel"] = tag;
             return RedirectToAction("Index");
         }
 
@@ -148,6 +165,11 @@ namespace RuuviTagApp.Controllers
         private async Task<bool> UserHasTag(string userID, string mac) => await (from t in db.RuuviTagModels
                                                                                  where t.UserId == userID && t.TagMacAddress == mac
                                                                                  select t).FirstOrDefaultAsync() != null;
+
+        private async Task<bool> TagNameTaken(string userID, string name) => await (from t in db.RuuviTagModels
+                                                                                    where t.UserId == userID && t.TagName == name
+                                                                                    select t).FirstOrDefaultAsync() != null;
+
         public ActionResult AddTagList()
         {
             throw new NotImplementedException();
@@ -216,24 +238,23 @@ namespace RuuviTagApp.Controllers
         {
             if (tagID == null)
             {
-                // error in call
+                TempData["GeneralError"] = "tagId was null.";
                 return RedirectToAction("Index");
             }
             RuuviTagModel tag = await db.RuuviTagModels.FindAsync(tagID);
             if (tag == null)
             {
-                // tag not found error
+                TempData["GeneralError"] = "Tag not found.";
                 return RedirectToAction("Index");
             }
-            string userID = User.Identity.GetUserId();
-            if (tag.UserId != userID)
+            if (tag.UserId != User.Identity.GetUserId())
             {
-                // tag is not users tag error
+                TempData["GeneralError"] = "You don't have access to that tag.";
                 return RedirectToAction("Index");
             }
             return PartialView(tag);
         }
-        
+
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -241,11 +262,21 @@ namespace RuuviTagApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!string.IsNullOrWhiteSpace(tag.TagName) && await TagNameTaken(User.Identity.GetUserId(), tag.TagName))
+                {
+                    TempData["TagErrorList"] = new List<string> { "Couldn't change tag name, since you already have a tag with that name!" };
+                    TempData["ShowTagSettings"] = true;
+                    TempData["TagModel"] = tag;
+                    return RedirectToAction("Index");
+                }
                 db.Entry(tag).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            // some error
+
+            TempData["TagErrorList"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            TempData["ShowTagSettings"] = true;
+            TempData["TagModel"] = tag;
             return RedirectToAction("Index");
         }
 
