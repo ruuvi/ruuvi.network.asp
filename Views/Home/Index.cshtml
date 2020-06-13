@@ -54,7 +54,8 @@ else
         @if (Request.IsAuthenticated)
         {
             @Html.Partial("~/Views/Home/_AddTagModal.cshtml", mam)
-            @Html.Partial("~/Views/Home/_TagSettingsModal.cshtml")
+            <div id="tagSettingsModal"></div>
+            @*@Html.Partial("~/Views/Home/_TagSettingsModal.cshtml")*@
             @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml")
         }@*End of content visible only when user is logged in*@
 
@@ -182,6 +183,14 @@ else
                 var select = ($(this).text());
                 console.log("Debug: Selected " + select); // Debug
             });
+        });
+
+        $('#btn-tagSettings').click(function () {
+            let url = '/Home/_TagSettingsModal/?tagID=' + 'tagId from somewhere';
+            $.get(url, (data) => {
+                $('#tagSettingsModal').replaceWith(data);
+                $('#tagSettingsModal').modal('show');
+            })
         });
     </script>
 }

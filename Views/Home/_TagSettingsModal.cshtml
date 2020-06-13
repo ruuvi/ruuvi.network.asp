@@ -1,4 +1,5 @@
-﻿<div class="modal" id="tagSettingsModal">
+﻿@model RuuviTagApp.ViewModels.MacAddressModel
+<div class="modal" id="tagSettingsModal">
     <div class="modal-dialog">
         <div class="modal-content modal-ruuvi">
             <div class="modal-header modal-ruuvi-header">
@@ -8,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @Html.Partial("~/Views/Home/_TagSettings.cshtml")
+                @Html.Partial("~/Views/Home/_TagSettings.cshtml", Model)
             </div>
             <div class="modal-footer modal-ruuvi-footer">
             </div>

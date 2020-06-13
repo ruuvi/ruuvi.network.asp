@@ -173,15 +173,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202005281652111_InitialCreate.cs" />
-    <Compile Include="Migrations\202005281652111_InitialCreate.designer.cs">
-      <DependentUpon>202005281652111_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202006111904162_TagName.cs" />
-    <Compile Include="Migrations\202006111904162_TagName.designer.cs">
-      <DependentUpon>202006111904162_TagName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ApiHelper.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -365,6 +356,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -376,14 +368,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202005281652111_InitialCreate.resx">
-      <DependentUpon>202005281652111_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202006111904162_TagName.resx">
-      <DependentUpon>202006111904162_TagName.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

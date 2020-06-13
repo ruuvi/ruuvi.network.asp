@@ -18,7 +18,6 @@
                             <a class="dropdown-item dropdown-item-ruuvi" href="#@tag.TagId">@(tag.TagName ?? tag.TagMacAddress)</a>
                             selectedTagId = tag.TagId;
                             selectedTagMac = tag.TagMacAddress;
-
                         }
                         @if (ViewBag.UserTagsListError != null)
                         {
@@ -27,7 +26,7 @@
                     </div>
                 </div>
                 <li class="nav-item active">
-                    <a class="nav-link svg-btn-settings" data-toggle="modal" data-target="#tagSettingsModal" title="Tag settings"></a>
+                    <a class="nav-link svg-btn-settings" id="btn-tagSettings" data-toggle="modal" data-target="#tagSettingsModal" title="Tag settings"></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link svg-btn-alert" data-toggle="modal" data-target="#tagAlertsModal"  title="Manage alerts"></a>
