@@ -18,7 +18,7 @@ namespace RuuviTagApp.Models
         public string TagMacAddress { get; set; }
         [Required]
         public bool TagActive { get; set; } = true;
-        [StringLength(50)]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "A valid name is between 3 and 50 characters")]
         public string TagName { get; set; }
         [StringLength(128)]
         public string UserId { get; set; }

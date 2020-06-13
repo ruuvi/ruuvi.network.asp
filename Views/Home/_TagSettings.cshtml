@@ -1,36 +1,42 @@
 ﻿@model RuuviTagApp.Models.RuuviTagModel
-<h4>@(Model.TagName ?? Model.TagMacAddress)</h4>
+    <div class="tagsettings-tagheader">
+        <h4>@(Model.TagName ?? Model.TagMacAddress)</h4>
+        <p title="RuuviTag ID is @Model.TagMacAddress">@Model.TagMacAddress</p>
+    </div>
 <p>Set or update the name of this RuuviTag. Naming a RuuviTag helps you to identify this RuuviTag within this application.</p>
-<p class="font-italic">*Please note, that naming a RuuviTag within this application does not rename the RuuviTag in other applications such as <a href="https://lab.ruuvi.com/ruuvi-station/" target="blank">Ruuvi Station</a>.</p>
+<p class="font-italic">*Naming a RuuviTag within this application does not rename the RuuviTag in other applications such as <a href="https://lab.ruuvi.com/ruuvi-station/" target="blank">Ruuvi Station</a>.</p>
 @*Form goes here*@
 @using (Html.BeginForm("_TagSettingsModal", "Home", FormMethod.Post, new { @id = "editTagForm" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.TagId)
-        @Html.HiddenFor(model => model.TagMacAddress)
-        @Html.HiddenFor(model => model.UserId)
+<div class="form-horizontal ml-0">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.TagId)
+    @Html.HiddenFor(model => model.TagMacAddress)
+    @Html.HiddenFor(model => model.UserId)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.TagActive, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.TagActive)
-                    @Html.ValidationMessageFor(model => model.TagActive, "", new { @class = "text-danger" })
-                </div>
-            </div>
+    <div class="form-group">
+        <label for="TagName">RuuviTag name</label>
+        <div class="col-md-10 pl-0">
+            @Html.EditorFor(model => model.TagName, new { htmlAttributes = new { @class = "form-control", @maxlength = "50", minlength="3" } })
+            @Html.ValidationMessageFor(model => model.TagName, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.TagName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TagName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TagName, "", new { @class = "text-danger" })
+    <h4 class="mt-5">Is this RuuviTag passive?</h4>
+    <p>In some cases you might want to temporarily disable a RuuviTag.* Data from a disabled RuuviTag will not be fetch or displayed.</p>
+    <p class="font-italic">*Disabling a RuuviTag affects only within this application. This action has no effect on the actual RuuviTag or other applications whatsoever.</p>
+    <div class="form-group">
+        <div class="col-md-10 pl-0">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.TagActive)
+                @Html.ValidationMessageFor(model => model.TagActive, "", new { @class = "text-danger" })
+                <label for="TagActive">Active RuuviTag</label>
             </div>
         </div>
     </div>
+</div>
 }
 
 @section Scripts {

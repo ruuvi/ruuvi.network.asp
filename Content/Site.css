@@ -570,3 +570,19 @@ body {
     .ruuvi-eye-home.fade {
         opacity: 0.5;
     }
+
+.tagsettings-tagheader {
+    background: url(/Images/web-ruuvi-eye-nega.png) no-repeat left center;
+    background-size: 20px;
+    background-position: left top 4px;
+    opacity: 1;
+}
+
+    .tagsettings-tagheader h4, .h4 {
+        margin-left: 25px;
+    }
+
+    .tagsettings-tagheader p {
+        margin-left: 25px;
+        font-size: 75%;
+    }
