@@ -22,11 +22,28 @@
                 <form>
                     <div class="form-group">
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="readDataRemovalInformation">
-                            <label class="form-check-label" for="readDataRemovalInformation">I have read the data removal information</label>
+                            <input type="checkbox" class="form-check-input" id="confirmDataRemoval">
+                            <label class="form-check-label" for="confirmDataRemoval">I have read the data removal information</label>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-general" id="btn-deleteUserData">Delete this account and all data related to it</button>
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <h2>Save email address to the database</h2>
+                <p>If we have won your trust and you have decided to save your email address to the database, please read and agree the Ruuvi <a href="https://shop.ruuvi.com/terms/" target="blank">terms and conditions</a>.</p>
+                <p>Saving the email address to the database enables the option to set up alerts for your RuuviTags.</p>
+                <form>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="confirmEmailSaving">
+                            <label class="form-check-label" for="confirmEmailSaving">I agree to the terms and conditions</label>
+                        </div>
+                    </div>
+                    <div id="continueAuth">
+                        <button type="submit" class="btn btn-general">Continue</button>
+                        <small id="continueAuthHelpText" class="form-text text-muted">Clicking this button will redirect you to the Google Authentication</small>
+                    </div>
                 </form>
             </div>
         }
@@ -35,17 +52,32 @@
 
 <script>
     let btnDeleteUserData = document.getElementById("btn-deleteUserData");
-    let btnIsVisible = false;
-    btnDeleteUserData.style.display = "none"; // Hide deletion button by default
+    let btnDeleteUserDataVisible = false;
+    btnDeleteUserData.style.display = "none"; // Hide button by default
 
     // Toggle data removal button
-    $('#readDataRemovalInformation').click(function () {
-        if (!btnIsVisible) {
+    $('#confirmDataRemoval').click(function () {
+        if (!btnDeleteUserDataVisible) {
             btnDeleteUserData.style.display = "block";
-            btnIsVisible = true;
+            btnDeleteUserDataVisible = true;
         } else {
             btnDeleteUserData.style.display = "none";
-            btnIsVisible = false;
+            btnDeleteUserDataVisible = false;
+        }
+    });
+
+    let continueAuth = document.getElementById("continueAuth");
+    let continueAuthVisible = false;
+    continueAuth.style.display = "none"; // Hide button by default
+
+    // Toggle data removal button
+    $('#confirmEmailSaving').click(function () {
+        if (!continueAuthVisible) {
+            continueAuth.style.display = "block";
+            continueAuthVisible = true;
+        } else {
+            continueAuth.style.display = "none";
+            continueAuthVisible = false;
         }
     });
 </script>
