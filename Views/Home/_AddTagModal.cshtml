@@ -23,12 +23,16 @@
                         <small id="tagIdHelp" class="form-text text-muted">RuuviTag ID is same as its MAC address.</small>
                         <small id="tagIdFormInfo" class="form-text text-muted">Please enter the ID with or without colons or spaces.</small>
                         @Html.ValidationMessageFor(model => model.MacAddress, "", new { @class = "text-danger" })
-                        @Html.LabelFor(model => model.AddTagName, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.AddTagName)
-                        @Html.ValidationMessageFor(model => model.AddTagName, "", new { @class = "text-danger" })
-                        <h4 class="mt-5">Read and display the data from your RuuviTag</h4>
-                        <p>Once you add a RuuviTag to your collection, you can instantly view the data it has collected without having to search it manually.</p>
                     </div>
+                    <div class="form-group">
+                        <label for="AddTagName">Name this RuuviTag (optional)</label>
+                        @*@Html.LabelFor(model => model.AddTagName, htmlAttributes: new { @class = "control-label" })*@
+                        @Html.EditorFor(model => model.AddTagName, new { htmlAttributes = new { @class = "form-control", placeholder = "My Dearest RuuviTag" } })
+                        @Html.ValidationMessageFor(model => model.AddTagName, "", new { @class = "text-danger" })
+                        <small id="addTagNameHelpText" class="text-muted form-text">Naming a RuuviTag might help you to identify this RuuviTag within this application.</small>
+                    </div>
+                    <h4 class="mt-5">Read and display the data from your RuuviTag</h4>
+                    <p>Once you add a RuuviTag to your collection, you can instantly view the data it has collected without having to search it manually.</p>
                 }
             </div>
             <div class="modal-footer modal-ruuvi-footer">
