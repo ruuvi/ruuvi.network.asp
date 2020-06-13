@@ -122,7 +122,7 @@ namespace RuuviTagApp.Controllers
                 string userID = User.Identity.GetUserId();
                 List<WhereOSApiRuuvi> apiResponse = await GetTagData(tag.GetAddress());
                 bool userHasTag = await UserHasTag(userID, tag.GetAddress());
-                bool tagNameTaken = !string.IsNullOrEmpty(tag.TagName) && await TagNameTaken(userID, tag.TagName);
+                bool tagNameTaken = !string.IsNullOrEmpty(tag.AddTagName) && await TagNameTaken(userID, tag.AddTagName);
                 if (apiResponse.Count == 0 || userHasTag || tagNameTaken)
                 {
                     List<string> tagErrors = new List<string>();
@@ -146,7 +146,7 @@ namespace RuuviTagApp.Controllers
 
                 // DECODE DATA HERE ?
 
-                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.TagName });
+                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
                 await db.SaveChangesAsync();
                 // use data and tag to refresh view
                 return RedirectToAction("Index");

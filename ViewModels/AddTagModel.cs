@@ -9,6 +9,6 @@ namespace RuuviTagApp.ViewModels
     public class AddTagModel : MacAddressModel
     {
         [StringLength(50, ErrorMessage = "Tag name cannot exceed 50 characters.")]
-        public string TagName { get; set; }
+        public string AddTagName { get; set; }
     }
 }
