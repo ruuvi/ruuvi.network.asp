@@ -232,13 +232,19 @@ namespace RuuviTagApp.Controllers
             }
             return PartialView(tag);
         }
-
+        
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> _TagSettingsModal(int tagID)
+        public async Task<ActionResult> _TagSettingsModal([Bind(Include = "TagName,TagActive", Exclude = "TagId,TagMacAddress,UserId")] RuuviTagModel tag)
         {
-            RuuviTagModel tag = await db.RuuviTagModels.FindAsync(tagID);
-            throw new NotImplementedException();
+            if (ModelState.IsValid)
+            {
+                db.Entry(tag).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            // some error
+            return RedirectToAction("Index");
         }
 
 
