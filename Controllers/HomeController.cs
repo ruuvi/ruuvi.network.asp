@@ -280,6 +280,21 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        [HttpDelete, ActionName("_TagSettingsModal")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteTag(int tagid)
+        {
+            RuuviTagModel tag = await db.RuuviTagModels.FindAsync(tagid);
+            if (User.Identity.GetUserId() != tag.UserId)
+            {
+                TempData["GeneralError"] = "You don't have access to that tag.";
+                return RedirectToAction("Index");
+            }
+            db.RuuviTagModels.Remove(tag);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
 
         public ActionResult TagAlerts()
         {
