@@ -39,6 +39,13 @@
 </div>
 }
 
+@using (Html.BeginForm())
+{
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+    @Html.AntiForgeryToken()
+    <button type="submit" value="Delete" class="btn btn-general">Delete Tag</button>
+}
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
