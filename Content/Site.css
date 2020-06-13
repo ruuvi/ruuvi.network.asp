@@ -172,6 +172,7 @@ textarea {
     color: #fff;
     background-color: #333;
     text-align: left;
+    cursor: pointer;
 }
 
 .dropdown-menu-ruuvi {
