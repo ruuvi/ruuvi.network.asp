@@ -15,7 +15,7 @@
                     <div class="dropdown-menu dropdown-menu-ruuvi" id="TagListDropDown" aria-labelledby="dropdownMenuButton">
                         @foreach (var tag in ViewBag.UserTagsList)
                         {
-                            <a class="dropdown-item dropdown-item-ruuvi" href="#@tag.TagId">@(tag.TagName ?? tag.TagMacAddress)</a>
+                            <a class="dropdown-item dropdown-item-ruuvi" onmousedown="window.selTagId='@tag.TagId'" href="#@tag.TagId">@(tag.TagName ?? tag.TagMacAddress)</a>
                             selectedTagId = tag.TagId;
                             selectedTagMac = tag.TagMacAddress;
                         }
@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <li class="nav-item active">
-                    <a class="nav-link svg-btn-settings" id="btn-tagSettings" data-toggle="modal" data-target="#tagSettingsModal" title="Tag settings"></a>
+                    <a class="nav-link svg-btn-settings" id="btn-tagSettings" title="Tag settings"></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link svg-btn-alert" data-toggle="modal" data-target="#tagAlertsModal"  title="Manage alerts"></a>

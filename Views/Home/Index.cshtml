@@ -186,7 +186,11 @@ else
         });
 
         $('#btn-tagSettings').click(function () {
-            let url = '/Home/_TagSettingsModal/?tagID=' + 'tagId from somewhere';
+            let tagID = window.selTagId;
+            if (tagID == null) {
+                return alert('Select a tag!');
+            }
+            let url = '/Home/_TagSettingsModal/?tagID=' + tagID;
             $.get(url, (data) => {
                 $('#tagSettingsModal').replaceWith(data);
                 $('#tagSettingsModal').modal('show');

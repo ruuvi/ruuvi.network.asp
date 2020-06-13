@@ -1,5 +1,5 @@
-﻿@model RuuviTagApp.ViewModels.MacAddressModel
-<h4>RuuviTag display name*</h4>
+﻿@model RuuviTagApp.Models.RuuviTagModel
+<h4>@(Model.TagName ?? Model.TagMacAddress)</h4>
 <p>Set or update the name of this RuuviTag. Naming a RuuviTag helps you to identify this RuuviTag within this application.</p>
 <p class="font-italic">*Please note, that naming a RuuviTag within this application does not rename the RuuviTag in other applications such as <a href="https://lab.ruuvi.com/ruuvi-station/" target="blank">Ruuvi Station</a>.</p>
 @*Form goes here*@

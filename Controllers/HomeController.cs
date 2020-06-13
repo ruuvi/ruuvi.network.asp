@@ -211,8 +211,13 @@ namespace RuuviTagApp.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> _TagSettingsModal(int tagID)
+        public async Task<ActionResult> _TagSettingsModal(int? tagID)
         {
+            if (tagID == null)
+            {
+                // error in call
+                return RedirectToAction("Index");
+            }
             RuuviTagModel tag = await db.RuuviTagModels.FindAsync(tagID);
             if (tag == null)
             {
@@ -227,6 +232,15 @@ namespace RuuviTagApp.Controllers
             }
             return PartialView(tag);
         }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> _TagSettingsModal(int tagID)
+        {
+            RuuviTagModel tag = await db.RuuviTagModels.FindAsync(tagID);
+            throw new NotImplementedException();
+        }
+
 
         public ActionResult TagAlerts()
         {
