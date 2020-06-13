@@ -67,9 +67,15 @@ else
             <h2 id="headerDisplayingTag"></h2>
         </div>
 
-        @Html.Partial("~/Views/Home/_AddTagModal.cshtml", mam)
-        <div id="tagSettingsModal"></div>
-        @*@Html.Partial("~/Views/Home/_TagSettingsModal.cshtml")*@
+        @Html.Partial("~/Views/Home/_AddTagModal.cshtml", add)
+        if (Model is RuuviTagModel tag)
+        {
+            @Html.Partial("~/Views/Home/_TagSettingsModal.cshtml", tag)
+        }
+        else
+        {
+            <div id="tagSettingsModal"></div>
+        }
         @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml")
     }@*End of content visible only when user is logged in*@
 
@@ -141,13 +147,17 @@ else
 @section scripts{
     <script type="text/javascript">
         $(window).on('load', function () {
-            let renderRegisterModal = @((ViewBag.RenderRegisterModal ?? false).ToString().ToLower());
-            if (renderRegisterModal) {
+            let showRegisterModal = @((ViewBag.ShowRegisterModal ?? false).ToString().ToLower());
+            if (showRegisterModal) {
                 $('#externalRegisterModal').modal('show');
             }
             let showAddTag = @((ViewBag.ShowAddTag ?? false).ToString().ToLower());
             if (showAddTag) {
                 $('#addTagModal').modal('show');
+            }
+            let showTagSettings = @((ViewBag.ShowTagSettings ?? false).ToString().ToLower());
+            if (showTagSettings) {
+                $('#tagSettingsModal').modal('show');
             }
         });
         $('.svg-btn-new').click(function () {
