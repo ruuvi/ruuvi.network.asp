@@ -177,6 +177,8 @@
     <Compile Include="Models\ApiHelper.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\RuuviTagModel.cs" />
+    <Compile Include="Models\TagAlertModel.cs" />
+    <Compile Include="Models\TagAlertType.cs" />
     <Compile Include="Models\TagListRowModel.cs" />
     <Compile Include="Models\UnpackRawData.cs" />
     <Compile Include="Models\UserTagListModel.cs" />
