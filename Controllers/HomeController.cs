@@ -172,7 +172,7 @@ namespace RuuviTagApp.Controllers
         
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> AddUserTagList(NameModel list)
+        public async Task<ActionResult> AddUserTagList(ListNameModel list)
 
         {
             if (ModelState.IsValid)
@@ -182,14 +182,14 @@ namespace RuuviTagApp.Controllers
                 if (userLists.Select(l => l.ListName).Contains(list.ListName))
                 {
                     // TempData error list = You already have a list with that name.
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Groups");
                 }
                 db.UserTagListModels.Add(new UserTagListModel { ListName = list.ListName, UserId = userID });
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Groups");
             }
             // TempData error list = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return RedirectToAction("Index");
+            return RedirectToAction("Groups");
         }
 
         public ActionResult AddTagAlarm()
@@ -318,13 +318,12 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
-        public ActionResult Groups()
+        [Authorize]
+        public async Task<ActionResult> Groups()
         {
-            if (!Request.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return View();
+            string userID = User.Identity.GetUserId();
+            List<UserTagListModel> userGroups = await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
+            return View(userGroups);
         }
     }
 }

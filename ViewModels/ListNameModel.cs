@@ -6,7 +6,7 @@ using System.Web;
 
 namespace RuuviTagApp.ViewModels
 {
-    public class NameModel
+    public class ListNameModel
     {
         [Required(ErrorMessage = "List name is required.")]
         [MaxLength(50, ErrorMessage = "Tag list name character limit is 50.")]

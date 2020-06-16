@@ -1,8 +1,10 @@
-﻿
+﻿@model IEnumerable<RuuviTagApp.Models.UserTagListModel>
+@using RuuviTagApp.ViewModels
 @{
     ViewBag.Title = "Groups";
     @Html.Partial("~/Views/Home/_GroupNav.cshtml")
-    @Html.Partial("~/Views/Home/_AddGroupModal.cshtml")
+    ListNameModel addList = Model is ListNameModel ? Model : new ListNameModel();
+    @Html.Partial("~/Views/Home/_AddGroupModal.cshtml", addList)
 }
 
 <div class="container body-content" id="body-content">
