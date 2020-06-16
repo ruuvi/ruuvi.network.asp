@@ -80,6 +80,11 @@ else
 
     @if (ViewBag.TagData != null)
     {
+        foreach (var item in ViewBag.TagData)
+        {
+            @item.Data.temperature
+            @item.Time
+        }
         //Example data
         <h1 class="text-danger" style="opacity:0.6">This is dummy data</h1>
         <div class="RuuviTagData">

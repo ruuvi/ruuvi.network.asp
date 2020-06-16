@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -98,15 +99,28 @@ namespace RuuviTagApp.Controllers
             if (ModelState.IsValid)
             {
                 List<WhereOSApiRuuvi> apiResponse = await GetTagData(mac.GetAddress());
+                
                 if (apiResponse.Count == 0)
                 {
                     ModelState.AddModelError("MacAddress", "No data found, check RuuviTag ID. See Help -section for more information.");
                     return View("Index", mac);
                 }
 
+
+                List<UnpackData> lstapiData = new List<UnpackData>();
+
+                foreach (WhereOSApiRuuvi apiRuuviTag in apiResponse)
+                {
+                    UnpackData ApiRowData = new UnpackData();
+                    UnpackRawData RawDataRow = new UnpackRawData();
+                    RawDataRow.UnpackAllData(apiRuuviTag.data);
+                    ApiRowData.Data = RawDataRow;
+                    lstapiData.Add(ApiRowData);
+                }
+
                 // DECODE DATA HERE ?
 
-                TempData["ApiResponse"] = apiResponse;
+                TempData["ApiResponse"] = lstapiData;
                 return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
             return View("Index", mac);

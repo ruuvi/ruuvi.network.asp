@@ -180,6 +180,7 @@
     <Compile Include="Models\TagAlertModel.cs" />
     <Compile Include="Models\TagAlertType.cs" />
     <Compile Include="Models\TagListRowModel.cs" />
+    <Compile Include="Models\UnpackData.cs" />
     <Compile Include="Models\UnpackRawData.cs" />
     <Compile Include="Models\UserTagListModel.cs" />
     <Compile Include="Models\WhereOSApiRuuvi.cs" />
