@@ -1,4 +1,4 @@
-﻿@model RuuviTagApp.ViewModels.ListNameModel
+﻿@model RuuviTagApp.ViewModels.NewTagListModel
 <div class="modal" id="addGroupModal">
     <div class="modal-dialog">
         <div class="modal-content modal-ruuvi">
@@ -12,11 +12,15 @@
                 <p>Use the form below to create a new group for RuuviTags.</p>
                 <p>If you have multiple different locations with multiple RuuviTags, creating a group for them might help you sort them out.</p>
                 <p class="mt-3 mb-3">
+                    @Html.DropDownList("UserTagDropdownList", null, htmlAttributes: new { @class = "dropdown", id = "selectTagToList" })
+                    <button class="btn btn-general" id="addATagToList">Add</button>
                     @using (Html.BeginForm("AddUserTagList", "Home", FormMethod.Post, new { id = "addUserTagListForm" }))
                     {
                         @Html.AntiForgeryToken()
-                        @Html.EditorFor(model => model.ListName, new { htmlAttributes = new { @class = "form-control", @maxlength = "50", minlength = "3" } })
-                    }
+                        @Html.EditorFor(model => model.ListName, new { htmlAttributes = new { @class = "form-control", @maxlength = "50", minlength = "3", requited = true } })
+                        @Html.HiddenFor(model => model.IdsAsString)
+                   }
+                    <ul id="addedTags"></ul>
                 </p>
             </div>
             <div class="modal-footer modal-ruuvi-footer">

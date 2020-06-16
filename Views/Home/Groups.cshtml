@@ -3,10 +3,14 @@
 @{
     ViewBag.Title = "Groups";
     @Html.Partial("~/Views/Home/_GroupNav.cshtml")
-    ListNameModel addList = Model is ListNameModel ? Model : new ListNameModel();
-    @Html.Partial("~/Views/Home/_AddGroupModal.cshtml", addList)
+    //ListNameModel addList = Model is ListNameModel ? Model : new ListNameModel();
+    @Html.Partial("~/Views/Home/_AddGroupModal.cshtml", new NewTagListModel())
 }
-
+@foreach (var item in Model)
+{
+    <p>@item.ListName</p>
+    <p>@item.TagListRowModels.Count</p>
+}
 <div class="container body-content" id="body-content">
     <div class="row" id="userGroups">
         <div class="col-lg-4">
@@ -73,12 +77,33 @@
     </div>
 </div>
 
-<script>
-    document.getElementById("groupSettings").style.display = "none";
-    //For demo purposes
-    function hideUserGroups(id) {
-        document.getElementById("userGroups").style.display = "none";
-        document.getElementById("selectedGroup").innerHTML = id;
-        document.getElementById("groupSettings").style.display = "block";
-    }
-</script>
+@section scripts{
+    <script type="text/javascript">
+        document.getElementById("groupSettings").style.display = "none";
+        //For demo purposes
+        function hideUserGroups(id) {
+            document.getElementById("userGroups").style.display = "none";
+            document.getElementById("selectedGroup").innerHTML = id;
+            document.getElementById("groupSettings").style.display = "block";
+        }
+        $('#addATagToList').click(() => {
+            const userTagList = document.getElementById('selectTagToList');
+            const addedTags = document.getElementById('addedTags');
+
+            let idx = userTagList.selectedIndex;
+            let selected = userTagList.options[idx];
+            if (idx < 0) {
+                return;
+            }
+            userTagList.options[idx].remove();
+
+            let oldVal = $('#IdsAsString').val();
+            console.log(oldVal);
+            $('#IdsAsString').val(`${oldVal};${selected.value}`);
+            let listNode = document.createElement('li');
+            let textNode = document.createTextNode(selected.text);
+            listNode.appendChild(textNode);
+            addedTags.appendChild(listNode);
+        })
+    </script>
+}

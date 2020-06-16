@@ -170,28 +170,6 @@ namespace RuuviTagApp.Controllers
                                                                                     where t.UserId == userID && t.TagName == name
                                                                                     select t).FirstOrDefaultAsync() != null;
         
-        [Authorize]
-        [HttpPost]
-        public async Task<ActionResult> AddUserTagList(ListNameModel list)
-
-        {
-            if (ModelState.IsValid)
-            {
-                string userID = User.Identity.GetUserId();
-                var userLists = await db.UserTagListModels.Where(l => l.UserId == userID).ToListAsync();
-                if (userLists.Select(l => l.ListName).Contains(list.ListName))
-                {
-                    // TempData error list = You already have a list with that name.
-                    return RedirectToAction("Groups");
-                }
-                db.UserTagListModels.Add(new UserTagListModel { ListName = list.ListName, UserId = userID });
-                await db.SaveChangesAsync();
-                return RedirectToAction("Groups");
-            }
-            // TempData error list = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return RedirectToAction("Groups");
-        }
-
         public ActionResult AddTagAlarm()
         {
             throw new NotImplementedException();
@@ -322,8 +300,47 @@ namespace RuuviTagApp.Controllers
         public async Task<ActionResult> Groups()
         {
             string userID = User.Identity.GetUserId();
+            var userTags = new List<SelectListItem>();
+            foreach(var tag in await GetUserTagsAsync(userID))
+            {
+                userTags.Add(new SelectListItem { Value = tag.TagId.ToString(), Text = tag.TagName ?? tag.TagMacAddress });
+            }
+            ViewBag.UserTagDropdownList = new SelectList(userTags, "Value", "Text");
             List<UserTagListModel> userGroups = await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
             return View(userGroups);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> AddUserTagList(NewTagListModel list)
+        {
+            if (ModelState.IsValid)
+            {
+                string userID = User.Identity.GetUserId();
+                var userLists = await db.UserTagListModels.Where(l => l.UserId == userID).ToListAsync();
+                var userTags = await GetUserTagsAsync(userID);
+                if (userLists.Select(l => l.ListName).Contains(list.ListName))
+                {
+                    // TempData error list = You already have a list with that name.
+                    return RedirectToAction("Groups");
+                }
+                var newList = db.UserTagListModels.Add(new UserTagListModel { ListName = list.ListName, UserId = userID });
+                if (!string.IsNullOrWhiteSpace(list.IdsAsString))
+                {
+                    string[] ids = list.IdsAsString.Trim(';').Split(';');
+                    foreach (string idstring in ids)
+                    {
+                        if (int.TryParse(idstring, out int tagId) && userTags.Any(t => t.TagId == tagId))
+                        {
+                            db.TagListRowModels.Add(new TagListRowModel { ListId = newList.UserTagListId, TagId = tagId });
+                        }
+                    }
+                }
+                await db.SaveChangesAsync();
+                return RedirectToAction("Groups");
+            }
+            // TempData error list = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return RedirectToAction("Groups");
         }
     }
 }
