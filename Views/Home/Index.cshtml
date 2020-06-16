@@ -3,13 +3,12 @@
 @using RuuviTagApp.ViewModels;
 @{
     ViewBag.Title = "Home";
-    if (Request.IsAuthenticated)
-    {
-        ViewBag.Msg = $"Hello {User.Identity.GetUserName()}!";
-    }
+
     MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
     AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
     string containerType;
+
+
 }
 
 

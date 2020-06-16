@@ -11,6 +11,9 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/chart")
+    @using Microsoft.AspNet.Identity;
+
+
 </head>
 <body class="d-flex flex-column" onload="onLoad()">
     <button onclick="topFunction()" id="btn-up" class="btn btn-up" title="Go to top">Up</button>
@@ -97,6 +100,14 @@
     <hr />
     <div class="container body-content">
         <footer class="footer-ruuvi text-center" id="footer-ruuvi">
+            <div style="font-size: larger;">
+                @*Function to tell the user he is logged in with "X" user*@
+                @if (Request.IsAuthenticated)
+                {
+                    ViewBag.Msg = $"Hello {User.Identity.GetUserName()}!";
+                }
+                @ViewBag.Msg
+            </div>
             <p>ALPHA VERSION</p>
             <div class="footer-ruuvi-logo">
                 <img src="~/Images/web-ruuvi-logo-nega.png" width="130" height="25" alt="Ruuvi logo">
@@ -203,6 +214,8 @@
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         }
+
+
     </script>
 
     @Scripts.Render("~/bundles/jquery")
