@@ -324,6 +324,11 @@ namespace RuuviTagApp.Controllers
                     // TempData error list = You already have a list with that name.
                     return RedirectToAction("Groups");
                 }
+                else if (string.IsNullOrWhiteSpace(list.ListName))
+                {
+                    // TempData error list = name required.
+                    return RedirectToAction("Groups");
+                }
                 var newList = db.UserTagListModels.Add(new UserTagListModel { ListName = list.ListName, UserId = userID });
                 if (!string.IsNullOrWhiteSpace(list.IdsAsString))
                 {
