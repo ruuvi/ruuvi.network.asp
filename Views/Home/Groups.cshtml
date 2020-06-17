@@ -14,7 +14,7 @@
             <div class="col-lg-4">
                 <div class="card card-ruuvi text-center">
                     <div class="card-body">
-                        <h5 class="card-title-ruuvi"><a href="#" id="Your Group Name 1" onclick="hideUserGroups(this.id)">@item.ListName</a></h5>
+                        <h5 class="card-title-ruuvi"><a href="#" id="@item.ListName" onclick="hideUserGroups(this.id)">@item.ListName</a></h5>
                         <p>@item.TagListRowModels.Count RuuviTags</p>
                     </div>
                 </div>
@@ -22,46 +22,12 @@
         }
     </div>
 </div>
-<div class="row" id="groupSettings">
-    <h2 id="selectedGroup"></h2>
-    <table class="table table-ruuvi">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>0024e4583a55</td>
-                <td>Saunatag</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>007ced518d2e</td>
-                <td>Bedroomtag</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>0145ed2cfea3</td>
-                <td>Livingroomtag</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-</div>
 
 @section scripts{
     <script type="text/javascript">
-        document.getElementById("groupSettings").style.display = "none";
-        //For demo purposes
-        function hideUserGroups(id) {
-            document.getElementById("userGroups").style.display = "none";
-            document.getElementById("selectedGroup").innerHTML = id;
-            document.getElementById("groupSettings").style.display = "block";
-        }
+        let addedTagsHeader = document.getElementById("addedTagsHeader");
+        addedTagsHeader.style.display = "none";
+
         $('#addATagToList').click(() => {
             const userTagList = document.getElementById('selectTagToList');
             const addedTags = document.getElementById('addedTags');
@@ -74,12 +40,18 @@
             userTagList.options[idx].remove();
 
             let oldVal = $('#IdsAsString').val();
-            console.log(oldVal);
+            //console.log(oldVal);
             $('#IdsAsString').val(`${oldVal};${selected.value}`);
             let listNode = document.createElement('li');
             let textNode = document.createTextNode(selected.text);
             listNode.appendChild(textNode);
             addedTags.appendChild(listNode);
-        })
+
+            // Displaying header only when there are items in the list
+            if (addedTagsHeader.style.display == "none") {
+                addedTagsHeader.style.display = "block";
+            }
+
+        });
     </script>
 }
