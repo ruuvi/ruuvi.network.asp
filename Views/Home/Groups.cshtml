@@ -16,6 +16,13 @@
                     <div class="card-body">
                         <h5 class="card-title-ruuvi"><a href="#" id="@item.ListName" onclick="hideUserGroups(this.id)">@item.ListName</a></h5>
                         <p>@item.TagListRowModels.Count RuuviTags</p>
+                        @foreach (var tagRow in item.TagListRowModels)
+                        {
+                            if(ViewBag.UsersTags.TryGetValue(tagRow.TagId, out RuuviTagApp.Models.RuuviTagModel tag))
+                            {
+                                <p>@(tag.TagName ?? tag.TagMacAddress)</p>
+                            }
+                        }
                     </div>
                 </div>
             </div>

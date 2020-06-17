@@ -301,11 +301,14 @@ namespace RuuviTagApp.Controllers
         {
             string userID = User.Identity.GetUserId();
             var userTags = new List<SelectListItem>();
+            var tags = new Dictionary<int, RuuviTagModel>();
             foreach(var tag in await GetUserTagsAsync(userID))
             {
                 userTags.Add(new SelectListItem { Value = tag.TagId.ToString(), Text = tag.TagName ?? tag.TagMacAddress });
+                tags.Add(tag.TagId, tag);
             }
             ViewBag.UserTagDropdownList = new SelectList(userTags, "Value", "Text");
+            ViewBag.UsersTags = tags;
             List<UserTagListModel> userGroups = await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
             return View(userGroups);
         }

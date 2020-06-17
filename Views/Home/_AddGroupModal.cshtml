@@ -23,7 +23,13 @@
 
                 <p class="mt-3">While you're at it, add some of your RuuviTags to this group.</p>
                 <div class="form-group">
-                    @Html.DropDownList("UserTagDropdownList", null, htmlAttributes: new { @class = "form-control", id = "selectTagToList" })
+                    @*@Html.DropDownList("UserTagDropdownList", null, htmlAttributes: new { @class = "form-control", id = "selectTagToList" })*@
+                    <select class="form-control" id="selectTagToList">
+                        @foreach (KeyValuePair<int, RuuviTagApp.Models.RuuviTagModel> tag in ViewBag.UsersTags)
+                        {
+                            <option class="" value="@tag.Key">@(tag.Value.TagName ?? tag.Value.TagMacAddress)</option>
+                        }
+                    </select>
                     <button class="btn btn-general mt-2" id="addATagToList">Add</button>
                 </div>
                 <p id="addedTagsHeader">RuuviTags to be added:</p>
