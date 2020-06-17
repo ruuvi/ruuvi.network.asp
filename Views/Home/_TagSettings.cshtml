@@ -1,11 +1,10 @@
 ﻿@model RuuviTagApp.Models.RuuviTagModel
 <div class="tagsettings-tagheader">
     <h4>@(Model.TagName ?? Model.TagMacAddress)</h4>
-    <p title="RuuviTag ID is @Model.TagMacAddress">@Model.TagMacAddress</p>
+    <p title="RuuviTag ID is @Model.TagMacAddress">ID: @Model.TagMacAddress</p>
 </div>
 <p>Set or update the name of this RuuviTag. Naming a RuuviTag helps you to identify this RuuviTag within this application.</p>
-<p class="font-italic">*Naming a RuuviTag within this application does not rename the RuuviTag in other applications such as <a href="https://lab.ruuvi.com/ruuvi-station/" target="blank">Ruuvi Station</a>.</p>
-@*Form goes here*@
+<p class="font-italic">Naming a RuuviTag within this application does not rename the RuuviTag in other applications such as <a href="https://lab.ruuvi.com/ruuvi-station/" target="blank">Ruuvi Station</a>.</p>
 @using (Html.BeginForm("_TagSettingsModal", "Home", FormMethod.Post, new { @id = "editTagForm" }))
 {
     @Html.AntiForgeryToken()
@@ -26,8 +25,8 @@
 
         <a class="btn btn-header-collapse" data-toggle="collapse" href="#collapseTagActive" role="button" aria-expanded="false" aria-controls="collapseTagActive">Is this RuuviTag passive?</a>
         <div class="collapse" id="collapseTagActive">
-            <p>In some cases you might want to temporarily disable a RuuviTag.* Data from a disabled RuuviTag will not be fetch or displayed.</p>
-            <p class="font-italic">*Disabling a RuuviTag affects only within this application. This action has no effect on the actual RuuviTag or other applications whatsoever.</p>
+            <p>In some cases you might want to temporarily disable a RuuviTag. Data from a disabled RuuviTag will not be fetch or displayed.</p>
+            <p class="font-italic">Disabling a RuuviTag affects only within this application. This action has no effect on the actual RuuviTag or other applications whatsoever.</p>
             <div class="form-group">
                 <div class="col-md-10 pl-0">
                     <div class="checkbox">
@@ -48,7 +47,7 @@
     <a class="btn btn-header-collapse" data-toggle="collapse" href="#collapseTagRemove" role="button" aria-expanded="false" aria-controls="collapseTagRemove">Farewell, @Model.TagMacAddress?</a>
     <div class="collapse" id="collapseTagRemove">
         <p>Is this RuuviTag no longer relevant? You can remove it from your collection, and it will no longer be displayed within this application.</p>
-        <p>You can add, remove and readd RuuviTags anytime.<br /><i>Please note, that removing a RuuviTag within this application does not affect linked RuuviTags in any other application.</i></p>
+        <p>You can add, remove and read RuuviTags anytime.<br /><i>Please note, that removing a RuuviTag within this application does not affect linked RuuviTags in any other application.</i></p>
         <button type="submit" value="Delete" class="btn btn-general" id="btn-removeTag">Remove</button>
     </div>
 }
