@@ -8,7 +8,6 @@
         ViewBag.Msg = $"Hello {User.Identity.GetUserName()}!";
     }
     MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
-    AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
     string containerType;
 }
 
@@ -66,7 +65,8 @@ else
         <div class="home-selectedTag">
             <h2 id="headerDisplayingTag"></h2>
         </div>
-
+        
+        AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
         @Html.Partial("~/Views/Home/_AddTagModal.cshtml", add)
         if (Model is RuuviTagModel tag)
         {
@@ -76,7 +76,8 @@ else
         {
             <div id="tagSettingsModal"></div>
         }
-        @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml")
+        AddAlarmModel alarm = Model is AddAlarmModel ? Model : new AddAlarmModel();
+        @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alarm)
     }@*End of content visible only when user is logged in*@
 
     @if (ViewBag.TagData != null)
@@ -217,9 +218,6 @@ else
 
         var selectedTagId, tagIdInModal;
         $('#btn-tagSettings').click(function () {
-            //if (selectedTagId == null) {
-            //    return alert('Select a tag!');
-            //}
 
             if (selectedTagId === tagIdInModal) {
                 $('#tagSettingsModal').modal('show');
@@ -236,6 +234,7 @@ else
 
         function setSelectedTagId(tagid) {
             selectedTagId = tagid;
+            $('#addAlarmBtn').val(tagid);
         }
     </script>
 }

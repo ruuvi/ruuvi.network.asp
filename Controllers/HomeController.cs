@@ -169,10 +169,15 @@ namespace RuuviTagApp.Controllers
         private async Task<bool> TagNameTaken(string userID, string name) => await (from t in db.RuuviTagModels
                                                                                     where t.UserId == userID && t.TagName == name
                                                                                     select t).FirstOrDefaultAsync() != null;
-        
-        public ActionResult AddTagAlarm()
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddTagAlarm(AddAlarmModel alarm, int? tagID)
         {
-            throw new NotImplementedException();
+            //var tempHigh = alarm["temperature-high"];
+            //var tempLow = alarm["temperature-low"];
+            return RedirectToAction("Index");
         }
 
         public ActionResult TagNav()

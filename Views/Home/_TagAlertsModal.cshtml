@@ -1,4 +1,5 @@
-﻿<div class="modal" id="tagAlertsModal">
+﻿@model RuuviTagApp.ViewModels.AddAlarmModel
+<div class="modal" id="tagAlertsModal">
     <div class="modal-dialog">
         <div class="modal-content modal-ruuvi">
             <div class="modal-header modal-ruuvi-header">
@@ -8,9 +9,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                @Html.Partial("~/Views/Home/_TagAlerts.cshtml")
+                @Html.Partial("~/Views/Home/_TagAlerts.cshtml", Model)
             </div>
             <div class="modal-footer modal-ruuvi-footer">
+                <button type="submit" id="addAlarmBtn" name="tagID" form="addTagAlarmForm" class="btn btn-general">Add Alert</button>
             </div>
         </div>
     </div>
