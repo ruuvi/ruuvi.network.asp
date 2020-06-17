@@ -674,3 +674,23 @@ body {
 .tagalert-header {
     vertical-align: bottom;
 }
+
+.btn-header-collapse {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    font-size: 1.5rem;
+    color: inherit;
+    padding-left: 0;
+}
+
+
+    .btn-header-collapse:hover {
+        color: #00A99D;
+    }
+
+    .btn-header-collapse:focus, .btn-header-collapse.focus {
+        color: #fff;
+        /*background-color: #333;*/
+        box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.0);
+    }

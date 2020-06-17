@@ -205,7 +205,6 @@ else
         $(document).ready(function () {
             $('#TagListDropDown a').on('click', function () {
                 var select = ($(this).text());
-                console.log("Debug: Selected " + select); // Debug
                 document.getElementById("btn-tagSettings").classList.remove("disabled"); // Enable button. Otherwise disabled
                 document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
 
