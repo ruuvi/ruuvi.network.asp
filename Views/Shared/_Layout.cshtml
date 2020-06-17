@@ -12,9 +12,12 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/chart")
 </head>
+@{
+    //var currentUrl = Request.Url.AbsoluteUri;
+    var currentView = Request.RawUrl;
+}
 <body class="d-flex flex-column" onload="onLoad()">
     <button onclick="topFunction()" id="btn-up" class="btn btn-up" title="Go to top">Up</button>
-
     <nav class="navbar navbar-expand-lg navbar-ruuvi fixed-top">
         <a class="navbar-brand" href="/Home/Index">
             <img class="d-none d-md-block" src="~/SVG/logo-ruuvi-network.svg" height="30" alt="Ruuvi logo">
@@ -40,7 +43,7 @@
                 <a class="dropdown-item dropdown-item-ruuvi" href="https://shop.ruuvi.com/product/ruuvitag-1-pack/" target="blank">Get a new RuuviTag</a>
                 <div class="dropdown-item dropdown-divider"></div>
                 <a class="dropdown-item dropdown-item-ruuvi" href="/Home/AppSettings">App settings</a>
-                <a class="dropdown-item dropdown-item-ruuvi" href="#" id="openHelpSliderButton" onclick="toggleHelpSlider()">Help</a>
+                <a class="dropdown-item dropdown-item-ruuvi" href="#" id="openHelpSliderButtonMobile" onclick="toggleHelpSlider()">Help</a>
                 @if (Request.IsAuthenticated)
                 {
                     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -90,7 +93,20 @@
     <div id="helpSlider" class="help-slider">
         <button type="button" class="btn btn-general help-close" onclick="closeHelpSlider()">Close window</button>
         <a class="btn btn-general help-newtab" onclick="closeHelpSlider()" href="/Home/Help" role="button">Open on new tab</a>
-        @Html.Partial("~/Views/Home/Help.cshtml")
+        @{
+            if (currentView == "/Home/Help")
+            {
+                <script>
+                    document.getElementById("openHelpSliderButton").classList.add("disabled");
+                    document.getElementById("openHelpSliderButtonMobile").classList.add("disabled");
+                </script>
+            }
+            else
+            {
+                @Html.Partial("~/Views/Home/Help.cshtml")
+            }
+        }
+
     </div>
 
     @RenderBody()

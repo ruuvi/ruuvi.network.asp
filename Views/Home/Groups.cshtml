@@ -1,80 +1,56 @@
 ﻿@model IEnumerable<RuuviTagApp.Models.UserTagListModel>
 @using RuuviTagApp.ViewModels
 @{
-    ViewBag.Title = "Groups";
+    ViewBag.Title = "RuuviTag groups";
     @Html.Partial("~/Views/Home/_GroupNav.cshtml")
     //ListNameModel addList = Model is ListNameModel ? Model : new ListNameModel();
     @Html.Partial("~/Views/Home/_AddGroupModal.cshtml", new NewTagListModel())
 }
-@foreach (var item in Model)
-{
-    <p>@item.ListName</p>
-    <p>@item.TagListRowModels.Count</p>
-}
+
 <div class="container body-content" id="body-content">
     <div class="row" id="userGroups">
-        <div class="col-lg-4">
-            <div class="card card-ruuvi text-center">
-                <div class="card-body">
-                    <h5 class="card-title-ruuvi"><a href="#" id="Your Group Name 1" onclick="hideUserGroups(this.id)">Your Group Name 1 (example hard coded)</a></h5>
-                    <p>3 RuuviTags</p>
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4">
+                <div class="card card-ruuvi text-center">
+                    <div class="card-body">
+                        <h5 class="card-title-ruuvi"><a href="#" id="Your Group Name 1" onclick="hideUserGroups(this.id)">@item.ListName</a></h5>
+                        <p>@item.TagListRowModels.Count RuuviTags</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card card-ruuvi text-center">
-                <div class="card-body">
-                    <h5 class="card-title-ruuvi"><a href="#" id="Your Group Name 2" onclick="hideUserGroups(this.id)">Your Group Name 2 (example hard coded)</a></h5>
-                    <p>7 RuuviTags</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card card-ruuvi text-center">
-                <div class="card-body">
-                    <h5 class="card-title-ruuvi"><a href="#" id="Your Group Name 3" onclick="hideUserGroups(this.id)">Your Group Name 3 (example hard coded)</a></h5>
-                    <p>12 RuuviTags</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card card-ruuvi text-center">
-                <div class="card-body">
-                    <h5 class="card-title-ruuvi"><a href="#" id="Your Group Name 4" onclick="hideUserGroups(this.id)">Your Group Name 4 (example hard coded)</a></h5>
-                    <p>0 RuuviTags</p>
-                </div>
-            </div>
-        </div>
+        }
     </div>
-    <div class="row" id="groupSettings">
-        <h2 id="selectedGroup"></h2>
-        <table class="table table-ruuvi">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>0024e4583a55</td>
-                    <td>Saunatag</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>007ced518d2e</td>
-                    <td>Bedroomtag</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>0145ed2cfea3</td>
-                    <td>Livingroomtag</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+</div>
+<div class="row" id="groupSettings">
+    <h2 id="selectedGroup"></h2>
+    <table class="table table-ruuvi">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>0024e4583a55</td>
+                <td>Saunatag</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>007ced518d2e</td>
+                <td>Bedroomtag</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>0145ed2cfea3</td>
+                <td>Livingroomtag</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 </div>
 
 @section scripts{
