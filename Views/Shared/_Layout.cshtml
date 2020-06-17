@@ -152,6 +152,10 @@
             resizingChecker = setTimeout(resizeEnd, 200);
         };
 
+        function resizeEnd() {
+            onLoad();
+        }
+
         // Close or hide the helpSlider
         function closeHelpSlider() {
             document.getElementById("helpSlider").style.width = "0";
