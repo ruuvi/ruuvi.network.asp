@@ -27,10 +27,10 @@
                         <img src="~/SVG/web-ruuvi-eye-nega.svg" width="28" height="28" alt="Ruuvi logo">
                         RuuviTag
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="TagListDropdown" id="selectTagToList">
+                    <div class="dropdown-menu dropdown-menu-ruuvi" aria-labelledby="TagListDropdown" id="selectTagToList">
                         @foreach (KeyValuePair<int, RuuviTagApp.Models.RuuviTagModel> tag in ViewBag.UsersTags)
                         {
-                            <a class="dropdown-item" onclick="getSelectedTag(this)" id="@tag.Key">@(tag.Value.TagName ?? tag.Value.TagMacAddress)</a>
+                            <a class="dropdown-item dropdown-item-ruuvi" onclick="getSelectedTag(this)" id="@tag.Key">@(tag.Value.TagName ?? tag.Value.TagMacAddress)</a>
                         }
                     </div>
                 </div>
