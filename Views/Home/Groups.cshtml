@@ -59,33 +59,40 @@
 
 @section scripts{
     <script type="text/javascript">
-        let addedTagsHeader = document.getElementById("addedTagsHeader");
-        addedTagsHeader.style.display = "none";
+        let addedTagsTable = document.getElementById("addedTagsTable");
+        let TagListDropdown = document.getElementById("TagListDropdown");
+        addedTagsTable.style.display = "none";
 
-        $('#addATagToList').click(() => {
-            const userTagList = document.getElementById('selectTagToList');
-            const addedTags = document.getElementById('addedTags');
+        // Function to get selected tag from Dropdownlist
+        function getSelectedTag(obj) {
+            //console.log(obj.id);
+            //console.log(obj.text);
 
-            let idx = userTagList.selectedIndex;
-            let selected = userTagList.options[idx];
-            if (idx < 0) {
-                return;
-            }
-            userTagList.options[idx].remove();
-
+            // Adding the selected tag to the list, which affects the database
             let oldVal = $('#IdsAsString').val();
-            //console.log(oldVal);
-            $('#IdsAsString').val(`${oldVal};${selected.value}`);
-            let listNode = document.createElement('li');
-            let textNode = document.createTextNode(selected.text);
-            listNode.appendChild(textNode);
-            addedTags.appendChild(listNode);
+            $('#IdsAsString').val(`${oldVal};${obj.id}`);
+
+            // Adding selected tag to the table
+            let tableBody = document.getElementById("addedTagsTableBody");
+            let row = tableBody.insertRow(0);
+            let cell1 = row.insertCell(0);
+            cell1.innerHTML = obj.text;
 
             // Displaying header only when there are items in the list
-            if (addedTagsHeader.style.display == "none") {
-                addedTagsHeader.style.display = "block";
+            if (addedTagsTable.style.display == "none") {
+                addedTagsTable.style.display = "block";
             }
 
-        });
+            // Removing selected tag from the list
+            document.getElementById(obj.id).remove();
+
+            var itemCount = selectTagToList.children.length;
+            //console.log("Count:" + itemCount);
+
+            // Disabling dropdown, when there are no available ruuvitags to be added
+            if (itemCount < 1) {
+                TagListDropdown.classList.add("disabled");
+            }
+        }
     </script>
 }

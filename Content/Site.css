@@ -166,6 +166,7 @@ textarea {
 
     .btn-tagdropdown:hover {
         background-color: #333;
+        color: white;
     }
 
     .btn-tagdropdown:focus, .btn-tagdropdown.focus {
@@ -670,6 +671,7 @@ body {
     .table-ruuvi tbody + tbody {
         border-color: #333;
     }
+
     .table-ruuvi th {
         color: #00A99D;
         text-decoration: none;

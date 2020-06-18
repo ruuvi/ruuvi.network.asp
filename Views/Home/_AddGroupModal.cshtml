@@ -21,19 +21,30 @@
                     </div>
                 }
 
-                <p class="mt-3">While you're at it, add some of your RuuviTags to this group.</p>
-                <div class="form-group">
-                    @*@Html.DropDownList("UserTagDropdownList", null, htmlAttributes: new { @class = "form-control", id = "selectTagToList" })*@
-                    <select class="form-control" id="selectTagToList">
+                <p class="mt-4">While you're at it, let's add some of your RuuviTags to this group. Select a saved RuuviTag from the list below.</p>
+                <div class="dropdown">
+                    <button class="btn btn-tagdropdown dropdown-toggle" type="button" id="TagListDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="~/SVG/web-ruuvi-eye-nega.svg" width="28" height="28" alt="Ruuvi logo">
+                        RuuviTag
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="TagListDropdown" id="selectTagToList">
                         @foreach (KeyValuePair<int, RuuviTagApp.Models.RuuviTagModel> tag in ViewBag.UsersTags)
                         {
-                            <option class="" value="@tag.Key">@(tag.Value.TagName ?? tag.Value.TagMacAddress)</option>
+                            <a class="dropdown-item" onclick="getSelectedTag(this)" id="@tag.Key">@(tag.Value.TagName ?? tag.Value.TagMacAddress)</a>
                         }
-                    </select>
-                    <button class="btn btn-general mt-2" id="addATagToList">Add</button>
+                    </div>
                 </div>
-                <p id="addedTagsHeader">RuuviTags to be added:</p>
-                <ul id="addedTags"></ul>
+                <div class="col-lg-12">
+                    <table class="table table-ruuvi table-ruuvi-hover table-sm mt-3" id="addedTagsTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">RuuviTag</th>
+                            </tr>
+                        </thead>
+                        <tbody id="addedTagsTableBody">
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer modal-ruuvi-footer">
                 <button class="btn btn-general btn-block-mobile" form="addUserTagListForm">Create</button>
