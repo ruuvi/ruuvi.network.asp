@@ -106,7 +106,8 @@ namespace RuuviTagApp.Controllers
                     return View("Index", mac);
                 }
 
-
+                string dataTimeList;
+                string dataTempList;
                 List<UnpackData> lstapiData = new List<UnpackData>();
 
                 foreach (WhereOSApiRuuvi apiRuuviTag in apiResponse)
@@ -115,8 +116,16 @@ namespace RuuviTagApp.Controllers
                     UnpackRawData RawDataRow = new UnpackRawData();
                     RawDataRow.UnpackAllData(apiRuuviTag.data);
                     ApiRowData.Data = RawDataRow;
+                    ApiRowData.Time = apiRuuviTag.time;
                     lstapiData.Add(ApiRowData);
                 }
+
+                dataTimeList = string.Join(",", lstapiData.Select(n => n.Time).ToList());
+                dataTempList = "'" + string.Join("','", lstapiData.Select(n => n.Data.temperature).ToList());
+
+                ViewBag.apiTime = dataTimeList;
+                ViewBag.apiTempData = dataTempList;
+
 
                 // DECODE DATA HERE ?
 
