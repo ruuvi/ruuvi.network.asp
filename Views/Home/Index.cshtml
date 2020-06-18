@@ -80,11 +80,11 @@ else
 
     @if (ViewBag.TagData != null)
     {
-        foreach (var item in ViewBag.TagData)
+        @*foreach (var item in ViewBag.TagData)
         {
             @item.Data.temperature
             @item.Time
-        }
+        }*@
 
         <div class="container-fluid">
             <div class="row">
@@ -131,32 +131,22 @@ else
 @section scripts{
 
     <script type="text/javascript">
-        let labelTime = [@(Html.Raw(ViewBag.apiTime)).forEach(x => { new Date(x) })];
+        let labelTime = [@Html.Raw(ViewBag.apiTime)];
         let labelTemp = [@Html.Raw(ViewBag.apiTempData)];
         //Line chart script for temperature 
         var ctx = document.getElementById('tempchart').getContext('2d');
         var tempChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: labelTemp,
+                labels: labeTime,
                 datasets: [{
                     label: 'Temperature',
-                    data: labelTime,
+                    data: labelTemp,
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(107, 234, 225, 0.2)'
                     ],
                     borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(107, 234, 225, 1)'
                     ],
                     borderWidth: 1
                 }]

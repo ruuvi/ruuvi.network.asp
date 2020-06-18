@@ -122,7 +122,7 @@ namespace RuuviTagApp.Controllers
                     lstapiData.Add(ApiRowData);
                 }
 
-                dataTimeList = string.Join(",", lstapiData.Select(n => n.Time).ToList());
+                dataTimeList = "'" + string.Join("','", lstapiData.Select(n => n.Time).ToList());
                 dataTempList = "'" + string.Join("','", lstapiData.Select(n => n.Data.temperature).ToList());
 
                 TempData["apiTime"] = dataTimeList;
