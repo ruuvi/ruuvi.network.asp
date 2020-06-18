@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -121,8 +122,8 @@ namespace RuuviTagApp.Controllers
             {
                 string userID = User.Identity.GetUserId();
                 List<WhereOSApiRuuvi> apiResponse = await GetTagData(tag.GetAddress());
-                bool userHasTag = await UserHasTag(userID, tag.GetAddress());
-                bool tagNameTaken = !string.IsNullOrEmpty(tag.AddTagName) && await TagNameTaken(userID, tag.AddTagName);
+                bool userHasTag = await UserHasTagMacAsync(userID, tag.GetAddress());
+                bool tagNameTaken = !string.IsNullOrEmpty(tag.AddTagName) && await TagNameTakenAsync(userID, tag.AddTagName);
                 if (apiResponse.Count == 0 || userHasTag || tagNameTaken)
                 {
                     List<string> tagErrors = new List<string>();
@@ -162,21 +163,69 @@ namespace RuuviTagApp.Controllers
                                                                                           where t.UserId == userID
                                                                                           select t).ToListAsync();
 
-        private async Task<bool> UserHasTag(string userID, string mac) => await (from t in db.RuuviTagModels
-                                                                                 where t.UserId == userID && t.TagMacAddress == mac
-                                                                                 select t).FirstOrDefaultAsync() != null;
+        private async Task<bool> UserHasTagMacAsync(string userID, string mac) => await (from t in db.RuuviTagModels
+                                                                                         where t.UserId == userID && t.TagMacAddress == mac
+                                                                                         select t).FirstOrDefaultAsync() != null;
 
-        private async Task<bool> TagNameTaken(string userID, string name) => await (from t in db.RuuviTagModels
-                                                                                    where t.UserId == userID && t.TagName == name
-                                                                                    select t).FirstOrDefaultAsync() != null;
+        private async Task<bool> UserHasTagIdAsync(string userID, int tagID) => await (from t in db.RuuviTagModels
+                                                                                       where t.UserId == userID && t.TagId == tagID
+                                                                                       select t).FirstOrDefaultAsync() != null;
+
+        private async Task<bool> TagNameTakenAsync(string userID, string name) => await (from t in db.RuuviTagModels
+                                                                                         where t.UserId == userID && t.TagName == name
+                                                                                         select t).FirstOrDefaultAsync() != null;
 
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddTagAlarm(AddAlarmModel alarm, int? tagID)
+        public async Task<ActionResult> AddTagAlarm(AddAlarmModel alarm, int? tagID)
         {
-            //var tempHigh = alarm["temperature-high"];
-            //var tempLow = alarm["temperature-low"];
+            if (tagID == null)
+            {
+                // error no id
+                return RedirectToAction("Index");
+            }
+            if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
+            {
+                // error tag is not users
+                return RedirectToAction("Index");
+            }
+            List<TagAlertType> alarmTypes = new List<TagAlertType>();
+            foreach (var type in await db.TagAlertTypes.ToListAsync())
+            {
+                type.TypeName = string.Join("", type.TypeName.Split('-'));
+                alarmTypes.Add(type);
+            }
+            bool NoAlarmsAdded = true;
+            foreach (PropertyInfo pi in alarm.GetType().GetProperties())
+            {
+                if (pi.GetValue(alarm) != null)
+                {
+                    int? alarmTypeId = alarmTypes
+                        .Where(at => string.Equals(at.TypeName, pi.Name, StringComparison.OrdinalIgnoreCase))
+                        .Select(at => at.AlertTypeId).FirstOrDefault();
+                    if (alarmTypeId == null)
+                    {
+                        continue;
+                    }
+                    db.TagAlertModels.Add(new TagAlertModel
+                    {
+                        AlertTypeId = (int)alarmTypeId,
+                        TagId = (int)tagID,
+                        AlertLimit = (double)pi.GetValue(alarm)
+                    });
+                    if (NoAlarmsAdded)
+                    {
+                        NoAlarmsAdded = false;
+                    }
+                }
+            }
+            if (NoAlarmsAdded)
+            {
+                // error no values for alarms
+                return RedirectToAction("Index");
+            }
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -262,7 +311,7 @@ namespace RuuviTagApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!string.IsNullOrWhiteSpace(tag.TagName) && await TagNameTaken(User.Identity.GetUserId(), tag.TagName))
+                if (!string.IsNullOrWhiteSpace(tag.TagName) && await TagNameTakenAsync(User.Identity.GetUserId(), tag.TagName))
                 {
                     TempData["TagErrorList"] = new List<string> { "Couldn't change tag name, since you already have a tag with that name!" };
                     TempData["ShowTagSettings"] = true;

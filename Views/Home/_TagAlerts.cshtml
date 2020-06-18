@@ -7,8 +7,8 @@
         @using (Html.BeginForm("AddTagAlarm", "Home", FormMethod.Post, new { @id = "addTagAlarmForm" }))
         {
             @Html.AntiForgeryToken()
-            @Html.HiddenFor(model => model.TempHigh)
-            @Html.HiddenFor(model => model.TempLow)
+            @Html.HiddenFor(model => model.TemperatureHigh)
+            @Html.HiddenFor(model => model.TemperatureLow)
             @Html.HiddenFor(model => model.HumidityHigh)
             @Html.HiddenFor(model => model.HumidityLow)
             @Html.HiddenFor(model => model.PressureHigh)
@@ -44,11 +44,11 @@
 
     tempHighSlider.oninput = function () {
         tempHighOutput.innerHTML = this.value;
-        $('#TempHigh').val(this.value);
+        $('#TemperatureHigh').val(this.value);
     }
 
     tempLowSlider.oninput = function () {
         tempLowOutput.innerHTML = this.value;
-        $('#TempLow').val(this.value);
+        $('#TemperatureLow').val(this.value);
     }
 </script>

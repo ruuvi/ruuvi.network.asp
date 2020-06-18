@@ -7,11 +7,13 @@ namespace RuuviTagApp.ViewModels
 {
     public class AddAlarmModel
     {
-        public double? TempHigh { get; set; }
-        public double? TempLow { get; set; }
+        public double? TemperatureHigh { get; set; }
+        public double? TemperatureLow { get; set; }
         public double? HumidityHigh { get; set; }
         public double? HumidityLow { get; set; }
         public double? PressureHigh { get; set; }
         public double? PressureLow { get; set; }
+
+        public bool AllPropertiesAreNull => GetType().GetProperties().All(p => p.GetValue(this) == null);
     }
 }
