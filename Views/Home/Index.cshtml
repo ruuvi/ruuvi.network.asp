@@ -17,6 +17,14 @@
 {
     @Html.Partial("~/Views/Home/_TagNav.cshtml")
 
+    if(!ViewBag.UserHasEmail)
+    {
+        <script>
+            document.getElementById("btn-tagAlerts").classList.add("disabled");
+            document.getElementById("btn-tagAlerts").style.display = "none";
+        </script>
+    }
+
 } @*End of tag navbar*@
 
 @*Choose container type based on the user login status.*@
