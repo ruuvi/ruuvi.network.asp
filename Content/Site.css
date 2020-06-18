@@ -670,6 +670,17 @@ body {
     .table-ruuvi tbody + tbody {
         border-color: #333;
     }
+    .table-ruuvi th {
+        color: #00A99D;
+        text-decoration: none;
+        font-weight: inherit;
+    }
+
+
+.table-ruuvi-hover tbody tr:hover {
+    color: #00a99d;
+    background-color: rgba(0, 0, 0, 0.075);
+}
 
 .tagalert-header {
     vertical-align: bottom;

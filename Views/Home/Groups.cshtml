@@ -14,14 +14,41 @@
             <div class="col-lg-4">
                 <div class="card card-ruuvi text-center">
                     <div class="card-body">
-                        <h5 class="card-title-ruuvi"><a href="#" id="@item.ListName" onclick="hideUserGroups(this.id)">@item.ListName</a></h5>
-                        <p>@item.TagListRowModels.Count RuuviTags</p>
-                        @foreach (var tagRow in item.TagListRowModels)
+                        <h5 class="card-title-ruuvi"><a title="Click to view RuuviTags" data-toggle="collapse" href="#collapseGroup-@item.UserTagListId" role="button" aria-expanded="false" aria-controls="collapseGroup" id="@item.ListName">@item.ListName</a></h5>
+
+                        @if (@item.TagListRowModels.Count > 0)
                         {
-                            if(ViewBag.UsersTags.TryGetValue(tagRow.TagId, out RuuviTagApp.Models.RuuviTagModel tag))
-                            {
-                                <p>@(tag.TagName ?? tag.TagMacAddress)</p>
-                            }
+                            <p>@item.TagListRowModels.Count RuuviTags</p>
+                            <div class="collapse" id="collapseGroup-@item.UserTagListId">
+                                <table class="table table-ruuvi table-ruuvi-hover table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">RuuviTag</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int tableRow = 0;
+                                            foreach (var tagRow in item.TagListRowModels)
+                                            {
+                                                if (ViewBag.UsersTags.TryGetValue(tagRow.TagId, out RuuviTagApp.Models.RuuviTagModel tag))
+                                                {
+                                                    tableRow++;
+                                                    <tr>
+                                                        <td>@tableRow</td>
+                                                        <td>@(tag.TagName ?? tag.TagMacAddress)</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>Zero RuuviTags in this group</p>
                         }
                     </div>
                 </div>
