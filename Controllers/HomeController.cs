@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using RuuviTagApp.Models;
 using RuuviTagApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
-using System.Data.Entity.Core.Mapping;
 using System.Linq;
-using System.Threading;
+using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace RuuviTagApp.Controllers
@@ -20,12 +20,12 @@ namespace RuuviTagApp.Controllers
         private readonly ApplicationDbContext db = new ApplicationDbContext();
         public async Task<ActionResult> Index(string tagMac)
         {
-            // tämän pitäisi luoda tietokanta
-            //var tag = db.RuuviTagModels.Find(1);
-            ViewBag.RenderRegisterModal = TempData["RenderRegisterModal"];
+            ViewBag.ShowRegisterModal = TempData["ShowRegisterModal"];
             ViewBag.LoginProvider = TempData["LoginProvider"];
             ViewBag.ShowAddTag = TempData["ShowAddTag"];
-            ViewBag.MacErrors = TempData["MacErrorList"];
+            ViewBag.ShowTagSettings = TempData["ShowTagSettings"];
+            ViewBag.TagErrors = TempData["TagErrorList"];
+            ViewBag.GeneralError = TempData["GeneralError"];
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
@@ -55,8 +55,10 @@ namespace RuuviTagApp.Controllers
             }
             else if (Request.IsAuthenticated)
             {
-                List<RuuviTagModel> userTags = await GetUserTagsAsync(User.Identity.GetUserId());
+                string userID = User.Identity.GetUserId();
+                List<RuuviTagModel> userTags = await GetUserTagsAsync(userID);
                 ViewBag.UserTagsList = userTags;
+                ViewBag.UserHasEmail = db.Users.Find(userID).Email != null;
 
                 // Add error message in case user hasn't added any tags
                 if (userTags == null || !userTags.Any() || userTags.Count == 0)
@@ -65,14 +67,24 @@ namespace RuuviTagApp.Controllers
                 }
             }
 
-            if (TempData["MacAddressModel"] is MacAddressModel macAddress)
+            if (TempData["TagModel"] is AddTagModel addTag)
             {
-                foreach (var e in ViewBag.MacErrors)
+                foreach (var e in ViewBag.TagErrors)
                 {
-                    ModelState.AddModelError("MacAddress", e);
+                    ModelState.AddModelError(string.Empty, e);
                 }
-                return View(macAddress);
+                return View(addTag);
             }
+            else if (TempData["TagModel"] is RuuviTagModel tag)
+            {
+                foreach (var e in ViewBag.TagErrors)
+                {
+                    // When more thigs are added to settings "TagName" will need to be changed to 'string.Empty'.
+                    ModelState.AddModelError("TagName", e);
+                }
+                return View(tag);
+            }
+
             return View();
         }
 
@@ -88,7 +100,16 @@ namespace RuuviTagApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                TempData["ApiResponse"] = await Task.Run(() => SimulateApiCallResponse(mac.GetAddress()));
+                List<WhereOSApiRuuvi> apiResponse = await GetTagData(mac.GetAddress());
+                if (apiResponse.Count == 0)
+                {
+                    ModelState.AddModelError("MacAddress", "No data found, check RuuviTag ID. See Help -section for more information.");
+                    return View("Index", mac);
+                }
+
+                // DECODE DATA HERE ?
+
+                TempData["ApiResponse"] = apiResponse;
                 return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
             return View("Index", mac);
@@ -96,29 +117,47 @@ namespace RuuviTagApp.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> AddTag(MacAddressModel mac, string userID)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddTag(AddTagModel tag)
         {
             if (ModelState.IsValid)
             {
-                // Backend call
-                // if fails return View("Index", mac);
-                // else
-                // Check if this tag has been added by this user
-                if (await UserHasTag(userID, mac.GetAddress()))
+                string userID = User.Identity.GetUserId();
+                List<WhereOSApiRuuvi> apiResponse = await GetTagData(tag.GetAddress());
+                bool userHasTag = await UserHasTagMacAsync(userID, tag.GetAddress());
+                bool tagNameTaken = !string.IsNullOrEmpty(tag.AddTagName) && await TagNameTakenAsync(userID, tag.AddTagName);
+                if (apiResponse.Count == 0 || userHasTag || tagNameTaken)
                 {
-                    TempData["MacErrorList"] = new List<string> { "Couldn't add this tag, since you have already added it!" };
+                    List<string> tagErrors = new List<string>();
+                    if (userHasTag)
+                    {
+                        tagErrors.Add("Couldn't add this tag, since you have already added it!");
+                    }
+                    if (tagNameTaken)
+                    {
+                        tagErrors.Add("Couldn't add this tag, since you have a tag with that name already!");
+                    }
+                    if (apiResponse.Count == 0)
+                    {
+                        tagErrors.Add("No data found, check RuuviTag ID. See Help -section for more information.");
+                    }
+                    TempData["TagErrorList"] = tagErrors;
                     TempData["ShowAddTag"] = true;
-                    TempData["MacAddressModel"] = mac;
+                    TempData["TagModel"] = tag;
                     return RedirectToAction("Index");
                 }
-                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = mac.GetAddress() });
+
+                // DECODE DATA HERE ?
+
+                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
                 await db.SaveChangesAsync();
                 // use data and tag to refresh view
                 return RedirectToAction("Index");
             }
-            TempData["MacErrorList"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+
+            TempData["TagErrorList"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
             TempData["ShowAddTag"] = true;
-            TempData["MacAddressModel"] = mac;
+            TempData["TagModel"] = tag;
             return RedirectToAction("Index");
         }
 
@@ -126,17 +165,100 @@ namespace RuuviTagApp.Controllers
                                                                                           where t.UserId == userID
                                                                                           select t).ToListAsync();
 
-        private async Task<bool> UserHasTag(string userID, string mac) => await (from t in db.RuuviTagModels
-                                                                                 where t.UserId == userID && t.TagMacAddress == mac
-                                                                                 select t).FirstOrDefaultAsync() != null;
-        public ActionResult AddTagList()
+        private async Task<bool> UserHasTagMacAsync(string userID, string mac) => await (from t in db.RuuviTagModels
+                                                                                         where t.UserId == userID && t.TagMacAddress == mac
+                                                                                         select t).FirstOrDefaultAsync() != null;
+
+        private async Task<bool> UserHasTagIdAsync(string userID, int tagID) => await (from t in db.RuuviTagModels
+                                                                                       where t.UserId == userID && t.TagId == tagID
+                                                                                       select t).FirstOrDefaultAsync() != null;
+
+        private async Task<bool> TagNameTakenAsync(string userID, string name) => await (from t in db.RuuviTagModels
+                                                                                         where t.UserId == userID && t.TagName == name
+                                                                                         select t).FirstOrDefaultAsync() != null;
+
+        private async Task<TagAlertModel> TagHasAlertOfType(int tagID, int typeID) => await (from a in db.TagAlertModels
+                                                                                             where a.TagId == tagID && a.AlertTypeId == typeID
+                                                                                             select a).FirstOrDefaultAsync();
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddTagAlert(AddAlertModel alert, int? tagID)
         {
-            throw new NotImplementedException();
+            if (tagID == null)
+            {
+                // error no id
+                return RedirectToAction("Index");
+            }
+            if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
+            {
+                // error tag is not users
+                return RedirectToAction("Index");
+            }
+            List<TagAlertType> alarmTypes = new List<TagAlertType>();
+            foreach (var type in await db.TagAlertTypes.ToListAsync())
+            {
+                type.TypeName = string.Join("", type.TypeName.Split('-'));
+                alarmTypes.Add(type);
+            }
+            bool NoAlarmsAdded = true;
+            foreach (PropertyInfo pi in alert.GetType().GetProperties())
+            {
+                if (pi.GetValue(alert) != null)
+                {
+                    int? alarmTypeId = alarmTypes
+                        .Where(at => string.Equals(at.TypeName, pi.Name, StringComparison.OrdinalIgnoreCase))
+                        .Select(at => at.AlertTypeId).FirstOrDefault();
+                    if (alarmTypeId == null)
+                    {
+                        continue;
+                    }
+                    if (await TagHasAlertOfType((int)tagID, (int)alarmTypeId) is TagAlertModel oldAlert && oldAlert != null)
+                    {
+                        oldAlert.AlertLimit = (double)pi.GetValue(alert);
+                        db.Entry(oldAlert).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        db.TagAlertModels.Add(new TagAlertModel
+                        {
+                            AlertTypeId = (int)alarmTypeId,
+                            TagId = (int)tagID,
+                            AlertLimit = (double)pi.GetValue(alert)
+                        }); 
+                    }
+                    if (NoAlarmsAdded)
+                    {
+                        NoAlarmsAdded = false;
+                    }
+                }
+            }
+            if (NoAlarmsAdded)
+            {
+                // error no values for alarms
+                return RedirectToAction("Index");
+            }
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
-        public ActionResult AddTagAlarm()
+        public async Task<JsonResult> GetAllAlerts(int? tagID)
         {
-            throw new NotImplementedException();
+            List<object> res = new List<object>();
+            if (tagID == null)
+            {
+                return Json(res, JsonRequestBehavior.AllowGet);
+            }
+            if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
+            {
+                return Json(res, JsonRequestBehavior.AllowGet);
+            }
+            foreach (var alert in await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync())
+            {
+                res.Add(new { alert.AlertTypeId, alert.AlertLimit });
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TagNav()
@@ -144,63 +266,23 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetTagData(string macAddress)
+        private async Task<List<WhereOSApiRuuvi>> GetTagData(string macAddress)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<SimulatedData> SimulateApiCallResponse(string mac)
-        {
-            Random rng = new Random();
-            Thread.Sleep(rng.Next(500, 2500));
-            List<SimulatedData> simDat = new List<SimulatedData>();
-            DateTime now = DateTime.Now;
-            for (int i = 0; i < 20; i++)
+            string url = ApiHelper.ApiClient.BaseAddress + macAddress;
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
-                simDat.Add(new SimulatedData
+                if (response.IsSuccessStatusCode)
                 {
-                    Id = mac,
-                    Time = now - TimeSpan.FromHours(i),
-                    Data = new TagData
-                    {
-                        Temperature = rng.Next(-20, 20) / 100D,
-                        Pressure = rng.Next(100000, 100100),
-                        Humidity = rng.Next(50000, 60000) / 1000D,
-                        Acc_X = rng.Next(-10, 10) / 1000D,
-                        Acc_Y = rng.Next(-10, 10) / 1000D,
-                        Acc_Z = rng.Next(1000, 1100) / 1000D,
-                        TXPower = rng.Next(0, 10),
-                        Voltage = rng.Next(2000, 2500) / 1000D,
-                        SeqNum = 200 - i
-                    }
-                });
+                    var json = await response.Content.ReadAsStringAsync();
+                    var data = JsonConvert.DeserializeObject<List<WhereOSApiRuuvi>>(json);
+
+                    return data;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
             }
-            return simDat;
-        }
-
-        public class SimulatedData
-        {
-            public string Id { get; set; }
-            public TagData Data { get; set; }
-            public DateTime Time { get; set; }
-            //public string Coordinates { get; set; }
-            //public string Gwmac { get; set; }
-            //public int Rssi { get; set; }
-            //public int Rssi_max { get; set; }
-            //public int Rssi_min { get; set; }
-        }
-
-        public class TagData
-        {
-            public double Temperature { get; set; }
-            public int Pressure { get; set; }
-            public double Humidity { get; set; }
-            public double Acc_X { get; set; }
-            public double Acc_Y { get; set; }
-            public double Acc_Z { get; set; }
-            public int TXPower { get; set; }
-            public double Voltage { get; set; }
-            public int SeqNum { get; set; }
         }
 
         protected override void Dispose(bool disposing)
@@ -225,6 +307,134 @@ namespace RuuviTagApp.Controllers
         public ActionResult AirpressureChart()
         {
             return View();
+        }
+
+        public ActionResult AppSettings()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public async Task<ActionResult> _TagSettingsModal(int? tagID)
+        {
+            if (tagID == null)
+            {
+                TempData["GeneralError"] = "tagId was null.";
+                return RedirectToAction("Index");
+            }
+            RuuviTagModel tag = await db.RuuviTagModels.FindAsync(tagID);
+            if (tag == null)
+            {
+                TempData["GeneralError"] = "Tag not found.";
+                return RedirectToAction("Index");
+            }
+            if (tag.UserId != User.Identity.GetUserId())
+            {
+                TempData["GeneralError"] = "You don't have access to that tag.";
+                return RedirectToAction("Index");
+            }
+            return PartialView(tag);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> _TagSettingsModal([Bind(Include = "TagId,TagMacAddress,TagActive,TagName,UserId")] RuuviTagModel tag)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!string.IsNullOrWhiteSpace(tag.TagName) && await TagNameTakenAsync(User.Identity.GetUserId(), tag.TagName))
+                {
+                    TempData["TagErrorList"] = new List<string> { "Couldn't change tag name, since you already have a tag with that name!" };
+                    TempData["ShowTagSettings"] = true;
+                    TempData["TagModel"] = tag;
+                    return RedirectToAction("Index");
+                }
+                db.Entry(tag).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            TempData["TagErrorList"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            TempData["ShowTagSettings"] = true;
+            TempData["TagModel"] = tag;
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpDelete, ActionName("_TagSettingsModal")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteTag(int tagid)
+        {
+            RuuviTagModel tag = await db.RuuviTagModels.FindAsync(tagid);
+            if (User.Identity.GetUserId() != tag.UserId)
+            {
+                TempData["GeneralError"] = "You don't have access to that tag.";
+                return RedirectToAction("Index");
+            }
+            db.RuuviTagModels.Remove(tag);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult TagAlerts()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public async Task<ActionResult> Groups()
+        {
+            string userID = User.Identity.GetUserId();
+            var userTags = new List<SelectListItem>();
+            var tags = new Dictionary<int, RuuviTagModel>();
+            foreach(var tag in await GetUserTagsAsync(userID))
+            {
+                userTags.Add(new SelectListItem { Value = tag.TagId.ToString(), Text = tag.TagName ?? tag.TagMacAddress });
+                tags.Add(tag.TagId, tag);
+            }
+            ViewBag.UserTagDropdownList = new SelectList(userTags, "Value", "Text");
+            ViewBag.UsersTags = tags;
+            List<UserTagListModel> userGroups = await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
+            return View(userGroups);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> AddUserTagList(NewTagListModel list)
+        {
+            if (ModelState.IsValid)
+            {
+                string userID = User.Identity.GetUserId();
+                var userLists = await db.UserTagListModels.Where(l => l.UserId == userID).ToListAsync();
+                var userTags = await GetUserTagsAsync(userID);
+                if (userLists.Select(l => l.ListName).Contains(list.ListName))
+                {
+                    // TempData error list = You already have a list with that name.
+                    return RedirectToAction("Groups");
+                }
+                else if (string.IsNullOrWhiteSpace(list.ListName))
+                {
+                    // TempData error list = name required.
+                    return RedirectToAction("Groups");
+                }
+                var newList = db.UserTagListModels.Add(new UserTagListModel { ListName = list.ListName, UserId = userID });
+                if (!string.IsNullOrWhiteSpace(list.IdsAsString))
+                {
+                    string[] ids = list.IdsAsString.Trim(';').Split(';');
+                    foreach (string idstring in ids)
+                    {
+                        if (int.TryParse(idstring, out int tagId) && userTags.Any(t => t.TagId == tagId))
+                        {
+                            db.TagListRowModels.Add(new TagListRowModel { ListId = newList.UserTagListId, TagId = tagId });
+                        }
+                    }
+                }
+                await db.SaveChangesAsync();
+                return RedirectToAction("Groups");
+            }
+            // TempData error list = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return RedirectToAction("Groups");
         }
     }
 }

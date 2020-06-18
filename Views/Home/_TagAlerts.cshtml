@@ -1,0 +1,57 @@
+﻿@*Maybe check if user has saved email address, and if not, inform user that they can not set up alarms. Otherwise display form?*@
+@model RuuviTagApp.ViewModels.AddAlertModel
+<h4>Set up RuuviTag alerts</h4>
+<p>Set up alerts and receive a notification via email if something is going on with your RuuviTag.*</p>
+<p class="font-italic">Notifications are not sent realtime. Alert limit values are checked on the hour.</p>
+    <div class="container">
+        <div>
+            <ul id="existingAlerts"></ul>
+        </div>
+        @using (Html.BeginForm("AddTagAlert", "Home", FormMethod.Post, new { @id = "addTagAlarmForm" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.TemperatureHigh)
+            @Html.HiddenFor(model => model.TemperatureLow)
+            @Html.HiddenFor(model => model.HumidityHigh)
+            @Html.HiddenFor(model => model.HumidityLow)
+            @Html.HiddenFor(model => model.PressureHigh)
+            @Html.HiddenFor(model => model.PressureLow)
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Temperature</h2>
+                    <p>From <span id="tempLowValue"></span>&#176;C to <span id="tempHighValue"></span>&#176;C</p>
+                </div>
+                <div class="col-lg-6">
+                    <label for="tempLow">Lowest</label>
+                    <input type="range" class="custom-range" id="tempLow" min="-163" max="163">
+                    <p id="tempLowValue"></p>
+                </div>
+
+                <div class="col-lg-6">
+                    <label for="tempHigh">Highest</label>
+                    <input type="range" class="custom-range" id="tempHigh" min="-163" max="163">
+                    <p id="tempHighValue"></p>
+                </div>
+            </div>
+        }
+    </div>
+
+<script>
+    var tempHighSlider = document.getElementById("tempHigh");
+    var tempHighOutput = document.getElementById("tempHighValue");
+    tempHighOutput.innerHTML = tempHighSlider.value;
+
+    var tempLowSlider = document.getElementById("tempLow");
+    var tempLowOutput = document.getElementById("tempLowValue");
+    tempLowOutput.innerHTML = tempLowSlider.value;
+
+    tempHighSlider.oninput = function () {
+        tempHighOutput.innerHTML = this.value;
+        $('#TemperatureHigh').val(this.value);
+    }
+
+    tempLowSlider.oninput = function () {
+        tempLowOutput.innerHTML = this.value;
+        $('#TemperatureLow').val(this.value);
+    }
+</script>

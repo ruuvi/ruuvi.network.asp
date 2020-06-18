@@ -1,8 +1,8 @@
 ﻿
 @{
-    ViewBag.Title = "Help";
+    ViewBag.Title = "Questions and answers";
 }
-<div class="container">
+<div class="container body-content" id="body-content">
     <div class="row mt-3" id="helpHeaders">
         <div class="col-lg-4">
             <div class="card card-ruuvi text-center">
@@ -39,6 +39,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-4">
+            <div class="card card-ruuvi text-center">
+                <div class="card-body">
+                    <h5 class="card-title-ruuvi"><a href="#groups">Groups</a></h5>
+                    <p>Learn about the groups and what are the they for.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row mt-5" id="helpContent">
@@ -54,12 +63,19 @@
             <h1 id="ruuvitag-id">RuuviTag ID or MAC</h1>
             <p>Each RuuviTag device has a unique ID. The ID is a very same as the devices MAC address. The ID looks something like this: c04db14ab635 or c0:4d:b1:4a:b6:35. You can search your RuuviTags with our without colons within this application.</p>
             <p>You can find the RuuviTag ID from the mobile application under the Tag Settings.</p>
+            <p>Please note, that when you are searching or saving a RuuviTag, this application checks whether the given ID is an actual RuuviTag or not. If the given ID or MAC address is not from a RuuviTag or if the RuuviTag has not sent any data to the cloud, you are not able to save or display any data from this RuuviTag. Please see <a href="#helpRuuviLinks">these options</a> or visit <a href="https://ruuvi.com" target="blank">ruuvi.com</a> to get help with this issue.</p>
         </div>
 
         <div class="col-12 col-help">
             <h1 id="alerts">Email Alerts</h1>
             <p>Please note that in order to set up alerts, you must have had to allow us to save your email address to our database during first time Google Authentication.</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam facilisis nisl placerat velit placerat, vitae finibus felis lacinia. Praesent et nisl lectus. Suspendisse lorem erat, faucibus sit amet sollicitudin ac, aliquam vel velit. Phasellus vehicula interdum hendrerit. Cras sagittis massa urna, nec ultrices dolor finibus eget. Etiam pharetra dictum mauris sed porttitor. Curabitur in augue vulputate nisl sollicitudin iaculis. Etiam vestibulum, ex lacinia venenatis accumsan, eros nisi fermentum orci, quis elementum enim mi sit amet lorem.</p>
+        </div>
+
+        <div class="col-12 col-help">
+            <h1 id="groups">Groups</h1>
+            <p>Imagine this: You have a lovely home and a comfortable cabin in Lapland. You want to monitor their rooms, saunas, garages and more, so you end up having more RuuviTags than you can count.</p>
+            <p>Creating groups will help you to categorize, sort and monitor your RuuviTags in different locations.</p>
         </div>
     </div>
 
@@ -77,6 +93,14 @@
                 <div class="card-body">
                     <h1><a href="https://ruuvi.com/faq/" target="blank">Forums</a></h1>
                     <p>Visit Ruuvi Forums</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card card-ruuvi text-center">
+                <div class="card-body">
+                    <h1><a href="https://t.me/ruuvicom" target="blank">Telegram</a></h1>
+                    <p>Chat with Ruuvi at Telegram</p>
                 </div>
             </div>
         </div>

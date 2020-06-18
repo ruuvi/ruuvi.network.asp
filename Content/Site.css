@@ -51,6 +51,11 @@ textarea {
     padding: 0 0 0 0;
 }
 
+    .footer-ruuvi p {
+        font-size: 0.8rem;
+        color: #666;
+    }
+
 .footer-ruuvi-logo {
     width: 100%;
     float: left;
@@ -127,7 +132,13 @@ textarea {
     border-bottom: 1px solid #333;
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
+    padding-left: 0;
+    text-align: left;
 }
+
+    .modal-ruuvi-header h2 {
+        margin-left: 1rem;
+    }
 
 .navbar-ruuvitag {
     background-color: #1a1a1a;
@@ -155,6 +166,7 @@ textarea {
 
     .btn-tagdropdown:hover {
         background-color: #333;
+        color: white;
     }
 
     .btn-tagdropdown:focus, .btn-tagdropdown.focus {
@@ -166,6 +178,8 @@ textarea {
 .dropdown-item-ruuvi {
     color: #fff;
     background-color: #333;
+    text-align: left;
+    cursor: pointer;
 }
 
 .dropdown-menu-ruuvi {
@@ -187,6 +201,7 @@ textarea {
     width: 28px;
     margin-top: 5px;
     -webkit-transition: 1s;
+    cursor: pointer;
 }
 
 
@@ -196,6 +211,7 @@ textarea {
     width: 28px;
     margin-top: 5px;
     -webkit-transition: 1s;
+    cursor: pointer;
 }
 
 .svg-btn-new {
@@ -204,6 +220,7 @@ textarea {
     width: 28px;
     margin-top: 5px;
     -webkit-transition: 1s;
+    cursor: pointer;
 }
 
 .svg-btn-alert:hover, .svg-btn-alert:focus {
@@ -367,10 +384,6 @@ h1 {
         opacity: 1;
         color: #fff;
     }
-
-.svg-btn-new {
-    cursor: pointer;
-}
 
 .ruuvi-close {
     float: right;
@@ -568,4 +581,129 @@ body {
 
     .ruuvi-eye-home.fade {
         opacity: 0.5;
+    }
+
+.tagsettings-tagheader {
+    background: url(/Images/web-ruuvi-eye-nega.png) no-repeat left center;
+    background-size: 20px;
+    background-position: left top 4px;
+    opacity: 1;
+}
+
+    .tagsettings-tagheader h4 {
+        margin-left: 25px;
+    }
+
+    .tagsettings-tagheader p {
+        margin-left: 25px;
+        font-size: 75%;
+    }
+
+#infoSelectTag {
+    font-size: 2rem;
+    margin: 1rem;
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+/*Can be removed after publish*/
+#alphaInfo {
+    font-size: 1rem;
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+.home-selectedTag {
+    background: url(/Images/web-ruuvi-eye-nega.png) no-repeat left center;
+    background-size: 30px;
+    background-position: left top 3px;
+    opacity: 1;
+}
+
+    .home-selectedTag h2 {
+        margin-left: 35px;
+    }
+
+.navbar-group {
+    background-color: #1a1a1a;
+}
+
+    .navbar-group .navbar-nav .nav-link {
+        color: #fff;
+        text-align: right;
+        margin-right: 15px;
+    }
+
+        .navbar-group .navbar-nav .nav-link:hover, .navbar-group .navbar-nav .nav-link:focus {
+            color: #00a99d;
+        }
+
+    .navbar-group .nav-item {
+        padding: 0;
+        margin: 0;
+    }
+
+.navbar-group-nav {
+    margin-left: 0px;
+}
+
+.table-ruuvi {
+    color: inherit;
+}
+
+    .table-ruuvi th,
+    .table-ruuvi td,
+    .table-ruuvi thead th,
+    .table-ruuvi tbody + tbody {
+        border-color: #333;
+    }
+
+    .table-ruuvi th {
+        color: #00A99D;
+        text-decoration: none;
+        font-weight: inherit;
+    }
+
+
+.table-ruuvi-hover tbody tr:hover {
+    color: #00a99d;
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+.tagalert-header {
+    vertical-align: bottom;
+}
+
+.btn-header-collapse {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    font-size: 1.5rem;
+    color: inherit;
+    padding-left: 0;
+}
+
+
+    .btn-header-collapse:hover {
+        color: #00A99D;
+    }
+
+    .btn-header-collapse:focus, .btn-header-collapse.focus {
+        color: #fff;
+        /*background-color: #333;*/
+        box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.0);
     }

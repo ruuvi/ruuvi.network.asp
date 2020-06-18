@@ -19,7 +19,7 @@
                     @Html.ValidationSummary(true, "Failed finishing authentication: ", new { @class = "text-danger" })
                     <div class="form-group">
                         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @maxlength="32", required = true } })
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @maxlength = "32", required = true } })
                         @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                     </div>
                     <h4 class="mt-5">Do you want to set up alerts?</h4>
@@ -37,7 +37,8 @@
                 }
             </div>
             <div class="modal-footer modal-ruuvi-footer">
-                <button class="btn btn-general" type="submit" form="externalRegisterForm">Register</button>
+                <small id="cookieUsageInfo" class="form-text text-muted">Some of the functions provided to the authenticated users require the use of cookies. By continuing you accept the <a href="https://ruuvi.com/terms/cookies/" target="blank">usage of cookies</a>.</small>
+                <button class="btn btn-general btn-block-mobile" type="submit" form="externalRegisterForm">Register</button>
             </div>
         </div>
     </div>

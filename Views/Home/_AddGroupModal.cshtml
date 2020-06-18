@@ -1,0 +1,54 @@
+﻿@model RuuviTagApp.ViewModels.NewTagListModel
+<div class="modal" id="addGroupModal">
+    <div class="modal-dialog">
+        <div class="modal-content modal-ruuvi">
+            <div class="modal-header modal-ruuvi-header">
+                <h2>Create a new group</h2>
+                <button type="button" class="ruuvi-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>If you have multiple different locations with multiple RuuviTags, creating a group for them might help you sort them out.</p>
+
+                @using (Html.BeginForm("AddUserTagList", "Home", FormMethod.Post, new { id = "addUserTagListForm" }))
+                {
+                    <div class="form-group">
+                        @Html.AntiForgeryToken()
+                        <label for="ListName">Group name</label>
+                        @Html.EditorFor(model => model.ListName, new { htmlAttributes = new { @class = "form-control", @maxlength = "50", minlength = "3", required = true, placeholder = "Sauna tags, bedroom tags ..." } })
+                        @Html.HiddenFor(model => model.IdsAsString)
+                    </div>
+                }
+
+                <p class="mt-4">While you're at it, let's add some of your RuuviTags to this group. Select a saved RuuviTag from the list below.</p>
+                <div class="dropdown">
+                    <button class="btn btn-tagdropdown dropdown-toggle" type="button" id="TagListDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="~/SVG/web-ruuvi-eye-nega.svg" width="28" height="28" alt="Ruuvi logo">
+                        RuuviTag
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-ruuvi" aria-labelledby="TagListDropdown" id="selectTagToList">
+                        @foreach (KeyValuePair<int, RuuviTagApp.Models.RuuviTagModel> tag in ViewBag.UsersTags)
+                        {
+                            <a class="dropdown-item dropdown-item-ruuvi" onclick="getSelectedTag(this)" id="@tag.Key">@(tag.Value.TagName ?? tag.Value.TagMacAddress)</a>
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <table class="table table-ruuvi table-ruuvi-hover table-sm mt-3" id="addedTagsTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">RuuviTag</th>
+                            </tr>
+                        </thead>
+                        <tbody id="addedTagsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer modal-ruuvi-footer">
+                <button class="btn btn-general btn-block-mobile" form="addUserTagListForm">Create</button>
+            </div>
+        </div>
+    </div>
+</div>

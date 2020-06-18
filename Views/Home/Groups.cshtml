@@ -1,0 +1,98 @@
+﻿@model IEnumerable<RuuviTagApp.Models.UserTagListModel>
+@using RuuviTagApp.ViewModels
+@{
+    ViewBag.Title = "RuuviTag groups";
+    @Html.Partial("~/Views/Home/_GroupNav.cshtml")
+    //ListNameModel addList = Model is ListNameModel ? Model : new ListNameModel();
+    @Html.Partial("~/Views/Home/_AddGroupModal.cshtml", new NewTagListModel())
+}
+
+<div class="container body-content" id="body-content">
+    <div class="row" id="userGroups">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4">
+                <div class="card card-ruuvi text-center">
+                    <div class="card-body">
+                        <h5 class="card-title-ruuvi"><a title="Click to view RuuviTags" data-toggle="collapse" href="#collapseGroup-@item.UserTagListId" role="button" aria-expanded="false" aria-controls="collapseGroup" id="@item.ListName">@item.ListName</a></h5>
+
+                        @if (@item.TagListRowModels.Count > 0)
+                        {
+                            <p>@item.TagListRowModels.Count RuuviTags</p>
+                            <div class="collapse" id="collapseGroup-@item.UserTagListId">
+                                <table class="table table-ruuvi table-ruuvi-hover table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">RuuviTag</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int tableRow = 0;
+                                            foreach (var tagRow in item.TagListRowModels)
+                                            {
+                                                if (ViewBag.UsersTags.TryGetValue(tagRow.TagId, out RuuviTagApp.Models.RuuviTagModel tag))
+                                                {
+                                                    tableRow++;
+                                                    <tr>
+                                                        <td>@tableRow</td>
+                                                        <td>@(tag.TagName ?? tag.TagMacAddress)</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>Zero RuuviTags in this group</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        let addedTagsTable = document.getElementById("addedTagsTable");
+        let TagListDropdown = document.getElementById("TagListDropdown");
+        addedTagsTable.style.display = "none";
+
+        // Function to get selected tag from Dropdownlist
+        function getSelectedTag(obj) {
+            //console.log(obj.id);
+            //console.log(obj.text);
+
+            // Adding the selected tag to the list, which affects the database
+            let oldVal = $('#IdsAsString').val();
+            $('#IdsAsString').val(`${oldVal};${obj.id}`);
+
+            // Adding selected tag to the table
+            let tableBody = document.getElementById("addedTagsTableBody");
+            let row = tableBody.insertRow(0);
+            let cell1 = row.insertCell(0);
+            cell1.innerHTML = obj.text;
+
+            // Displaying header only when there are items in the list
+            if (addedTagsTable.style.display == "none") {
+                addedTagsTable.style.display = "block";
+            }
+
+            // Removing selected tag from the list
+            document.getElementById(obj.id).remove();
+
+            var itemCount = selectTagToList.children.length;
+            //console.log("Count:" + itemCount);
+
+            // Disabling dropdown, when there are no available ruuvitags to be added
+            if (itemCount < 1) {
+                TagListDropdown.classList.add("disabled");
+            }
+        }
+    </script>
+}
