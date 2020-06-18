@@ -209,7 +209,9 @@ else
             $('#TagListDropDown a').on('click', function () {
                 var select = ($(this).text());
                 document.getElementById("btn-tagSettings").classList.remove("disabled"); // Enable button. Otherwise disabled
-                document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
+                if (userHasEmail) {
+                    document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
+                }
 
                 document.getElementById("headerDisplayingTag").style.display = "block"; // Displaying header for selected tag
                 document.getElementById("headerDisplayingTag").innerHTML = select; // Adding selected tag to the header
@@ -234,9 +236,25 @@ else
             });
         });
 
+        //$('#btn-tagAlerts').click(function () {
+        //    let url = '/Home/GetAllAlerts/?tagID=' + setSelectedTagId;
+        //    $.get(url, (data) => {
+        //        if (data.length < 1) {
+        //            return;
+        //        }
+        //        let alertList = document.getElementById('existingAlerts');
+        //        data.forEach(x => {
+        //            let listNode = document.createElement('li');
+        //            let textNode = document.createTextNode(x[1]);
+        //        });
+        //    })
+        //});
+
         function setSelectedTagId(tagid) {
             selectedTagId = tagid;
-            $('#addAlarmBtn').val(tagid);
+            if (userHasEmail) {
+                $('#addAlarmBtn').val(tagid);
+            }
         }
     </script>
 }

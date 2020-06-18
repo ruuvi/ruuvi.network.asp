@@ -243,6 +243,24 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<JsonResult> GetAllAlerts(int? tagID)
+        {
+            List<object> res = new List<object>();
+            if (tagID == null)
+            {
+                return Json(res, JsonRequestBehavior.AllowGet);
+            }
+            if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
+            {
+                return Json(res, JsonRequestBehavior.AllowGet);
+            }
+            foreach (var alert in await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync())
+            {
+                res.Add(new { alert.AlertTypeId, alert.AlertLimit });
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult TagNav()
         {
             return View();

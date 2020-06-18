@@ -4,6 +4,9 @@
 <p>Set up alerts and receive a notification via email if something is going on with your RuuviTag.*</p>
 <p class="font-italic">Notifications are not sent realtime. Alert limit values are checked on the hour.</p>
     <div class="container">
+        <div>
+            <ul id="existingAlerts"></ul>
+        </div>
         @using (Html.BeginForm("AddTagAlert", "Home", FormMethod.Post, new { @id = "addTagAlarmForm" }))
         {
             @Html.AntiForgeryToken()
