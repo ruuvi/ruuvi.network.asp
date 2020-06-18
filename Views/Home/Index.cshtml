@@ -86,7 +86,13 @@ else
             @item.Time
         }
 
-
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <canvas id="tempchart"></canvas>
+                </div>
+            </div>
+        </div>
 
         //Example data
         <h1 class="text-danger" style="opacity:0.6">This is dummy data</h1>
@@ -125,8 +131,8 @@ else
 @section scripts{
 
     <script type="text/javascript">
-        let labelTime = [@ViewBag.apiTime];
-        let labelTemp = [@ViewBag.apiTempData];
+        let labelTime = [@(Html.Raw(ViewBag.apiTime)).forEach(x => { new Date(x) })];
+        let labelTemp = [@Html.Raw(ViewBag.apiTempData)];
         //Line chart script for temperature 
         var ctx = document.getElementById('tempchart').getContext('2d');
         var tempChart = new Chart(ctx, {

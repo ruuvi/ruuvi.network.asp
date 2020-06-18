@@ -26,6 +26,8 @@ namespace RuuviTagApp.Controllers
             ViewBag.ShowTagSettings = TempData["ShowTagSettings"];
             ViewBag.TagErrors = TempData["TagErrorList"];
             ViewBag.GeneralError = TempData["GeneralError"];
+            ViewBag.apiTime = TempData["apiTime"];
+            ViewBag.apiTempData = TempData["apiTempData"];
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
@@ -99,7 +101,7 @@ namespace RuuviTagApp.Controllers
             if (ModelState.IsValid)
             {
                 List<WhereOSApiRuuvi> apiResponse = await GetTagData(mac.GetAddress());
-                
+
                 if (apiResponse.Count == 0)
                 {
                     ModelState.AddModelError("MacAddress", "No data found, check RuuviTag ID. See Help -section for more information.");
@@ -123,8 +125,8 @@ namespace RuuviTagApp.Controllers
                 dataTimeList = string.Join(",", lstapiData.Select(n => n.Time).ToList());
                 dataTempList = "'" + string.Join("','", lstapiData.Select(n => n.Data.temperature).ToList());
 
-                ViewBag.apiTime = dataTimeList;
-                ViewBag.apiTempData = dataTempList;
+                TempData["apiTime"] = dataTimeList;
+                TempData["apiTempData"] = dataTempList;
 
 
                 // DECODE DATA HERE ?
