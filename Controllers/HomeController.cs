@@ -55,8 +55,10 @@ namespace RuuviTagApp.Controllers
             }
             else if (Request.IsAuthenticated)
             {
-                List<RuuviTagModel> userTags = await GetUserTagsAsync(User.Identity.GetUserId());
+                string userID = User.Identity.GetUserId();
+                List<RuuviTagModel> userTags = await GetUserTagsAsync(userID);
                 ViewBag.UserTagsList = userTags;
+                ViewBag.UserHasEmail = db.Users.Find(userID).Email != null;
 
                 // Add error message in case user hasn't added any tags
                 if (userTags == null || !userTags.Any() || userTags.Count == 0)
@@ -175,10 +177,14 @@ namespace RuuviTagApp.Controllers
                                                                                          where t.UserId == userID && t.TagName == name
                                                                                          select t).FirstOrDefaultAsync() != null;
 
+        private async Task<TagAlertModel> TagHasAlertOfType(int tagID, int typeID) => await (from a in db.TagAlertModels
+                                                                                             where a.TagId == tagID && a.AlertTypeId == typeID
+                                                                                             select a).FirstOrDefaultAsync();
+
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddTagAlarm(AddAlarmModel alarm, int? tagID)
+        public async Task<ActionResult> AddTagAlert(AddAlertModel alert, int? tagID)
         {
             if (tagID == null)
             {
@@ -197,9 +203,9 @@ namespace RuuviTagApp.Controllers
                 alarmTypes.Add(type);
             }
             bool NoAlarmsAdded = true;
-            foreach (PropertyInfo pi in alarm.GetType().GetProperties())
+            foreach (PropertyInfo pi in alert.GetType().GetProperties())
             {
-                if (pi.GetValue(alarm) != null)
+                if (pi.GetValue(alert) != null)
                 {
                     int? alarmTypeId = alarmTypes
                         .Where(at => string.Equals(at.TypeName, pi.Name, StringComparison.OrdinalIgnoreCase))
@@ -208,12 +214,20 @@ namespace RuuviTagApp.Controllers
                     {
                         continue;
                     }
-                    db.TagAlertModels.Add(new TagAlertModel
+                    if (await TagHasAlertOfType((int)tagID, (int)alarmTypeId) is TagAlertModel oldAlert && oldAlert != null)
                     {
-                        AlertTypeId = (int)alarmTypeId,
-                        TagId = (int)tagID,
-                        AlertLimit = (double)pi.GetValue(alarm)
-                    });
+                        oldAlert.AlertLimit = (double)pi.GetValue(alert);
+                        db.Entry(oldAlert).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        db.TagAlertModels.Add(new TagAlertModel
+                        {
+                            AlertTypeId = (int)alarmTypeId,
+                            TagId = (int)tagID,
+                            AlertLimit = (double)pi.GetValue(alert)
+                        }); 
+                    }
                     if (NoAlarmsAdded)
                     {
                         NoAlarmsAdded = false;

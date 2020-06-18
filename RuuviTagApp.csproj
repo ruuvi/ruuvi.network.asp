@@ -185,7 +185,7 @@
     <Compile Include="Models\WhereOSApiRuuvi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\AddAlarmModel.cs" />
+    <Compile Include="ViewModels\AddAlertModel.cs" />
     <Compile Include="ViewModels\AddTagModel.cs" />
     <Compile Include="ViewModels\MacAddressModel.cs" />
     <Compile Include="ViewModels\NewTagListModel.cs" />

@@ -76,7 +76,7 @@ else
         {
             <div id="tagSettingsModal"></div>
         }
-        AddAlarmModel alarm = Model is AddAlarmModel ? Model : new AddAlarmModel();
+        AddAlertModel alarm = Model is AddAlertModel ? Model : new AddAlertModel();
         @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alarm)
     }@*End of content visible only when user is logged in*@
 
@@ -147,6 +147,7 @@ else
 
 @section scripts{
     <script type="text/javascript">
+        var userHasEmail;
         $(window).on('load', function () {
             let showRegisterModal = @((ViewBag.ShowRegisterModal ?? false).ToString().ToLower());
             if (showRegisterModal) {
@@ -160,6 +161,7 @@ else
             if (showTagSettings) {
                 $('#tagSettingsModal').modal('show');
             }
+            userHasEmail = @((ViewBag.UserHasEmail ?? false).ToString().ToLower());
         });
         $('.svg-btn-new').click(function () {
             $('#addTag').toggleClass('shown');
