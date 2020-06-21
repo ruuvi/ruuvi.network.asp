@@ -7,7 +7,22 @@
     MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
     string containerType;
 
+    <script>
+        //Putting the datas viewbags into "let" variables
+        let labelTime = [@Html.Raw(ViewBag.apiTime)];
+        let labelTemp = [@Html.Raw(ViewBag.apiTempData)];
+        let labelHum = [@Html.Raw(ViewBag.apiHumData)];
+        let labelPress = [@Html.Raw(ViewBag.apiPressData)];
+    </script>
 
+    string lastTemp = "";
+    string lastHumi = "";
+    string lastPressure = "";
+
+    // Partial views
+    @Html.Partial("~/Views/Home/_TemperatureModal.cshtml")
+    @Html.Partial("~/Views/Home/_HumidityModal.cshtml")
+    @Html.Partial("~/Views/Home/_AirpressureModal.cshtml")
 }
 
 
@@ -16,7 +31,7 @@
 {
     @Html.Partial("~/Views/Home/_TagNav.cshtml")
 
-    if(!ViewBag.UserHasEmail)
+    if (!ViewBag.UserHasEmail)
     {
         <script>
             document.getElementById("btn-tagAlerts").classList.add("disabled");
@@ -35,44 +50,44 @@ else
 {
     containerType = "container";
 }
-    <div class="@containerType body-content" id="body-content">
+<div class="@containerType body-content" id="body-content">
+    <div class="row">
+        @*Remove on publish*@
+        <div class="col-lg-12">
+            <p id="alphaInfo">This is alpha version - expect alpha results.</p>
+        </div>
+    </div>
+    @* Content visible only when user is not logged in *@
+    @if (!Request.IsAuthenticated && ViewBag.TagData == null)
+    {
         <div class="row">
-            @*Remove on publish*@
-            <div class="col-lg-12">
-                <p id="alphaInfo">This is alpha version - expect alpha results.</p>
+            <div class="col-md-6">
+                <h2>Sign in using Google</h2>
+                @Html.Partial("~/Views/Account/_ExternalLoginPartial.cshtml", new ExternalLoginListViewModel())
+            </div>
+            <div class="col-md-6 mt-lg-0 mt-5">
+                <h2>Continue without signing in</h2>
+                <div class="form-group">
+                    @Html.Partial("~/Views/Home/_SearchTagPartial.cshtml", mam)
+                </div>
             </div>
         </div>
-        @* Content visible only when user is not logged in *@
-        @if (!Request.IsAuthenticated && ViewBag.TagData == null)
-        {
-            <div class="row">
-                <div class="col-md-6">
-                    <h2>Sign in using Google</h2>
-                    @Html.Partial("~/Views/Account/_ExternalLoginPartial.cshtml", new ExternalLoginListViewModel())
-                </div>
-                <div class="col-md-6 mt-lg-0 mt-5">
-                    <h2>Continue without signing in</h2>
-                    <div class="form-group">
-                        @Html.Partial("~/Views/Home/_SearchTagPartial.cshtml", mam)
-                    </div>
-                </div>
-            </div>
-            ExternalLoginConfirmationViewModel elcvm = Model is ExternalLoginConfirmationViewModel ?
-                Model : new ExternalLoginConfirmationViewModel();
-            @Html.Partial("~/Views/Account/_ExternalLoginConfirmationModal.cshtml", elcvm)
-        } @*End of content visible only when user is not logged in*@
+        ExternalLoginConfirmationViewModel elcvm = Model is ExternalLoginConfirmationViewModel ?
+            Model : new ExternalLoginConfirmationViewModel();
+        @Html.Partial("~/Views/Account/_ExternalLoginConfirmationModal.cshtml", elcvm)
+    } @*End of content visible only when user is not logged in*@
 
-        @* Content visible only when user is logged in *@
-        @if (Request.IsAuthenticated)
-        {
-            <div id="infoSelectTag">
-                <p>To display data please choose or add a RuuviTag</p>
-            </div>
+    @* Content visible only when user is logged in *@
+    @if (Request.IsAuthenticated)
+    {
+        <div id="infoSelectTag">
+            <p>To display data please choose or add a RuuviTag</p>
+        </div>
 
         <div class="home-selectedTag">
             <h2 id="headerDisplayingTag"></h2>
         </div>
-        
+
         AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
         @Html.Partial("~/Views/Home/_AddTagModal.cshtml", add)
         if (Model is RuuviTagModel tag)
@@ -87,85 +102,113 @@ else
         @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alarm)
     }@*End of content visible only when user is logged in*@
 
-        @if (ViewBag.TagData != null)
+    @if (ViewBag.TagData != null)
+    {
+        foreach (var item in ViewBag.TagData)
         {
-            @*foreach (var item in ViewBag.TagData)
-            {
-                @item.Data.temperature
-                @item.Time
-            }*@
+            lastTemp = item.Data.temperature;
+            lastHumi = item.Data.humidity;
+            lastPressure = item.Data.pressure;
+        }
 
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <canvas id="tempchart"></canvas>
+        //Example data
+        <h1 class="text-danger" style="opacity:0.6">This is dummy data</h1>
+        <div class="RuuviTagData">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row" id="ruuviTagTemperature">
+                        <div class="col-lg-12 col-sm-12">
+                            <a class="btn btn-tagdata-temp" id="btn-TagTemp" onclick="openTempChartModal()" title="View tag temperature"></a>
+                            @*<p class="tagdata-value">38.26</p> <span class="celsius">&#176;C</span>*@
+                            <p class="tagdata-value">@lastTemp</p> <span class="celsius">&#176;C</span>
+                            <p class="tagdata-header">Temperature</p>
+                            <hr class="tagdata-hr" />
+                        </div>
+                    </div>
+                    <div class="row" id="ruuviTagHumidity">
+                        <div class="col-lg-12 col-sm-12">
+                            <a class="btn btn-tagdata-hum" id="btn-TagHum" onclick="openHumiChartModal()" title="View tag humidity"></a>
+                            @*<p class="tagdata-value">85.5</p> <span class="percent">%</span>*@
+                            <p class="tagdata-value">@lastHumi</p> <span class="percent">%</span>
+                            <p class="tagdata-header">Humidity</p>
+                            <hr class="tagdata-hr" />
+                        </div>
+                    </div>
+                    <div class="row" id="ruuviTagAirPressure">
+                        <div class="col-lg-12 col-sm-12">
+                            <a class="btn btn-tagdata-air" id="btn-TagAir" onclick="openAirChartModal()" title="View tag air pressure"></a>
+                            @*<p class="tagdata-value">1015.36</p> <span class="hpa">hPa</span>*@
+                            <p class="tagdata-value">@lastPressure</p> <span class="hpa">hPa</span>
+                            <p class="tagdata-header">Air pressure</p>
+                            <hr class="tagdata-hr" />
+                        </div>
                     </div>
                 </div>
+                <div class="col-lg-6 ruuvi-eye-home d-none d-md-block" id="RuuviEyeBg" onmouseover="highlightEye()">
+                </div>
             </div>
-
-            <div class="container-fluid">
+            <p class="tip d-lg-none">To view charts, please <a class="link" onclick="highlightIcons()" role="button">press the icons</a> above.</p>
+            <div id="desktopCharts">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12 mt-2">
+                        <h1 class="tagdata-header">Temperature</h1>
+                        @*@Html.Partial("~/Views/Home/_TemperatureChart.cshtml")*@
+                        <canvas id="tempchart"></canvas>
+                    </div>
+                    <div class="col-lg-12 mt-5">
+                        <h1 class="tagdata-header">Humidity</h1>
+                        @*@Html.Partial("~/Views/Home/_HumidityChart.cshtml")*@
+                        <canvas id="presschart"></canvas>
+                    </div>
+                    <div class="col-lg-12 mt-5">
+                        <h1 class="tagdata-header">Air pressure</h1>
+                        @*@Html.Partial("~/Views/Home/_AirpressureChart.cshtml")*@
                         <canvas id="humchart"></canvas>
                     </div>
                 </div>
             </div>
-
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <canvas id="presschart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-
-            //Example data
-            <h1 class="text-danger" style="opacity:0.6">This is dummy data</h1>
-            <div class="RuuviTagData">
-
-                <p class="tip d-lg-none">To view charts, please <a class="link" onclick="highlightIcons()" role="button">press the icons</a> above.</p>
-                <div id="desktopCharts">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <h1>Temp chart here</h1>
-                            @Html.Partial("~/Views/Home/_TemperatureChart.cshtml")
-                        </div>
-                        <div class="col-lg-4">
-                            <h1>Humidity chart here</h1>
-                            @Html.Partial("~/Views/Home/_HumidityChart.cshtml")
-                        </div>
-                        <div class="col-lg-4">
-                            <h1>Air chart here</h1>
-                            @Html.Partial("~/Views/Home/_AirpressureChart.cshtml")
-                        </div>
-                    </div>
-                </div>
-                @if (ViewBag.TagData != null)
-                {
-                    <a class="btn btn-general mt-5" href="/Home/Index">Sign in or search another RuuviTag</a>
-                }
-            </div>
-
-            // Partial views
-            @Html.Partial("~/Views/Home/_TemperatureModal.cshtml")
-            @Html.Partial("~/Views/Home/_HumidityModal.cshtml")
-            @Html.Partial("~/Views/Home/_AirpressureModal.cshtml")
-        }
-    </div>
+            @if (ViewBag.TagData != null)
+            {
+                <a class="btn btn-general mt-5" href="/Home/Index">Sign in or search another RuuviTag</a>
+            }
+        </div>
+    }
+</div>
 
 @section scripts{
 
     <script type="text/javascript">
-        //Putting the datas viewbags into "let" variables
-        let labelTime = [@Html.Raw(ViewBag.apiTime)];
-        let labelTemp = [@Html.Raw(ViewBag.apiTempData)];
-        let labelHum = [@Html.Raw(ViewBag.apiHumData)];
-        let labelPress = [@Html.Raw(ViewBag.apiPressData)];
-
-        //Line chart script for temperature 
-        var ctx = document.getElementById('tempchart').getContext('2d');
+                //Line chart script for temperature
+            var ctx = document.getElementById('tempchart').getContext('2d');
         var tempChart = new Chart(ctx, {
+                type: 'line',
+            data: {
+                labels: labelTime,
+                datasets: [{
+                label: 'Temperature',
+                    data: labelTemp,
+                    backgroundColor: [
+                        'rgba(107, 234, 225, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(107, 234, 225, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                yAxes: [{
+                ticks: {
+                beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var ctx = document.getElementById('tempchartmodal').getContext('2d');
+        var tempChartModal = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labelTime,
@@ -192,7 +235,7 @@ else
             }
         });
 
-        //Line chart script for humidity 
+        //Line chart script for humidity
         var ctz = document.getElementById('humchart').getContext('2d');
         var humidityChart = new Chart(ctz, {
             type: 'line',
@@ -221,9 +264,65 @@ else
             }
         });
 
-        //Line chart script for pressure 
+        var ctz = document.getElementById('humchartmodal').getContext('2d');
+        var humidityChartModal = new Chart(ctz, {
+            type: 'line',
+            data: {
+                labels: labelTime,
+                datasets: [{
+                    label: 'Humidity',
+                    data: labelHum,
+                    backgroundColor: [
+                        'rgba(107, 234, 225, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(107, 234, 225, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        //Line chart script for pressure
         var ctc = document.getElementById('presschart').getContext('2d');
         var pressChart = new Chart(ctc, {
+            type: 'line',
+            data: {
+                labels: labelTime,
+                datasets: [{
+                    label: 'Pressure',
+                    data: labelPress,
+                    backgroundColor: [
+                        'rgba(107, 234, 225, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(107, 234, 225, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var ctc = document.getElementById('presschartmodal').getContext('2d');
+        var pressChartModal = new Chart(ctc, {
             type: 'line',
             data: {
                 labels: labelTime,
@@ -362,41 +461,3 @@ else
         }
     </script>
 }
-
-
-
-
-
-
-
-
-@*<div class="row">
-    <div class="col-lg-6">
-        <div class="row" id="ruuviTagTemperature">
-            <div class="col-lg-12 col-sm-12">
-                <a class="btn btn-tagdata-temp" id="btn-TagTemp" onclick="openTempChartModal()" title="View tag temperature"></a>
-                <p class="tagdata-value">38.26</p> <span class="celsius">&#176;C</span>
-                <p class="tagdata-header">Temperature</p>
-                <hr class="tagdata-hr" />
-            </div>
-        </div>
-        <div class="row" id="ruuviTagHumidity">
-            <div class="col-lg-12 col-sm-12">
-                <a class="btn btn-tagdata-hum" id="btn-TagHum" onclick="openHumiChartModal()" title="View tag humidity"></a>
-                <p class="tagdata-value">85.5</p> <span class="percent">%</span>
-                <p class="tagdata-header">Humidity</p>
-                <hr class="tagdata-hr" />
-            </div>
-        </div>
-        <div class="row" id="ruuviTagAirPressure">
-            <div class="col-lg-12 col-sm-12">
-                <a class="btn btn-tagdata-air" id="btn-TagAir" onclick="openAirChartModal()" title="View tag air pressure"></a>
-                <p class="tagdata-value">1015.36</p> <span class="hpa">hPa</span>
-                <p class="tagdata-header">Air pressure</p>
-                <hr class="tagdata-hr" />
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6 ruuvi-eye-home d-none d-md-block" id="RuuviEyeBg" onmouseover="highlightEye()">
-    </div>
-</div>*@
