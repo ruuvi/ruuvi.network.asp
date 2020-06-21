@@ -112,7 +112,7 @@ else
         }
 
         //Example data
-        <h1 class="text-danger" style="opacity:0.6">This is dummy data</h1>
+        @*<h1 class="text-danger" style="opacity:0.6">This is dummy data</h1>*@
         <div class="RuuviTagData">
             <div class="row">
                 <div class="col-lg-6">
@@ -179,7 +179,7 @@ else
 
     <script type="text/javascript">
                 //Line chart script for temperature
-            var ctx = document.getElementById('tempchart').getContext('2d');
+        var ctx = document.getElementById('tempchart').getContext('2d');
         var tempChart = new Chart(ctx, {
                 type: 'line',
             data: {
@@ -207,8 +207,8 @@ else
             }
         });
 
-        var ctx = document.getElementById('tempchartmodal').getContext('2d');
-        var tempChartModal = new Chart(ctx, {
+        var ctxm = document.getElementById('tempchartmodal').getContext('2d');
+        var tempChartModal = new Chart(ctxm, {
             type: 'line',
             data: {
                 labels: labelTime,
@@ -264,8 +264,8 @@ else
             }
         });
 
-        var ctz = document.getElementById('humchartmodal').getContext('2d');
-        var humidityChartModal = new Chart(ctz, {
+        var ctzm = document.getElementById('humchartmodal').getContext('2d');
+        var humidityChartModal = new Chart(ctzm, {
             type: 'line',
             data: {
                 labels: labelTime,
@@ -321,8 +321,8 @@ else
             }
         });
 
-        var ctc = document.getElementById('presschartmodal').getContext('2d');
-        var pressChartModal = new Chart(ctc, {
+        var ctcm = document.getElementById('presschartmodal').getContext('2d');
+        var pressChartModal = new Chart(ctcm, {
             type: 'line',
             data: {
                 labels: labelTime,
