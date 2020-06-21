@@ -361,7 +361,7 @@
     <Content Include="Views\Home\Groups.cshtml" />
     <Content Include="Views\Home\_GroupNav.cshtml" />
     <Content Include="Views\Home\_AddGroupModal.cshtml" />
-    <Content Include="Views\Home\GetAllAlerts.cshtml" />
+    <Content Include="Views\Home\_GetAllAlerts.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

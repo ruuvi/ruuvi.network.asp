@@ -245,7 +245,7 @@ else
         });
 
         $('#btn-tagAlerts').click(function () {
-            let url = '/Home/GetAllAlerts/?tagID=' + setSelectedTagId;
+            let url = '/Home/_GetAllAlerts/?tagID=' + selectedTagId;
             $.get(url, (data) => {
                 $('#existingAlerts').html(data);
             })

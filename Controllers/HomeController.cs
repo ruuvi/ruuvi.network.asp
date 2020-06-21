@@ -11,7 +11,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Services.Protocols;
 
 namespace RuuviTagApp.Controllers
 {
@@ -197,12 +196,7 @@ namespace RuuviTagApp.Controllers
                 // error tag is not users
                 return RedirectToAction("Index");
             }
-            List<TagAlertType> alarmTypes = new List<TagAlertType>();
-            foreach (var type in await db.TagAlertTypes.ToListAsync())
-            {
-                type.TypeName = string.Join("", type.TypeName.Split('-'));
-                alarmTypes.Add(type);
-            }
+            List<TagAlertType> alarmTypes = await db.TagAlertTypes.ToListAsync();
             bool NoAlarmsAdded = true;
             foreach (PropertyInfo pi in alert.GetType().GetProperties())
             {
@@ -244,7 +238,8 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> GetAllAlerts(int? tagID)
+        [Authorize]
+        public async Task<ActionResult> _GetAllAlerts(int? tagID)
         {
             if (tagID == null)
             {
@@ -258,6 +253,28 @@ namespace RuuviTagApp.Controllers
             }
             var alerts = await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync();
             return PartialView(alerts);
+        }
+
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<ActionResult> RemoveAlert(int? alertID)
+        {
+            if (alertID == null)
+            {
+                // error no id
+                return RedirectToAction("Index");
+            }
+            TagAlertModel alert = db.TagAlertModels.Find(alertID);
+            if (!string.Equals(User.Identity.GetUserId(), alert.RuuviTagModel.UserId))
+            {
+                // error not users tag
+                return RedirectToAction("Index");
+            }
+            db.TagAlertModels.Remove(alert);
+            await db.SaveChangesAsync();
+            //TempData["ShowAlerts"] = true; ??
+            return RedirectToAction("Index");
         }
 
         public ActionResult TagNav()
@@ -333,7 +350,7 @@ namespace RuuviTagApp.Controllers
             db.Users.Remove(user);
             await db.SaveChangesAsync();
             var acc = DependencyResolver.Current.GetService<AccountController>();
-            acc.ControllerContext = new ControllerContext(this.Request.RequestContext, acc);
+            acc.ControllerContext = new ControllerContext(Request.RequestContext, acc);
             return acc.LogOff();
         }
 
@@ -400,23 +417,15 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult TagAlerts()
-        {
-            return View();
-        }
-
         [Authorize]
         public async Task<ActionResult> Groups()
         {
             string userID = User.Identity.GetUserId();
-            //var userTags = new List<SelectListItem>();
             var tags = new Dictionary<int, RuuviTagModel>();
             foreach(var tag in await GetUserTagsAsync(userID))
             {
-                //userTags.Add(new SelectListItem { Value = tag.TagId.ToString(), Text = tag.TagName ?? tag.TagMacAddress });
                 tags.Add(tag.TagId, tag);
             }
-            //ViewBag.UserTagDropdownList = new SelectList(userTags, "Value", "Text");
             ViewBag.UsersTags = tags;
             List<UserTagListModel> userGroups = await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
             return View(userGroups);
