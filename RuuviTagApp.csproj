@@ -173,6 +173,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202006211845167_SlightChanges.cs" />
+    <Compile Include="Migrations\202006211845167_SlightChanges.designer.cs">
+      <DependentUpon>202006211845167_SlightChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ApiHelper.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -356,6 +361,7 @@
     <Content Include="Views\Home\Groups.cshtml" />
     <Content Include="Views\Home\_GroupNav.cshtml" />
     <Content Include="Views\Home\_AddGroupModal.cshtml" />
+    <Content Include="Views\Home\_GetAllAlerts.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -376,6 +382,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202006211845167_SlightChanges.resx">
+      <DependentUpon>202006211845167_SlightChanges.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

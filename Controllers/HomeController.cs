@@ -196,12 +196,7 @@ namespace RuuviTagApp.Controllers
                 // error tag is not users
                 return RedirectToAction("Index");
             }
-            List<TagAlertType> alarmTypes = new List<TagAlertType>();
-            foreach (var type in await db.TagAlertTypes.ToListAsync())
-            {
-                type.TypeName = string.Join("", type.TypeName.Split('-'));
-                alarmTypes.Add(type);
-            }
+            List<TagAlertType> alarmTypes = await db.TagAlertTypes.ToListAsync();
             bool NoAlarmsAdded = true;
             foreach (PropertyInfo pi in alert.GetType().GetProperties())
             {
@@ -243,22 +238,43 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<JsonResult> GetAllAlerts(int? tagID)
+        [Authorize]
+        public async Task<ActionResult> _GetAllAlerts(int? tagID)
         {
-            List<object> res = new List<object>();
             if (tagID == null)
             {
-                return Json(res, JsonRequestBehavior.AllowGet);
+                // error no id
+                return RedirectToAction("Index");
             }
             if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
             {
-                return Json(res, JsonRequestBehavior.AllowGet);
+                // error not users tag
+                return RedirectToAction("Index");
             }
-            foreach (var alert in await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync())
+            var alerts = await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync();
+            return PartialView(alerts);
+        }
+
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<ActionResult> RemoveAlert(int? alertID)
+        {
+            if (alertID == null)
             {
-                res.Add(new { alert.AlertTypeId, alert.AlertLimit });
+                // error no id
+                return RedirectToAction("Index");
             }
-            return Json(res, JsonRequestBehavior.AllowGet);
+            TagAlertModel alert = db.TagAlertModels.Find(alertID);
+            if (!string.Equals(User.Identity.GetUserId(), alert.RuuviTagModel.UserId))
+            {
+                // error not users tag
+                return RedirectToAction("Index");
+            }
+            db.TagAlertModels.Remove(alert);
+            await db.SaveChangesAsync();
+            //TempData["ShowAlerts"] = true; ??
+            return RedirectToAction("Index");
         }
 
         public ActionResult TagNav()
@@ -309,9 +325,33 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult AppSettings()
         {
             return View();
+        }
+
+        [Authorize]
+        [HttpPost, ActionName("AppSettings")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteUser()
+        {
+            string userID = User.Identity.GetUserId();
+            ApplicationUser user = db.Users.Find(userID);
+            if (user == null)
+            {
+                // something went wrong
+                return RedirectToAction("AppSettings");
+            }
+            foreach (UserTagListModel userList in await db.UserTagListModels.Where(g => g.UserId == userID).ToListAsync())
+            {
+                db.UserTagListModels.Remove(userList);
+            }
+            db.Users.Remove(user);
+            await db.SaveChangesAsync();
+            var acc = DependencyResolver.Current.GetService<AccountController>();
+            acc.ControllerContext = new ControllerContext(Request.RequestContext, acc);
+            return acc.LogOff();
         }
 
         [Authorize]
@@ -377,26 +417,44 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult TagAlerts()
-        {
-            return View();
-        }
-
         [Authorize]
         public async Task<ActionResult> Groups()
         {
             string userID = User.Identity.GetUserId();
-            var userTags = new List<SelectListItem>();
             var tags = new Dictionary<int, RuuviTagModel>();
             foreach(var tag in await GetUserTagsAsync(userID))
             {
-                userTags.Add(new SelectListItem { Value = tag.TagId.ToString(), Text = tag.TagName ?? tag.TagMacAddress });
                 tags.Add(tag.TagId, tag);
             }
-            ViewBag.UserTagDropdownList = new SelectList(userTags, "Value", "Text");
             ViewBag.UsersTags = tags;
             List<UserTagListModel> userGroups = await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
             return View(userGroups);
+        }
+
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpDelete]
+        public async Task<ActionResult> Groups(int? listRowID)
+        {
+            if (listRowID == null)
+            {
+                // error no id
+                return RedirectToAction("Groups");
+            }
+            TagListRowModel row = db.TagListRowModels.Find(listRowID);
+            if (row == null)
+            {
+                // error row not found
+                return RedirectToAction("Groups");
+            }
+            if (row.RuuviTagModel.UserId != User.Identity.GetUserId())
+            {
+                // error not users row
+                return RedirectToAction("Groups");
+            }
+            db.TagListRowModels.Remove(row);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Groups");
         }
 
         [Authorize]
@@ -434,6 +492,32 @@ namespace RuuviTagApp.Controllers
                 return RedirectToAction("Groups");
             }
             // TempData error list = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return RedirectToAction("Groups");
+        }
+
+        [Authorize]
+        [HttpPost, ActionName("Groups")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteGroup(int? tagListID)
+        {
+            if (tagListID == null)
+            {
+                // error no id
+                return RedirectToAction("Groups");
+            }
+            UserTagListModel group = db.UserTagListModels.Find(tagListID);
+            if (group == null)
+            {
+                // error group not found
+                return RedirectToAction("Groups");
+            }
+            if (group.UserId != User.Identity.GetUserId())
+            {
+                // error not users group
+                return RedirectToAction("Groups");
+            }
+            db.UserTagListModels.Remove(group);
+            await db.SaveChangesAsync();
             return RedirectToAction("Groups");
         }
     }

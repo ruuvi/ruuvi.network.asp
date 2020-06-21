@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ namespace RuuviTagApp.Models
         public override string SecurityStamp { get => base.SecurityStamp; set => base.SecurityStamp = value; }
         [StringLength(50)]
         public override string PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }
+        public virtual ICollection<RuuviTagModel> UserTags { get; set; }
+        public virtual ICollection<UserTagListModel> UserTagLists { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -45,5 +48,35 @@ namespace RuuviTagApp.Models
         public DbSet<TagListRowModel> TagListRowModels { get; set; }
         public DbSet<TagAlertType> TagAlertTypes { get; set; }
         public DbSet<TagAlertModel> TagAlertModels { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<RuuviTagModel>()
+                .HasRequired(u => u.ApplicationUser)
+                .WithMany(t => t.UserTags)
+                .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<UserTagListModel>()
+                .HasRequired(u => u.ApplicationUser)
+                .WithMany(l => l.UserTagLists)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<TagListRowModel>()
+                .HasRequired(l => l.UserTagListModel)
+                .WithMany(r => r.TagListRowModels)
+                .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<TagListRowModel>()
+                .HasRequired(r => r.RuuviTagModel)
+                .WithMany(t => t.UserTagListRows)
+                .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<TagAlertModel>()
+                .HasRequired(t => t.RuuviTagModel)
+                .WithMany(a => a.TagAlerts)
+                .WillCascadeOnDelete(true);
+        }
     }
 }

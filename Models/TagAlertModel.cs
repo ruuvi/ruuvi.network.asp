@@ -17,10 +17,10 @@ namespace RuuviTagApp.Models
         [Required]
         public int AlertTypeId { get; set; }
         [ForeignKey("AlertTypeId")]
-        public TagAlertType TagAlertType { get; set; }
+        public virtual TagAlertType TagAlertType { get; set; }
         [Required]
         public int TagId { get; set; }
         [ForeignKey("TagId")]
-        public RuuviTagModel RuuviTagModel { get; set; }
+        public virtual RuuviTagModel RuuviTagModel { get; set; }
     }
 }
