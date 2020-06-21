@@ -9,6 +9,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -26,6 +27,10 @@ namespace RuuviTagApp.Controllers
             ViewBag.ShowTagSettings = TempData["ShowTagSettings"];
             ViewBag.TagErrors = TempData["TagErrorList"];
             ViewBag.GeneralError = TempData["GeneralError"];
+            ViewBag.apiTime = TempData["apiTime"];
+            ViewBag.apiTempData = TempData["apiTempData"];
+            ViewBag.apiHumData = TempData["apiHumData"];
+            ViewBag.apiPressData = TempData["apiPressData"];
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
@@ -101,15 +106,43 @@ namespace RuuviTagApp.Controllers
             if (ModelState.IsValid)
             {
                 List<WhereOSApiRuuvi> apiResponse = await GetTagData(mac.GetAddress());
+
                 if (apiResponse.Count == 0)
                 {
                     ModelState.AddModelError("MacAddress", "No data found, check RuuviTag ID. See Help -section for more information.");
                     return View("Index", mac);
                 }
 
+                string dataTimeList;
+                string dataTempList;
+                string dataHumList;
+                string dataPressList;
+                List<UnpackData> lstapiData = new List<UnpackData>();
+
+                foreach (WhereOSApiRuuvi apiRuuviTag in apiResponse)
+                {
+                    UnpackData ApiRowData = new UnpackData();
+                    UnpackRawData RawDataRow = new UnpackRawData();
+                    RawDataRow.UnpackAllData(apiRuuviTag.data);
+                    ApiRowData.Data = RawDataRow;
+                    ApiRowData.Time = apiRuuviTag.time;
+                    lstapiData.Add(ApiRowData);
+                }
+
+                dataTimeList = "'" + string.Join("','", lstapiData.Select(n => n.Time.TimeOfDay).ToList()) + "'";
+                dataTempList = string.Join(",", lstapiData.Select(n => n.Data.temperature).ToList());
+                dataHumList = string.Join(",", lstapiData.Select(n => n.Data.humidity).ToList());
+                dataPressList = string.Join(",", lstapiData.Select(n => n.Data.pressure).ToList());
+
+                TempData["apiTime"] = dataTimeList;
+                TempData["apiTempData"] = dataTempList;
+                TempData["apiHumData"] = dataHumList;
+                TempData["apiPressData"] = dataPressList;
+
+
                 // DECODE DATA HERE ?
 
-                TempData["ApiResponse"] = apiResponse;
+                TempData["ApiResponse"] = lstapiData;
                 return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
             return View("Index", mac);
