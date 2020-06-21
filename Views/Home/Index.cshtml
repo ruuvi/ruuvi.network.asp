@@ -84,8 +84,8 @@ else
         {
             <div id="tagSettingsModal"></div>
         }
-        AddAlertModel alarm = Model is AddAlertModel ? Model : new AddAlertModel();
-        @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alarm)
+        AddAlertModel alert = Model is AddAlertModel ? Model : new AddAlertModel();
+        @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alert)
     }@*End of content visible only when user is logged in*@
 
     @if (ViewBag.TagData != null)
@@ -244,19 +244,12 @@ else
             });
         });
 
-        //$('#btn-tagAlerts').click(function () {
-        //    let url = '/Home/GetAllAlerts/?tagID=' + setSelectedTagId;
-        //    $.get(url, (data) => {
-        //        if (data.length < 1) {
-        //            return;
-        //        }
-        //        let alertList = document.getElementById('existingAlerts');
-        //        data.forEach(x => {
-        //            let listNode = document.createElement('li');
-        //            let textNode = document.createTextNode(x[1]);
-        //        });
-        //    })
-        //});
+        $('#btn-tagAlerts').click(function () {
+            let url = '/Home/GetAllAlerts/?tagID=' + setSelectedTagId;
+            $.get(url, (data) => {
+                $('#existingAlerts').html(data);
+            })
+        });
 
         function setSelectedTagId(tagid) {
             selectedTagId = tagid;

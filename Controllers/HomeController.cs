@@ -244,22 +244,20 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<JsonResult> GetAllAlerts(int? tagID)
+        public async Task<ActionResult> GetAllAlerts(int? tagID)
         {
-            List<object> res = new List<object>();
             if (tagID == null)
             {
-                return Json(res, JsonRequestBehavior.AllowGet);
+                // error no id
+                return RedirectToAction("Index");
             }
             if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
             {
-                return Json(res, JsonRequestBehavior.AllowGet);
+                // error not users tag
+                return RedirectToAction("Index");
             }
-            foreach (var alert in await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync())
-            {
-                res.Add(new { alert.AlertTypeId, alert.AlertLimit });
-            }
-            return Json(res, JsonRequestBehavior.AllowGet);
+            var alerts = await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync();
+            return PartialView(alerts);
         }
 
         public ActionResult TagNav()
@@ -411,14 +409,14 @@ namespace RuuviTagApp.Controllers
         public async Task<ActionResult> Groups()
         {
             string userID = User.Identity.GetUserId();
-            var userTags = new List<SelectListItem>();
+            //var userTags = new List<SelectListItem>();
             var tags = new Dictionary<int, RuuviTagModel>();
             foreach(var tag in await GetUserTagsAsync(userID))
             {
-                userTags.Add(new SelectListItem { Value = tag.TagId.ToString(), Text = tag.TagName ?? tag.TagMacAddress });
+                //userTags.Add(new SelectListItem { Value = tag.TagId.ToString(), Text = tag.TagName ?? tag.TagMacAddress });
                 tags.Add(tag.TagId, tag);
             }
-            ViewBag.UserTagDropdownList = new SelectList(userTags, "Value", "Text");
+            //ViewBag.UserTagDropdownList = new SelectList(userTags, "Value", "Text");
             ViewBag.UsersTags = tags;
             List<UserTagListModel> userGroups = await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
             return View(userGroups);

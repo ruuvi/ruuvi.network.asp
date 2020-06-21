@@ -1,0 +1,35 @@
+﻿@model IEnumerable<RuuviTagApp.Models.TagAlertModel>
+
+@{ 
+    var AlertTypes = new Dictionary<int, string[]>() {
+        { 1, new string[] { "Temperature high", "°C" }},
+        { 2, new string[] { "Temperature low", "°C" }},
+        { 3, new string[] { "Humidity high", "" }},
+        { 4, new string[] { "Humidity low", "" }},
+        { 5, new string[] { "Pressure high", "" }},
+        { 6, new string[] { "Pressure low", "" }},
+    };
+}
+
+<table class="table">
+    <tr>
+        <th>Alert Limit</th>
+        <th>Alert Type</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>@Html.DisplayFor(modelItem => item.AlertLimit)</td>
+        <td>@Html.DisplayFor(modelItem => item.AlertTypeId)</td>
+        <td>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <button class="btn btn-sm btn-general" type="submit" name="alertID" value="@item.AlertId">Remove Alert</button>
+            }
+        </td>
+    </tr>
+}
+
+</table>
