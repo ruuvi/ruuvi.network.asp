@@ -21,6 +21,6 @@ namespace RuuviTagApp.Models
         [Required]
         public int TagId { get; set; }
         [ForeignKey("TagId")]
-        public RuuviTagModel RuuviTagModel { get; set; }
+        public virtual RuuviTagModel RuuviTagModel { get; set; }
     }
 }

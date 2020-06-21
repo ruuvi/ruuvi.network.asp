@@ -19,15 +19,19 @@
                 <p>If you come to a conclusion to get all your data removed from this application, please read this section carefully.</p>
                 <p>By continuing with this action, you agree to delete all data related to your account. Please note, that this action only affects data stored within this application - data such as username, saved RuuviTag ID's and RuuviTag Lists. This action does not affect the actual data gathered by the RuuviTags or any other account of yours, that are related to Ruuvi.</p>
                 <p class="text-warning">Data removal is permanent and can not be undone!</p>
-                <form>
+                <div>
                     <div class="form-group">
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="confirmDataRemoval">
                             <label class="form-check-label" for="confirmDataRemoval">I have read the data removal information</label>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-general btn-block-mobile" disabled id="btn-deleteUserData">Delete this account and all data related to it</button>
-                </form>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-general btn-block-mobile" id="btn-deleteUserData">Delete this account and all data related to it</button>
+                    }
+                </div>
             </div>
             <div class="col-lg-6">
                 <h2>Save email address to the database</h2>

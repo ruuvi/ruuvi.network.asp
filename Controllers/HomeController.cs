@@ -309,9 +309,27 @@ namespace RuuviTagApp.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult AppSettings()
         {
             return View();
+        }
+
+        [Authorize]
+        [HttpPost, ActionName("AppSettings")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteUser()
+        {
+            string userID = User.Identity.GetUserId();
+            var user = db.Users.Find(userID);
+            if (user == null)
+            {
+                // something went wrong
+                return RedirectToAction("AppSettings");
+            }
+            db.Users.Remove(user);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         [Authorize]
