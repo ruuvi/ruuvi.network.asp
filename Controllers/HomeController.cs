@@ -28,6 +28,8 @@ namespace RuuviTagApp.Controllers
             ViewBag.GeneralError = TempData["GeneralError"];
             ViewBag.apiTime = TempData["apiTime"];
             ViewBag.apiTempData = TempData["apiTempData"];
+            ViewBag.apiHumData = TempData["apiHumData"];
+            ViewBag.apiPressData = TempData["apiPressData"];
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
@@ -110,6 +112,8 @@ namespace RuuviTagApp.Controllers
 
                 string dataTimeList;
                 string dataTempList;
+                string dataHumList;
+                string dataPressList;
                 List<UnpackData> lstapiData = new List<UnpackData>();
 
                 foreach (WhereOSApiRuuvi apiRuuviTag in apiResponse)
@@ -122,11 +126,15 @@ namespace RuuviTagApp.Controllers
                     lstapiData.Add(ApiRowData);
                 }
 
-                dataTimeList = string.Join(",", lstapiData.Select(n => n.Time.Hour).ToList());
+                dataTimeList = string.Join(",", lstapiData.Select(n => n.Time.TimeOfDay).ToList());
                 dataTempList = string.Join(",", lstapiData.Select(n => n.Data.temperature).ToList());
+                dataHumList = string.Join(",", lstapiData.Select(n => n.Data.humidity).ToList());
+                dataPressList = string.Join(",", lstapiData.Select(n => n.Data.pressure).ToList());
 
                 TempData["apiTime"] = dataTimeList;
                 TempData["apiTempData"] = dataTempList;
+                TempData["apiHumData"] = dataHumList;
+                TempData["apiPressData"] = dataPressList;
 
 
                 // DECODE DATA HERE ?
