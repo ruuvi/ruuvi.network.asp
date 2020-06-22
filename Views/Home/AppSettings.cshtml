@@ -16,8 +16,9 @@
             <div class="col-lg-6">
                 <h2>Remove all my data</h2>
                 <p>You are signed in as @ViewBag.Username.</p>
+
                 <p>If you come to a conclusion to get all your data removed from this application, please read this section carefully.</p>
-                <p>By continuing with this action, you agree to delete all data related to your account. Please note, that this action only affects data stored within this application - data such as username, saved RuuviTag ID's and RuuviTag Lists. This action does not affect the actual data gathered by the RuuviTags or any other account of yours, that are related to Ruuvi.</p>
+                <p>By continuing with this action, you agree to delete all data related to your account. Please note, that this action only affects data stored within this application - data such as username, saved RuuviTag ID's and RuuviTag Groups. This action does not affect the actual data gathered by the RuuviTags or any other account of yours, that are related to Ruuvi.</p>
                 <p class="text-warning">Data removal is permanent and can not be undone!</p>
                 <div>
                     <div class="form-group">
@@ -29,7 +30,8 @@
                     @using (Html.BeginForm())
                     {
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-general btn-block-mobile" id="btn-deleteUserData">Delete this account and all data related to it</button>
+                        <button type="submit" class="btn btn-general btn-block-mobile" id="btn-deleteUserData">Delete this account and data</button>
+                        <small id="userDeletionHelpText" class="form-text text-muted">Pressing this button is final step to delete all your data within this application.</small>
                     }
                 </div>
             </div>
@@ -56,16 +58,20 @@
 
 <script>
     let btnDeleteUserData = document.getElementById("btn-deleteUserData");
+    let helptextDeleteUserData = document.getElementById("userDeletionHelpText");
     let btnDeleteUserDataVisible = false;
-    btnDeleteUserData.style.display = "none"; // Hide button by default
+    btnDeleteUserData.style.display = "none"; // Hide by default
+    helptextDeleteUserData.style.display = "none"; // Hide by default
 
     // Toggle data removal button
     $('#confirmDataRemoval').click(function () {
         if (!btnDeleteUserDataVisible) {
             btnDeleteUserData.style.display = "block";
+            helptextDeleteUserData.style.display = "block";
             btnDeleteUserDataVisible = true;
         } else {
             btnDeleteUserData.style.display = "none";
+            helptextDeleteUserData.style.display = "none";
             btnDeleteUserDataVisible = false;
         }
     });
