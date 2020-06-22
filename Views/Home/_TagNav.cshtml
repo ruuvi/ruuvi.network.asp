@@ -17,10 +17,13 @@
                             <a class="dropdown-item dropdown-item-ruuvi disabled" href="#">@ViewBag.UserTagsListError</a>
                         }
                         @*<div class="dropdown-divider-ruuvi"></div>*@
-                        <h6 class="dropdown-header dropdown-header-ruuvi">Groups</h6>
-                        @foreach (var group in ViewBag.UserGroups)
+                        @if (ViewBag.UserGroups != null || ViewBag.UserGroups.Count == 0)
                         {
-                            <a class="dropdown-item dropdown-item-ruuvi" onclick="setSelectedGroupId('@group.UserTagListId')">@group.ListName</a>
+                            <h6 class="dropdown-header dropdown-header-ruuvi">Groups</h6>
+                            foreach (var group in ViewBag.UserGroups)
+                            {
+                                <a class="dropdown-item dropdown-item-ruuvi" onclick="setSelectedGroupId('@group.UserTagListId')">@group.ListName</a>
+                            }
                         }
                     </div>
                 </div>
