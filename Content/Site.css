@@ -707,3 +707,31 @@ body {
         /*background-color: #333;*/
         box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.0);
     }
+
+.collapse-ruuvi {
+    width: 100%;
+    border: 1px solid #333;
+    border-radius: 2px 2px 2px 2px;
+}
+
+.range-ruuvi::-webkit-slider-thumb {
+    color: #00A99D;
+    background-color: #00A99D;
+}
+
+.range-ruuvi::-moz-range-thumb {
+    color: #00A99D;
+    background-color: #00A99D;
+}
+
+.range-ruuvi::-webkit-slider-thumb:hover, .range-ruuvi::-webkit-slider-thumb:focus {
+    color: #fff;
+    background-color: #333;
+    box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+}
+
+.range-ruuvi::-webkit-slider-thumb:hover, .range-ruuvi::-webkit-slider-thumb:focus {
+    color: #fff;
+    background-color: #333;
+    box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+}
