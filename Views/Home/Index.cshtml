@@ -17,7 +17,7 @@
 {
     @Html.Partial("~/Views/Home/_TagNav.cshtml")
 
-    if(!ViewBag.UserHasEmail)
+    if (!ViewBag.UserHasEmail)
     {
         <script>
             document.getElementById("btn-tagAlerts").classList.add("disabled");
@@ -68,7 +68,7 @@ else
         <div class="home-selectedTag">
             <h2 id="userSelectionHeader"></h2>
         </div>
-        
+
         AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
         @Html.Partial("~/Views/Home/_AddTagModal.cshtml", add)
         if (Model is RuuviTagModel tag)
@@ -212,6 +212,7 @@ else
             $('#TagListDropDown a').on('click', function () {
                 var select = ($(this).text());
                 document.getElementById("btn-tagSettings").classList.remove("disabled"); // Enable button. Otherwise disabled
+
                 if (userHasEmail) {
                     document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
                 }
@@ -219,7 +220,7 @@ else
                 document.getElementById("userSelectionHeader").style.display = "block"; // Displaying header for selected item
                 document.getElementById("userSelectionHeader").innerHTML = select; // Adding selected item to the header
 
-                document.getElementById("infoSelectTag").style.display = "none";
+                document.getElementById("infoSelectedItem").style.display = "none";
             });
         });
 
@@ -250,6 +251,25 @@ else
             selectedTagId = tagid;
             if (userHasEmail) {
                 $('#addAlarmBtn').val(tagid);
+
+                // Checking if buttons are hidde (because a group was selected), and displaying them
+                let alertBtn = document.getElementById("btn-tagAlerts");
+                let settingsBtn = document.getElementById("btn-tagSettings");
+                if (alertBtn.style.display == "none" || settingsBtn.style.display == "none") {
+                    alertBtn.style.display = "block";
+                    settingsBtn.style.display = "block";
+                }
+            }
+        }
+
+        function setSelectedGroupId(groupid) {
+            selectedGroupId = groupid;
+            if (userHasEmail) {
+                //Hiding buttons in case user selected a group instead of a tag
+                let alertBtn = document.getElementById("btn-tagAlerts");
+                let settingsBtn = document.getElementById("btn-tagSettings");
+                alertBtn.style.display = "none";
+                settingsBtn.style.display = "none";
             }
         }
     </script>
