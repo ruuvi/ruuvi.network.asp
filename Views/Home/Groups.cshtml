@@ -3,11 +3,11 @@
 @{
     ViewBag.Title = "RuuviTag groups";
     @Html.Partial("~/Views/Home/_GroupNav.cshtml")
-    //ListNameModel addList = Model is ListNameModel ? Model : new ListNameModel();
     @Html.Partial("~/Views/Home/_AddGroupModal.cshtml", new NewTagListModel())
 }
 
 <div class="container body-content" id="body-content">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="row" id="userGroups">
         @foreach (var item in Model)
         {

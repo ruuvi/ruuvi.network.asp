@@ -248,7 +248,7 @@ else
             let url = '/Home/_GetAllAlerts/?tagID=' + selectedTagId;
             $.get(url, (data) => {
                 $('#existingAlerts').html(data);
-            })
+            });
         });
 
         function setSelectedTagId(tagid) {

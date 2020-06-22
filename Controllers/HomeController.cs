@@ -188,16 +188,16 @@ namespace RuuviTagApp.Controllers
         {
             if (tagID == null)
             {
-                // error no id
+                TempData["GeneralError"] = "Could not add alert due to missing ID. Please try again.";
                 return RedirectToAction("Index");
             }
             if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
             {
-                // error tag is not users
+                TempData["GeneralError"] = "You do not have permission to do that.";
                 return RedirectToAction("Index");
             }
             List<TagAlertType> alarmTypes = await db.TagAlertTypes.ToListAsync();
-            bool NoAlarmsAdded = true;
+            bool NoAlertsAdded = true;
             foreach (PropertyInfo pi in alert.GetType().GetProperties())
             {
                 if (pi.GetValue(alert) != null)
@@ -223,15 +223,15 @@ namespace RuuviTagApp.Controllers
                             AlertLimit = (double)pi.GetValue(alert)
                         }); 
                     }
-                    if (NoAlarmsAdded)
+                    if (NoAlertsAdded)
                     {
-                        NoAlarmsAdded = false;
+                        NoAlertsAdded = false;
                     }
                 }
             }
-            if (NoAlarmsAdded)
+            if (NoAlertsAdded)
             {
-                // error no values for alarms
+                TempData["GeneralError"] = "No alerts were added.";
                 return RedirectToAction("Index");
             }
             await db.SaveChangesAsync();
@@ -243,12 +243,12 @@ namespace RuuviTagApp.Controllers
         {
             if (tagID == null)
             {
-                // error no id
+                TempData["GeneralError"] = "Unable to get alerts due to missing ID. Please try again.";
                 return RedirectToAction("Index");
             }
             if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
             {
-                // error not users tag
+                TempData["GeneralError"] = "You do not have permission to do that.";
                 return RedirectToAction("Index");
             }
             var alerts = await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync();
@@ -262,18 +262,17 @@ namespace RuuviTagApp.Controllers
         {
             if (alertID == null)
             {
-                // error no id
+                TempData["GeneralError"] = "Unable to remove alert due to missig ID. Please try again.";
                 return RedirectToAction("Index");
             }
             TagAlertModel alert = db.TagAlertModels.Find(alertID);
             if (!string.Equals(User.Identity.GetUserId(), alert.RuuviTagModel.UserId))
             {
-                // error not users tag
+                TempData["GeneralError"] = "You do not have permission to do that.";
                 return RedirectToAction("Index");
             }
             db.TagAlertModels.Remove(alert);
             await db.SaveChangesAsync();
-            //TempData["ShowAlerts"] = true; ??
             return RedirectToAction("Index");
         }
 
@@ -420,6 +419,14 @@ namespace RuuviTagApp.Controllers
         [Authorize]
         public async Task<ActionResult> Groups()
         {
+            ViewBag.Errors = TempData["GeneralGroupsErrors"];
+            if (ViewBag.Errors != null)
+            {
+                foreach (var e in ViewBag.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, e);
+                }
+            }
             string userID = User.Identity.GetUserId();
             var tags = new Dictionary<int, RuuviTagModel>();
             foreach(var tag in await GetUserTagsAsync(userID))
@@ -438,18 +445,18 @@ namespace RuuviTagApp.Controllers
         {
             if (listRowID == null)
             {
-                // error no id
+                TempData["GeneralGroupsErrors"] = new string[] { "Unable to remove tag from group due to missing ID. Please try again." };
                 return RedirectToAction("Groups");
             }
             TagListRowModel row = db.TagListRowModels.Find(listRowID);
             if (row == null)
             {
-                // error row not found
+                TempData["GeneralGroupsErrors"] = new string[] { "Tag was not removed, since it's not in that group." };
                 return RedirectToAction("Groups");
             }
             if (row.RuuviTagModel.UserId != User.Identity.GetUserId())
             {
-                // error not users row
+                TempData["GeneralGroupsErrors"] = new string[] { "You do not have access to do that." };
                 return RedirectToAction("Groups");
             }
             db.TagListRowModels.Remove(row);
@@ -463,22 +470,22 @@ namespace RuuviTagApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                string userID = User.Identity.GetUserId();
-                var userLists = await db.UserTagListModels.Where(l => l.UserId == userID).ToListAsync();
-                var userTags = await GetUserTagsAsync(userID);
-                if (userLists.Select(l => l.ListName).Contains(list.ListName))
+                if (string.IsNullOrWhiteSpace(list.ListName))
                 {
-                    // TempData error list = You already have a list with that name.
+                    TempData["GeneralGroupsErrors"] = new string[] { "Unable to create group, a name for a group is required." };
                     return RedirectToAction("Groups");
                 }
-                else if (string.IsNullOrWhiteSpace(list.ListName))
+                string userID = User.Identity.GetUserId();
+                var userLists = await db.UserTagListModels.Where(l => l.UserId == userID).ToListAsync();
+                if (userLists.Select(l => l.ListName).Contains(list.ListName))
                 {
-                    // TempData error list = name required.
+                    TempData["GeneralGroupsErrors"] = new string[] { "Unable to create group, since you already have a group with that name." };
                     return RedirectToAction("Groups");
                 }
                 var newList = db.UserTagListModels.Add(new UserTagListModel { ListName = list.ListName, UserId = userID });
                 if (!string.IsNullOrWhiteSpace(list.IdsAsString))
                 {
+                    var userTags = await GetUserTagsAsync(userID);
                     string[] ids = list.IdsAsString.Trim(';').Split(';');
                     foreach (string idstring in ids)
                     {
@@ -491,7 +498,7 @@ namespace RuuviTagApp.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Groups");
             }
-            // TempData error list = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            TempData["GeneralGroupsErrors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
             return RedirectToAction("Groups");
         }
 
@@ -502,18 +509,18 @@ namespace RuuviTagApp.Controllers
         {
             if (tagListID == null)
             {
-                // error no id
+                TempData["GeneralGroupsErrors"] = new string[] { "Unable to remove group due to missing ID. Please try again." };
                 return RedirectToAction("Groups");
             }
             UserTagListModel group = db.UserTagListModels.Find(tagListID);
             if (group == null)
             {
-                // error group not found
+                TempData["GeneralGroupsErrors"] = new string[] { "Group does not exist." };
                 return RedirectToAction("Groups");
             }
             if (group.UserId != User.Identity.GetUserId())
             {
-                // error not users group
+                TempData["GeneralGroupsErrors"] = new string[] { "You do not have access to do that." };
                 return RedirectToAction("Groups");
             }
             db.UserTagListModels.Remove(group);
