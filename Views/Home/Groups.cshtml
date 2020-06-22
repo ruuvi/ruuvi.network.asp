@@ -15,16 +15,10 @@
                 <div class="card card-ruuvi text-center">
                     <div class="card-body">
                         <h5 class="card-title-ruuvi"><a title="Click to view RuuviTags" data-toggle="collapse" href="#collapseGroup-@item.UserTagListId" role="button" aria-expanded="false" aria-controls="collapseGroup" id="@item.ListName">@item.ListName</a></h5>
-                        @using (Html.BeginForm())
-                        {
-                            @Html.AntiForgeryToken()
-                            <button type="submit" name="tagListID" value="@item.UserTagListId" class="btn btn-general">Delete Group</button>
-                        }
-
-                        @if (@item.TagListRowModels.Count > 0)
-                        {
-                            <p>@item.TagListRowModels.Count RuuviTags</p>
-                            <div class="collapse" id="collapseGroup-@item.UserTagListId">
+                        <p>@item.TagListRowModels.Count RuuviTags</p>
+                        <div class="collapse" id="collapseGroup-@item.UserTagListId">
+                            @if (@item.TagListRowModels.Count > 0)
+                            {
                                 <table class="table table-ruuvi table-ruuvi-hover table-sm">
                                     <thead>
                                         <tr>
@@ -45,12 +39,12 @@
                                                         <td>@tableRow</td>
                                                         <td>@(tag.TagName ?? tag.TagMacAddress)</td>
                                                         <td>
-                                                        @using (Html.BeginForm())
-                                                        {
-                                                            @Html.HttpMethodOverride(HttpVerbs.Delete)
-                                                            @Html.AntiForgeryToken()
-                                                            <button class="btn btn-sm btn-general" value="@tagRow.ListRowId" name="listRowID">Remove Tag</button>
-                                                        }
+                                                            @using (Html.BeginForm())
+                                                            {
+                                                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                                                @Html.AntiForgeryToken()
+                                                                <button class="btn btn-sm btn-general" value="@tagRow.ListRowId" name="listRowID">Remove</button>
+                                                            }
                                                         </td>
                                                     </tr>
                                                 }
@@ -58,12 +52,13 @@
                                         }
                                     </tbody>
                                 </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <p>Zero RuuviTags in this group</p>
-                        }
+                            }
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" name="tagListID" value="@item.UserTagListId" class="btn btn-general">Delete group</button>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
