@@ -58,6 +58,7 @@ namespace RuuviTagApp.Controllers
                 string userID = User.Identity.GetUserId();
                 List<RuuviTagModel> userTags = await GetUserTagsAsync(userID);
                 ViewBag.UserTagsList = userTags;
+                ViewBag.UserGroups = await GetUsersGroupsAsync(userID);
                 ViewBag.UserHasEmail = db.Users.Find(userID).Email != null;
 
                 // Add error message in case user hasn't added any tags
@@ -429,14 +430,19 @@ namespace RuuviTagApp.Controllers
             }
             string userID = User.Identity.GetUserId();
             var tags = new Dictionary<int, RuuviTagModel>();
-            foreach(var tag in await GetUserTagsAsync(userID))
+            foreach (var tag in await GetUserTagsAsync(userID))
             {
                 tags.Add(tag.TagId, tag);
             }
             ViewBag.UsersTags = tags;
-            List<UserTagListModel> userGroups = await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
+            List<UserTagListModel> userGroups = await GetUsersGroupsWithRowsAsync(userID);
             return View(userGroups);
         }
+
+        private async Task<List<UserTagListModel>> GetUsersGroupsWithRowsAsync(string userID)
+            => await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
+        private async Task<List<UserTagListModel>> GetUsersGroupsAsync(string userID)
+            => await db.UserTagListModels.Where(l => l.UserId == userID).ToListAsync();
 
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -476,7 +482,7 @@ namespace RuuviTagApp.Controllers
                     return RedirectToAction("Groups");
                 }
                 string userID = User.Identity.GetUserId();
-                var userLists = await db.UserTagListModels.Where(l => l.UserId == userID).ToListAsync();
+                var userLists = await GetUsersGroupsAsync(userID);
                 if (userLists.Select(l => l.ListName).Contains(list.ListName))
                 {
                     TempData["GeneralGroupsErrors"] = new string[] { "Unable to create group, since you already have a group with that name." };

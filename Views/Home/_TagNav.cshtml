@@ -19,6 +19,10 @@
                             selectedTagId = tag.TagId;
                             selectedTagMac = tag.TagMacAddress;
                         }
+                        @foreach (var group in ViewBag.UserGroups)
+                        {
+                            <a class="dropdown-item dropdown-item-ruuvi" onclick="setSelectedGroupId('@group.UserTagListId')">@group.ListName</a>
+                        }
                         @if (ViewBag.UserTagsListError != null)
                         {
                             <a class="dropdown-item dropdown-item-ruuvi disabled" href="#">@ViewBag.UserTagsListError</a>
