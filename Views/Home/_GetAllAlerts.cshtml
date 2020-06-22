@@ -29,7 +29,7 @@
                 @using (Html.BeginForm("RemoveAlert", "Home", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
-                    <button class="btn btn-sm btn-general" type="submit" name="alertID" value="@item.AlertId">Remove Alert</button>
+                    <button class="btn btn-sm btn-general" type="submit" name="alertID" value="@item.AlertId">Remove</button>
                 }
             </td>
         </tr>
