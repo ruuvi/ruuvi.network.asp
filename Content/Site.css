@@ -34,6 +34,10 @@ textarea {
     .navbar-ruuvi .navbar-nav .nav-link {
         color: #fff;
         text-align: right;
+        text-transform: uppercase;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        letter-spacing: 1px;
     }
 
         .navbar-ruuvi .navbar-nav .nav-link:hover, .navbar-ruuvi .navbar-nav .nav-link:focus {
@@ -43,6 +47,13 @@ textarea {
     .navbar-ruuvi .navbar-toggler-icon {
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
     }
+
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+    outline: none;
+    box-shadow: none;
+}
 
 .footer-ruuvi {
     bottom: 0;
@@ -77,6 +88,9 @@ textarea {
     color: #fff;
     background-color: #00A99D;
     border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    letter-spacing: 1.5px;
 }
 
     .btn-general:hover {
@@ -138,6 +152,10 @@ textarea {
 
     .modal-ruuvi-header h2 {
         margin-left: 1rem;
+        font-family: 'Montserrat', sans-serif;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 700;
     }
 
 .navbar-ruuvitag {
@@ -180,6 +198,10 @@ textarea {
     background-color: #333;
     text-align: left;
     cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+    text-transform: uppercase;
 }
 
 .dropdown-menu-ruuvi {
@@ -361,6 +383,8 @@ h1 {
 .card-title-ruuvi {
     margin-bottom: 0.75rem;
     color: #00A99D;
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
 }
 
 .col-help {
@@ -378,6 +402,10 @@ h1 {
     color: #fff;
     background-color: #00A99D;
     border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 }
 
     .btn-up:hover {
@@ -676,6 +704,9 @@ body {
         color: #00A99D;
         text-decoration: none;
         font-weight: inherit;
+        font-family: 'Oswald', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 2px;
     }
 
 
@@ -695,6 +726,10 @@ body {
     font-size: 1.5rem;
     color: inherit;
     padding-left: 0;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: left;
 }
 
 
@@ -712,6 +747,8 @@ body {
     width: 100%;
     border: 1px solid #333;
     border-radius: 2px 2px 2px 2px;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .range-ruuvi::-webkit-slider-thumb {
@@ -734,4 +771,16 @@ body {
     color: #fff;
     background-color: #333;
     box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+label {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
