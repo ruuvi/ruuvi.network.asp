@@ -61,12 +61,12 @@ else
     @* Content visible only when user is logged in *@
     @if (Request.IsAuthenticated)
     {
-        <div id="infoSelectTag">
-            <p>To display data please choose or add a RuuviTag</p>
+        <div id="infoSelectedItem">
+            <p>Select a RuuviTag or a group to display data</p>
         </div>
 
         <div class="home-selectedTag">
-            <h2 id="headerDisplayingTag"></h2>
+            <h2 id="userSelectionHeader"></h2>
         </div>
         
         AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
@@ -216,8 +216,8 @@ else
                     document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
                 }
 
-                document.getElementById("headerDisplayingTag").style.display = "block"; // Displaying header for selected tag
-                document.getElementById("headerDisplayingTag").innerHTML = select; // Adding selected tag to the header
+                document.getElementById("userSelectionHeader").style.display = "block"; // Displaying header for selected item
+                document.getElementById("userSelectionHeader").innerHTML = select; // Adding selected item to the header
 
                 document.getElementById("infoSelectTag").style.display = "none";
             });
