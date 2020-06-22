@@ -10,12 +10,12 @@
                 <div class="dropdown">
                     <button class="btn btn-tagdropdown dropdown-toggle btn-sm" type="button" id="tagMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Choose RuuviTag">
                         <img src="~/SVG/web-ruuvi-eye-nega.svg" width="28" height="28" alt="Ruuvi logo">
-                        RuuviTag
                     </button>
                     <div class="dropdown-menu dropdown-menu-ruuvi" id="TagListDropDown" aria-labelledby="dropdownMenuButton">
+                        <h6 class="dropdown-header dropdown-header-ruuvi">RuuviTags</h6>
                         @foreach (var tag in ViewBag.UserTagsList)
                         {
-                            <a class="dropdown-item dropdown-item-ruuvi" onclick="setSelectedTagId('@tag.TagId')">@(tag.TagName ?? tag.TagMacAddress)</a>
+                            <a class="dropdown-item dropdown-item-ruuvi dropdown-item-ruuvitag" onclick="setSelectedTagId('@tag.TagId')">@(tag.TagName ?? tag.TagMacAddress)</a>
                             selectedTagId = tag.TagId;
                             selectedTagMac = tag.TagMacAddress;
                         }
@@ -23,13 +23,15 @@
                         {
                             <a class="dropdown-item dropdown-item-ruuvi disabled" href="#">@ViewBag.UserTagsListError</a>
                         }
+                        @*<div class="dropdown-divider-ruuvi"></div>*@
+                        <h6 class="dropdown-header dropdown-header-ruuvi">Groups</h6>
                     </div>
                 </div>
                 <li class="nav-item active">
                     <a class="nav-link svg-btn-settings disabled" id="btn-tagSettings" title="Tag settings"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link svg-btn-alert disabled" id="btn-tagAlerts" data-toggle="modal" data-target="#tagAlertsModal"  title="Manage alerts"></a>
+                    <a class="nav-link svg-btn-alert disabled" id="btn-tagAlerts" data-toggle="modal" data-target="#tagAlertsModal" title="Manage alerts"></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link svg-btn-new" id="btn-addNewTag" data-toggle="modal" data-target="#addTagModal" title="Add new RuuviTag"></a>

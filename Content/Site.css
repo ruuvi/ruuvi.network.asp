@@ -208,6 +208,23 @@ textarea {
     text-transform: uppercase;
 }
 
+.dropdown-item-ruuvitag {
+    font-weight: 400;
+}
+
+.dropdown-header-ruuvi {
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.dropdown-divider-ruuvi {
+    border-top: 1px solid #00A99D;
+    margin: 5px 20px 5px 20px;
+}
+
 .dropdown-menu-ruuvi {
     color: #fff;
     background-color: #333;
@@ -763,7 +780,7 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(0, 169, 157, 0.5);
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Oswald', sans-serif;
     letter-spacing: 2px;
     text-transform: uppercase;
