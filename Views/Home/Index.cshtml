@@ -3,12 +3,26 @@
 @using RuuviTagApp.ViewModels;
 @{
     ViewBag.Title = "Home";
-    if (Request.IsAuthenticated)
-    {
-        ViewBag.Msg = $"Hello {User.Identity.GetUserName()}!";
-    }
+
     MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
     string containerType;
+
+    <script>
+        //Putting the datas viewbags into "let" variables
+        let labelTime = [@Html.Raw(ViewBag.apiTime)];
+        let labelTemp = [@Html.Raw(ViewBag.apiTempData)];
+        let labelHum = [@Html.Raw(ViewBag.apiHumData)];
+        let labelPress = [@Html.Raw(ViewBag.apiPressData)];
+    </script>
+
+    string lastTemp = "";
+    string lastHumi = "";
+    string lastPressure = "";
+
+    // Partial views
+    @Html.Partial("~/Views/Home/_TemperatureModal.cshtml")
+    @Html.Partial("~/Views/Home/_HumidityModal.cshtml")
+    @Html.Partial("~/Views/Home/_AirpressureModal.cshtml")
 }
 
 
@@ -85,15 +99,23 @@ else
 
     @if (ViewBag.TagData != null)
     {
+        foreach (var item in ViewBag.TagData)
+        {
+            lastTemp = item.Data.temperature;
+            lastHumi = item.Data.humidity;
+            lastPressure = item.Data.pressure;
+        }
+
         //Example data
-        <h1 class="text-danger" style="opacity:0.6">This is dummy data</h1>
+        @*<h1 class="text-danger" style="opacity:0.6">This is dummy data</h1>*@
         <div class="RuuviTagData">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="row" id="ruuviTagTemperature">
                         <div class="col-lg-12 col-sm-12">
                             <a class="btn btn-tagdata-temp" id="btn-TagTemp" onclick="openTempChartModal()" title="View tag temperature"></a>
-                            <p class="tagdata-value">38.26</p> <span class="celsius">&#176;C</span>
+                            @*<p class="tagdata-value">38.26</p> <span class="celsius">&#176;C</span>*@
+                            <p class="tagdata-value">@lastTemp</p> <span class="celsius">&#176;C</span>
                             <p class="tagdata-header">Temperature</p>
                             <hr class="tagdata-hr" />
                         </div>
@@ -101,7 +123,8 @@ else
                     <div class="row" id="ruuviTagHumidity">
                         <div class="col-lg-12 col-sm-12">
                             <a class="btn btn-tagdata-hum" id="btn-TagHum" onclick="openHumiChartModal()" title="View tag humidity"></a>
-                            <p class="tagdata-value">85.5</p> <span class="percent">%</span>
+                            @*<p class="tagdata-value">85.5</p> <span class="percent">%</span>*@
+                            <p class="tagdata-value">@lastHumi</p> <span class="percent">%</span>
                             <p class="tagdata-header">Humidity</p>
                             <hr class="tagdata-hr" />
                         </div>
@@ -109,7 +132,8 @@ else
                     <div class="row" id="ruuviTagAirPressure">
                         <div class="col-lg-12 col-sm-12">
                             <a class="btn btn-tagdata-air" id="btn-TagAir" onclick="openAirChartModal()" title="View tag air pressure"></a>
-                            <p class="tagdata-value">1015.36</p> <span class="hpa">hPa</span>
+                            @*<p class="tagdata-value">1015.36</p> <span class="hpa">hPa</span>*@
+                            <p class="tagdata-value">@lastPressure</p> <span class="hpa">hPa</span>
                             <p class="tagdata-header">Air pressure</p>
                             <hr class="tagdata-hr" />
                         </div>
@@ -121,17 +145,21 @@ else
             <p class="tip d-lg-none">To view charts, please <a class="link" onclick="highlightIcons()" role="button">press the icons</a> above.</p>
             <div id="desktopCharts">
                 <div class="row">
-                    <div class="col-lg-4">
-                        <h1>Temp chart here</h1>
-                        @Html.Partial("~/Views/Home/_TemperatureChart.cshtml")
+                    <div class="col-lg-12 mt-2">
+                        <h1 class="tagdata-header">Temperature</h1>
+                        @*@Html.Partial("~/Views/Home/_TemperatureChart.cshtml")*@
+                        <canvas id="tempchart"></canvas>
                     </div>
-                    <div class="col-lg-4">
-                        <h1>Humidity chart here</h1>
-                        @Html.Partial("~/Views/Home/_HumidityChart.cshtml")
+                    <div class="col-lg-12 mt-5">
+                        <h1 class="tagdata-header">Humidity</h1>
+                        @*@Html.Partial("~/Views/Home/_HumidityChart.cshtml")*@
+                        <canvas id="humchart"></canvas>
                     </div>
-                    <div class="col-lg-4">
-                        <h1>Air chart here</h1>
-                        @Html.Partial("~/Views/Home/_AirpressureChart.cshtml")
+                    <div class="col-lg-12 mt-5">
+                        <h1 class="tagdata-header">Air pressure</h1>
+                        @*@Html.Partial("~/Views/Home/_AirpressureChart.cshtml")*@
+                        <canvas id="presschart"></canvas>
+
                     </div>
                 </div>
             </div>
@@ -140,17 +168,185 @@ else
                 <a class="btn btn-general mt-5" href="/Home/Index">Sign in or search another RuuviTag</a>
             }
         </div>
-
-        // Partial views
-        @Html.Partial("~/Views/Home/_TemperatureModal.cshtml")
-        @Html.Partial("~/Views/Home/_HumidityModal.cshtml")
-        @Html.Partial("~/Views/Home/_AirpressureModal.cshtml")
     }
 </div>
 
 @section scripts{
+
     <script type="text/javascript">
-        var userHasEmail;
+                //Line chart script for temperature
+        var ctx = document.getElementById('tempchart').getContext('2d');
+        var tempChart = new Chart(ctx, {
+                type: 'line',
+            data: {
+                labels: labelTime,
+                datasets: [{
+                label: 'Temperature',
+                    data: labelTemp,
+                    backgroundColor: [
+                        'rgba(107, 234, 225, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(107, 234, 225, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                yAxes: [{
+                ticks: {
+                beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var ctxm = document.getElementById('tempchartmodal').getContext('2d');
+        var tempChartModal = new Chart(ctxm, {
+            type: 'line',
+            data: {
+                labels: labelTime,
+                datasets: [{
+                    label: 'Temperature',
+                    data: labelTemp,
+                    backgroundColor: [
+                        'rgba(107, 234, 225, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(107, 234, 225, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        //Line chart script for humidity
+        var ctz = document.getElementById('humchart').getContext('2d');
+        var humidityChart = new Chart(ctz, {
+            type: 'line',
+            data: {
+                labels: labelTime,
+                datasets: [{
+                    label: 'Humidity',
+                    data: labelHum,
+                    backgroundColor: [
+                        'rgba(107, 234, 225, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(107, 234, 225, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var ctzm = document.getElementById('humchartmodal').getContext('2d');
+        var humidityChartModal = new Chart(ctzm, {
+            type: 'line',
+            data: {
+                labels: labelTime,
+                datasets: [{
+                    label: 'Humidity',
+                    data: labelHum,
+                    backgroundColor: [
+                        'rgba(107, 234, 225, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(107, 234, 225, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        //Line chart script for pressure
+        var ctc = document.getElementById('presschart').getContext('2d');
+        var pressChart = new Chart(ctc, {
+            type: 'line',
+            data: {
+                labels: labelTime,
+                datasets: [{
+                    label: 'Pressure',
+                    data: labelPress,
+                    backgroundColor: [
+                        'rgba(107, 234, 225, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(107, 234, 225, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var ctcm = document.getElementById('presschartmodal').getContext('2d');
+        var pressChartModal = new Chart(ctcm, {
+            type: 'line',
+            data: {
+                labels: labelTime,
+                datasets: [{
+                    label: 'Pressure',
+                    data: labelPress,
+                    backgroundColor: [
+                        'rgba(107, 234, 225, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(107, 234, 225, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+
+
         $(window).on('load', function () {
             let showRegisterModal = @((ViewBag.ShowRegisterModal ?? false).ToString().ToLower());
             if (showRegisterModal) {
