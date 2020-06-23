@@ -431,6 +431,7 @@ else
             $.get(url, (data) => {
                 $('#tagSettingsModal').replaceWith(data);
                 tagIdInModal = selectedTagId;
+                $('#TagsId').val(selectedTagId);
                 $('#tagSettingsModal').modal('show');
             });
         });
@@ -466,6 +467,14 @@ else
                 alertBtn.style.display = "none";
                 settingsBtn.style.display = "none";
             }
+        }
+
+        function setGroupId(selectedGroup) {
+            let label = document.getElementById('textForTagToGroup');
+            label.innerHTML = `Add tag to group ${selectedGroup.text}`;
+            $('#ListsId').val(selectedGroup.id);
+            let container = document.getElementById('addToGroupSubmitDiv');
+            container.style.display = 'block';
         }
     </script>
 }

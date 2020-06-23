@@ -17,7 +17,7 @@
                         <h5 class="card-title-ruuvi"><a title="Click to view RuuviTags" data-toggle="collapse" href="#collapseGroup-@item.UserTagListId" role="button" aria-expanded="false" aria-controls="collapseGroup" id="@item.ListName">@item.ListName</a></h5>
                         <p>@item.TagListRowModels.Count RuuviTags</p>
                         <div class="collapse" id="collapseGroup-@item.UserTagListId">
-                            @if (@item.TagListRowModels.Count > 0)
+                            @if (item.TagListRowModels.Count > 0)
                             {
                                 <table class="table table-ruuvi table-ruuvi-hover table-sm">
                                     <thead>
