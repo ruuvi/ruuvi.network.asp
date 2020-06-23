@@ -16,9 +16,11 @@ using System.Web.Mvc;
 namespace RuuviTagApp.Controllers
 {
     [RequireHttps]
+    [HandleError]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
+        
         public async Task<ActionResult> Index(string tagMac)
         {
             ViewBag.ShowRegisterModal = TempData["ShowRegisterModal"];

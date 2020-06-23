@@ -790,3 +790,21 @@ label {
     text-transform: uppercase;
     letter-spacing: 2px;
 }
+
+.col-centered {
+    float: none;
+    display: block;
+    margin: 0 auto;
+    /* margin-left: auto; margin-right: auto; */
+    text-align: center;
+}
+
+.NotFound h1 {
+    font-size: 5rem;
+    letter-spacing: 1rem;
+
+}
+.NotFound p {
+    font-size: 1.5rem;
+    letter-spacing: 0.6rem;
+}
