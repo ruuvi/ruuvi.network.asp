@@ -417,7 +417,7 @@ namespace RuuviTagApp.Controllers
                 TempData["GeneralError"] = "You don't have access to that tag.";
                 return RedirectToAction("Index");
             }
-            List<UserTagListModel> groupsAbleToAddTagTo = new List<UserTagListModel>();
+            List<UserTagListModel> availabeGroups = new List<UserTagListModel>();
             foreach (var group in await GetUsersGroupsWithRowsAsync(userID))
             {
                 bool canAddTagTo = true;
@@ -426,14 +426,15 @@ namespace RuuviTagApp.Controllers
                     if (row.TagId == tagID)
                     {
                         canAddTagTo = false;
+                        break;
                     }
                 }
                 if (canAddTagTo)
                 {
-                    groupsAbleToAddTagTo.Add(group);
+                    availabeGroups.Add(group);
                 }
             }
-            ViewBag.UserGroups = groupsAbleToAddTagTo;
+            ViewBag.UserGroups = availabeGroups;
             return PartialView(tag);
         }
 
