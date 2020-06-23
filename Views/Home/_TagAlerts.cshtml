@@ -13,6 +13,7 @@
         @Html.HiddenFor(model => model.HumidityLow)
         @Html.HiddenFor(model => model.PressureHigh)
         @Html.HiddenFor(model => model.PressureLow)
+    }
         <div class="row" id="temperatureAlert">
             <div class="col-lg-12">
                 <a class="btn btn-header-collapse" data-toggle="collapse" href="#collapseTempAlert" role="button" aria-expanded="false" aria-controls="collapseTempAlert">Temperature</a>
@@ -80,7 +81,6 @@
         <div class="collapse" id="collapseAlertTable">
             <div id="existingAlerts"></div>
         </div>
-    }
 </div>
 
 <script>
