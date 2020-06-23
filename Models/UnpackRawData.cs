@@ -136,6 +136,7 @@ namespace RuuviTagApp
             {
                 if (t >= 5000 && t <= 115534)
                 {
+                    t = t / 100;
                     pressure = t.ToString();
                 }
                 else pressure = "NAN";
@@ -144,11 +145,12 @@ namespace RuuviTagApp
             {
                 if (t >= 50000 && t <= 115535)
                 {
+                    t = t / 100;
                     pressure = t.ToString();
                 }
                 else pressure = "NAN";
             }
-            
+
         }
 
         private void addAccX(string data)
