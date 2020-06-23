@@ -112,7 +112,6 @@ else
         lastTemp = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.temperature;
         lastHumi = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.humidity;
         lastPressure = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.pressure;
-
         <div class="RuuviTagData">
             <div class="row">
                 <div class="col-lg-6">
@@ -138,6 +137,7 @@ else
                             <p class="tagdata-value">@lastPressure</p> <span class="hpa">hPa</span>
                             <p class="tagdata-header">Air pressure</p>
                             <hr class="tagdata-hr" />
+                            <p id="lastUpdated">Not calculated</p>
                         </div>
                     </div>
                 </div>
@@ -466,6 +466,33 @@ else
                 alertBtn.style.display = "none";
                 settingsBtn.style.display = "none";
             }
+        }
+
+        // Get the last updated time
+        let lastUpdatedTimerInterval = 1000; // Defautl 1000 = 1 second
+        let lastUpdatedTimer = setInterval(lastUpdated, lastUpdatedTimerInterval);
+        function lastUpdated() {
+            let date = new Date();
+            let currentTime = date.getTime();
+            let apiCallTime = @((ViewBag.apiCallTime));
+            let timeDiff = Math.abs(apiCallTime - currentTime);
+            let secDiff = Math.ceil(timeDiff / (1000));
+            let lastUpdated = secDiff;
+
+            let sec = 1;
+            let min = 60 * sec;
+
+            if (secDiff < 1 * min) {
+                lastUpdated = "Updated " + secDiff + "s ago";
+            } else if (secDiff < 2 * min) {
+                lastUpdated = "Updated a minute ago";
+            } else if (secDiff >= 2 * min) {
+                lastUpdated = "Updated " + Math.round(secDiff / 60) + " minutes ago";
+            } else if (secDiff >= 60 * min) {
+                lastUpdatedTimerInterval = 900000; // After an hour, let's call the timer every 15min
+            }
+
+            document.getElementById("lastUpdated").innerHTML = lastUpdated;
         }
     </script>
 }
