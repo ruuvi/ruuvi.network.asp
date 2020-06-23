@@ -217,6 +217,14 @@ namespace RuuviTagApp.Controllers
                                                                                              where a.TagId == tagID && a.AlertTypeId == typeID
                                                                                              select a).FirstOrDefaultAsync();
 
+        private async Task<bool> UserHasGroupIdAsync(string userID, int listsID) => await (from l in db.UserTagListModels
+                                                                                           where l.UserId == userID && l.UserTagListId == listsID
+                                                                                           select l).FirstOrDefaultAsync() != null;
+
+        private async Task<bool> TagIsInListAsync(int tagsId, int listsId) => await (from r in db.TagListRowModels
+                                                                                where r.TagId == tagsId && r.ListId == listsId
+                                                                                select r).FirstOrDefaultAsync() != null;
+
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -403,11 +411,30 @@ namespace RuuviTagApp.Controllers
                 TempData["GeneralError"] = "Tag not found.";
                 return RedirectToAction("Index");
             }
-            if (tag.UserId != User.Identity.GetUserId())
+            string userID = User.Identity.GetUserId();
+            if (tag.UserId != userID)
             {
                 TempData["GeneralError"] = "You don't have access to that tag.";
                 return RedirectToAction("Index");
             }
+            List<UserTagListModel> availabeGroups = new List<UserTagListModel>();
+            foreach (var group in await GetUsersGroupsWithRowsAsync(userID))
+            {
+                bool canAddTagTo = true;
+                foreach (var row in group.TagListRowModels)
+                {
+                    if (row.TagId == tagID)
+                    {
+                        canAddTagTo = false;
+                        break;
+                    }
+                }
+                if (canAddTagTo)
+                {
+                    availabeGroups.Add(group);
+                }
+            }
+            ViewBag.UserGroups = availabeGroups;
             return PartialView(tag);
         }
 
@@ -453,6 +480,32 @@ namespace RuuviTagApp.Controllers
         }
 
         [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddTagToList(AddTagToListModel row)
+        {
+            if (ModelState.IsValid)
+            {
+                string userID = User.Identity.GetUserId();
+                if (!await UserHasTagIdAsync(userID, row.TagsId) && !await UserHasGroupIdAsync(userID, row.ListsId))
+                {
+                    TempData["GeneralError"] = "You don't have permission to do that.";
+                    return RedirectToAction("Index");
+                }
+                if (await TagIsInListAsync(row.TagsId, row.ListsId))
+                {
+                    TempData["GeneralError"] = "Tag is already in that group.";
+                    return RedirectToAction("Index");
+                }
+                db.TagListRowModels.Add(new TagListRowModel { ListId = row.ListsId, TagId = row.TagsId });
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            TempData["GeneralError"] = "Something went wrong with adding tag to group. Please try again.";
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
         public async Task<ActionResult> Groups()
         {
             ViewBag.Errors = TempData["GeneralGroupsErrors"];
@@ -476,6 +529,7 @@ namespace RuuviTagApp.Controllers
 
         private async Task<List<UserTagListModel>> GetUsersGroupsWithRowsAsync(string userID)
             => await db.UserTagListModels.Where(g => g.UserId == userID).Include(r => r.TagListRowModels).ToListAsync();
+        
         private async Task<List<UserTagListModel>> GetUsersGroupsAsync(string userID)
             => await db.UserTagListModels.Where(l => l.UserId == userID).ToListAsync();
 
