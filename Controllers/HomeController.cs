@@ -20,7 +20,7 @@ namespace RuuviTagApp.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
-        
+
         public async Task<ActionResult> Index(string tagMac)
         {
             ViewBag.ShowRegisterModal = TempData["ShowRegisterModal"];
@@ -33,6 +33,10 @@ namespace RuuviTagApp.Controllers
             ViewBag.apiTempData = TempData["apiTempData"];
             ViewBag.apiHumData = TempData["apiHumData"];
             ViewBag.apiPressData = TempData["apiPressData"];
+
+            // Get the time when site was loaded (when api was called) in milliseconds
+            long currentTimeMs = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            ViewBag.apiCallTime = currentTimeMs;
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
@@ -265,7 +269,7 @@ namespace RuuviTagApp.Controllers
                             AlertTypeId = (int)alarmTypeId,
                             TagId = (int)tagID,
                             AlertLimit = (double)pi.GetValue(alert)
-                        }); 
+                        });
                     }
                     if (NoAlertsAdded)
                     {
