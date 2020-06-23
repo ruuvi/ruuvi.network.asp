@@ -37,6 +37,7 @@ namespace RuuviTagApp.Controllers
             // Get the time when site was loaded (when api was called) in milliseconds
             long currentTimeMs = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             ViewBag.apiCallTime = currentTimeMs;
+            string userID = string.Empty;
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
@@ -66,7 +67,7 @@ namespace RuuviTagApp.Controllers
             }
             else if (Request.IsAuthenticated)
             {
-                string userID = User.Identity.GetUserId();
+                userID = User.Identity.GetUserId();
                 List<RuuviTagModel> userTags = await GetUserTagsAsync(userID);
                 ViewBag.UserTagsList = userTags;
                 ViewBag.UserGroups = await GetUsersGroupsAsync(userID);
@@ -94,6 +95,8 @@ namespace RuuviTagApp.Controllers
                     // When more thigs are added to settings "TagName" will need to be changed to 'string.Empty'.
                     ModelState.AddModelError("TagName", e);
                 }
+                ViewBag.AvailableGroups = await GetAvailableGroupsForTag(tag.TagId, userID);
+                ViewBag.Id = tag.TagId;
                 return View(tag);
             }
 
@@ -421,6 +424,12 @@ namespace RuuviTagApp.Controllers
                 TempData["GeneralError"] = "You don't have access to that tag.";
                 return RedirectToAction("Index");
             }
+            ViewBag.AvailableGroups = await GetAvailableGroupsForTag(tagID, userID);
+            return PartialView(tag);
+        }
+
+        private async Task<List<UserTagListModel>> GetAvailableGroupsForTag(int? tagID, string userID)
+        {
             List<UserTagListModel> availabeGroups = new List<UserTagListModel>();
             foreach (var group in await GetUsersGroupsWithRowsAsync(userID))
             {
@@ -438,8 +447,8 @@ namespace RuuviTagApp.Controllers
                     availabeGroups.Add(group);
                 }
             }
-            ViewBag.UserGroups = availabeGroups;
-            return PartialView(tag);
+
+            return availabeGroups;
         }
 
         [Authorize]

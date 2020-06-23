@@ -39,7 +39,7 @@
         </div>
     </div>
 }
-@if (ViewBag.UserGroups.Count > 0)
+@if (ViewBag.AvailableGroups != null && ViewBag.AvailableGroups.Count > 0)
 {
     @Html.Partial("~/Views/Home/_AddTagToGroup.cshtml", new RuuviTagApp.ViewModels.AddTagToListModel())
 }

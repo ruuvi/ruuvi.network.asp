@@ -385,6 +385,12 @@ else
             }
             let showTagSettings = @((ViewBag.ShowTagSettings ?? false).ToString().ToLower());
             if (showTagSettings) {
+                let tagsId = @(ViewBag.Id ?? 0);
+                if (tagsId > 0) {
+                    $('#TagsId').val(tagsId);
+                    selectedTagId = tagsId;
+                    tagIdInModal = tagsId;
+                }
                 $('#tagSettingsModal').modal('show');
             }
             userHasEmail = @((ViewBag.UserHasEmail ?? false).ToString().ToLower());
