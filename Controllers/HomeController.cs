@@ -130,8 +130,8 @@ namespace RuuviTagApp.Controllers
                 }
 
                 dataTimeList = "'" + string.Join("','", lstapiData.Select(n => n.Time.TimeOfDay).ToList()) + "'";
-                dataTempList = string.Join(",", lstapiData.Select(n => n.Data.temperature).ToList());
-                dataHumList = string.Join(",", lstapiData.Select(n => n.Data.humidity).ToList());
+                dataTempList = "'" + string.Join("','", lstapiData.Select(n => n.Data.temperature).ToList()) + "'";
+                dataHumList = "'" + string.Join("','", lstapiData.Select(n => n.Data.humidity).ToList()) + "'";
                 dataPressList = string.Join(",", lstapiData.Select(n => n.Data.pressure).ToList());
 
                 TempData["apiTime"] = dataTimeList;
