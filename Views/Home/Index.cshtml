@@ -98,8 +98,8 @@ else
         @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alert)
     }@*End of content visible only when user is logged in*@
 
-    @if (ViewBag.TagData != null || ViewBag.Test == true)
-    {
+    <div id="chartarea" style="display:none">
+        {
         //// Old version to get the last data from RuuviTag
         //foreach (var item in ViewBag.TagData)
         //{
@@ -167,7 +167,8 @@ else
                 <a class="btn btn-general mt-5" href="/Home/Index">Sign in or search another RuuviTag</a>
             }
         </div>
-    }
+
+    </div>
 </div>
 
 @section scripts{
@@ -178,7 +179,7 @@ else
         if (isLogged == "False") {
             //Line chart script for temperature
             var ctx = document.getElementById('tempchart').getContext('2d');
-            var tempChart = new Chart(ctx, {
+            window.tempChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labelTime,
@@ -204,6 +205,7 @@ else
                     }
                 }
             });
+            
 
             var ctxm = document.getElementById('tempchartmodal').getContext('2d');
             var tempChartModal = new Chart(ctxm, {
@@ -235,7 +237,7 @@ else
 
             //Line chart script for humidity
             var ctz = document.getElementById('humchart').getContext('2d');
-            var humidityChart = new Chart(ctz, {
+            window.humidityChart = new Chart(ctz, {
                 type: 'line',
                 data: {
                     labels: labelTime,
@@ -292,7 +294,7 @@ else
 
             //Line chart script for pressure
             var ctc = document.getElementById('presschart').getContext('2d');
-            var pressChart = new Chart(ctc, {
+            window.pressChart = new Chart(ctc, {
                 type: 'line',
                 data: {
                     labels: labelTime,
@@ -505,7 +507,11 @@ else
                     labelHum.push(results[i].Data.humidity);
                     labelPress.push(results[i].Data.pressure);
                 }
+                document.getElementById("chartarea").style.display = "block";
             });
+            window.tempChart.update();
+            window.humidityChart.update();
+            window.pressChart.update();
         }
 
         function setSelectedGroupId(groupid) {

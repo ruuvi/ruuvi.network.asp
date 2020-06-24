@@ -228,7 +228,7 @@ namespace RuuviTagApp.Controllers
                 lstapiData.Add(ApiRowData);
             }
 
-            ViewBag.Test = true;
+            
             return Json(lstapiData, JsonRequestBehavior.AllowGet);
         }
 
