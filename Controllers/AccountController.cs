@@ -148,19 +148,14 @@ namespace RuuviTagApp.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            if (result == SignInStatus.Success)
+            using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                using (ApplicationDbContext db = new ApplicationDbContext())
-                {
-                    string userID = User.Identity.GetUserId();
-                    var user = db.Users.Find(userID);
-                    user.Email = loginInfo.Email;
-                    await db.SaveChangesAsync();
-                }
-                return LogOff();
+                string userID = User.Identity.GetUserId();
+                var user = db.Users.Find(userID);
+                user.Email = loginInfo.Email;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
             }
-            return View("Error");
         }
 
         //
