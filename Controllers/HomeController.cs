@@ -204,6 +204,35 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        public async Task<ActionResult> LoggedInApiData(int? TagID)
+        {
+            if (TagID == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var tag = db.RuuviTagModels.Find(TagID);
+
+            List<WhereOSApiRuuvi> apiResponse = await GetTagData(tag.TagMacAddress);
+
+            List<UnpackData> lstapiData = new List<UnpackData>();
+
+            foreach (WhereOSApiRuuvi apiRuuviTag in apiResponse)
+            {
+                UnpackData ApiRowData = new UnpackData();
+                UnpackRawData RawDataRow = new UnpackRawData();
+                RawDataRow.UnpackAllData(apiRuuviTag.data);
+                ApiRowData.Data = RawDataRow;
+                ApiRowData.Time = apiRuuviTag.time;
+                lstapiData.Add(ApiRowData);
+            }
+
+            ViewBag.Test = true;
+            return Json(lstapiData, JsonRequestBehavior.AllowGet);
+        }
+
+
         private async Task<List<RuuviTagModel>> GetUserTagsAsync(string userID) => await (from t in db.RuuviTagModels
                                                                                           where t.UserId == userID
                                                                                           select t).ToListAsync();

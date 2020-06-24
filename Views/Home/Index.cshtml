@@ -98,7 +98,7 @@ else
         @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alert)
     }@*End of content visible only when user is logged in*@
 
-    @if (ViewBag.TagData != null)
+    @if (ViewBag.TagData != null || ViewBag.Test == true)
     {
         //// Old version to get the last data from RuuviTag
         //foreach (var item in ViewBag.TagData)
@@ -490,6 +490,22 @@ else
                     settingsBtn.style.display = "block";
                 }
             }
+
+            let url = "/Home/LoggedInApiData/?TagID=" + tagid;
+            $.ajax({
+                url: url,
+                dataType: 'json',
+            }).done(function (results) {
+                console.log(results);
+
+                var labelTime = [], labelTemp = [], labelHum = [], labelPress = [];
+                for (let i = 0; i < results.lenght; i++) {
+                    labelTime.push(results[i].Time);
+                    labelTemp.push(results[i].Data.temperature);
+                    labelHum.push(results[i].Data.humidity);
+                    labelPress.push(results[i].Data.pressure);
+                }
+            });
         }
 
         function setSelectedGroupId(groupid) {
