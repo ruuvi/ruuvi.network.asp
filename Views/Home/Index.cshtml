@@ -378,7 +378,7 @@ else
 
             document.getElementById("lastUpdated").innerHTML = lastUpdated;
         }
-        
+
         $(window).on('load', function () {
             let showRegisterModal = @((ViewBag.ShowRegisterModal ?? false).ToString().ToLower());
             if (showRegisterModal) {
@@ -513,7 +513,7 @@ else
                     labelTemp.push(results[i].Data.temperature);
                     labelHum.push(results[i].Data.humidity);
                     labelPress.push(results[i].Data.pressure);
-                    
+
                 }
                 console.log(labelTime);
                 pushToCharts(labelTime, labelTemp, labelHum, labelPress, tagid);
@@ -565,7 +565,8 @@ else
 
         function setGroupId(selectedGroup) {
             let label = document.getElementById('textForTagToGroup');
-            label.innerHTML = `Add tag to group: ${selectedGroup.text}`;
+            //label.innerHTML = `Add tag to group: ${selectedGroup.text}`;
+            label.innerHTML = `${selectedGroup.text}`;
             $('#ListsId').val(selectedGroup.id);
             let container = document.getElementById('addToGroupSubmitDiv');
             container.style.display = 'block';

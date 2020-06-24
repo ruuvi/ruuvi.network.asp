@@ -815,3 +815,8 @@ label {
     opacity: 0.8;
     float: right;
 }
+
+#containerAddTagToGroup {
+    padding-left: 0;
+    margin-left: 0;
+}
