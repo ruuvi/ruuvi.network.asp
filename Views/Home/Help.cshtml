@@ -54,9 +54,9 @@
         <div class="col-12 col-help">
             <h1 id="google-authentication">Google Authentication</h1>
             <p>In order to spare you from creating a yet another user account, you can authenticate by using your very own Google Account.</p>
-            <p>While authenticating first time, we are giving you an option to save or not to save your email address to our database. If you choose not to save the email address, unfortunately you will not be able to create any email alerts for your RuuviTags within this application. This is an irreversible option, so choose carefully.</p>
-            <p>To revoke authentication access, please head to Google Security settings.</p>
-            <p>More about Google Account permissions <a href=https://support.google.com/accounts/answer/112802 target=”blank”>here (Google)</a>.</p>
+            <p>While authenticating first time, we are giving you an option to save or not to save your email address to our database. If you choose not to save the email address, unfortunately you will not be able to create any email alerts for your RuuviTags within this application. You can, however, save your email address to the database later in <a href="/Home/AppSettings">App settings</a>.</p>
+            <p>To revoke authentication access, please head to Google Security settings. More about Google Account permissions <a href=https://support.google.com/accounts/answer/112802 target=”blank”>here (Google)</a>.</p>
+            <p>To delete your authenticated account and all data related to it within this application, see <a href="/Home/AppSettings">App settings</a>.</p>
         </div>
 
         <div class="col-12 col-help">
@@ -64,12 +64,13 @@
             <p>Each RuuviTag device has a unique ID. The ID is a very same as the devices MAC address. The ID looks something like this: c04db14ab635 or c0:4d:b1:4a:b6:35. You can search your RuuviTags with our without colons within this application.</p>
             <p>You can find the RuuviTag ID from the mobile application under the Tag Settings.</p>
             <p>Please note, that when you are searching or saving a RuuviTag, this application checks whether the given ID is an actual RuuviTag or not. If the given ID or MAC address is not from a RuuviTag or if the RuuviTag has not sent any data to the cloud, you are not able to save or display any data from this RuuviTag. Please see <a href="#helpRuuviLinks">these options</a> or visit <a href="https://ruuvi.com" target="blank">ruuvi.com</a> to get help with this issue.</p>
+            <p>This application currently supports Data format 3 (RAWv1) and Data format 5 (RAWv2). If you have trouble finding your RuuviTag, please make sure it has a proper firmware. Read more <a href="https://lab.ruuvi.com/ruuvitag-fw/" target="blank">here</a>.</p>
         </div>
 
         <div class="col-12 col-help">
             <h1 id="alerts">Email Alerts</h1>
-            <p>Please note that in order to set up alerts, you must have had to allow us to save your email address to our database during first time Google Authentication.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam facilisis nisl placerat velit placerat, vitae finibus felis lacinia. Praesent et nisl lectus. Suspendisse lorem erat, faucibus sit amet sollicitudin ac, aliquam vel velit. Phasellus vehicula interdum hendrerit. Cras sagittis massa urna, nec ultrices dolor finibus eget. Etiam pharetra dictum mauris sed porttitor. Curabitur in augue vulputate nisl sollicitudin iaculis. Etiam vestibulum, ex lacinia venenatis accumsan, eros nisi fermentum orci, quis elementum enim mi sit amet lorem.</p>
+            <p>Please note that in order to set up alerts, you must have had to allow us to save your email address to our database during first time Google Authentication or in <a href="/Home/AppSettings">App settings</a>.</p>
+            <p>You can set up low and high limit values to temperature, humidity and air pressure. Alerts are checked on the hour and they are sent via email.</p>
         </div>
 
         <div class="col-12 col-help">

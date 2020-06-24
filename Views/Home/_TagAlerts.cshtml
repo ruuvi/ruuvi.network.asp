@@ -3,40 +3,89 @@
 <h4>Set up RuuviTag alerts</h4>
 <p>Set up alerts and receive a notification via email if something is going on with your RuuviTag.*</p>
 <p class="font-italic">Notifications are not sent realtime. Alert limit values are checked on the hour.</p>
-    <div class="container">
-        <div>
-            <ul id="existingAlerts"></ul>
+<div class="container">
+    @using (Html.BeginForm("AddTagAlert", "Home", FormMethod.Post, new { @id = "addTagAlarmForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.TemperatureHigh)
+        @Html.HiddenFor(model => model.TemperatureLow)
+        @Html.HiddenFor(model => model.HumidityHigh)
+        @Html.HiddenFor(model => model.HumidityLow)
+        @Html.HiddenFor(model => model.PressureHigh)
+        @Html.HiddenFor(model => model.PressureLow)
+    }
+    <p class="text-muted ml-0">Please note that sliders are reset, because they are new values. Only by touching a slider will update it's value.</p>
+    <div class="row" id="temperatureAlert">
+        <div class="col-lg-12">
+            <a class="btn btn-header-collapse" data-toggle="collapse" href="#collapseTempAlert" role="button" aria-expanded="false" aria-controls="collapseTempAlert">Temperature</a>
         </div>
-        @using (Html.BeginForm("AddTagAlert", "Home", FormMethod.Post, new { @id = "addTagAlarmForm" }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(model => model.TemperatureHigh)
-            @Html.HiddenFor(model => model.TemperatureLow)
-            @Html.HiddenFor(model => model.HumidityHigh)
-            @Html.HiddenFor(model => model.HumidityLow)
-            @Html.HiddenFor(model => model.PressureHigh)
-            @Html.HiddenFor(model => model.PressureLow)
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Temperature</h2>
-                    <p>From <span id="tempLowValue"></span>&#176;C to <span id="tempHighValue"></span>&#176;C</p>
-                </div>
-                <div class="col-lg-6">
-                    <label for="tempLow">Lowest</label>
-                    <input type="range" class="custom-range" id="tempLow" min="-163" max="163">
-                    <p id="tempLowValue"></p>
-                </div>
-
-                <div class="col-lg-6">
-                    <label for="tempHigh">Highest</label>
-                    <input type="range" class="custom-range" id="tempHigh" min="-163" max="163">
-                    <p id="tempHighValue"></p>
-                </div>
+        <div class="collapse collapse-ruuvi" id="collapseTempAlert">
+            <div class="col-lg-12">
+                <p>Alert when less than <span id="tempLowValue"></span>&#176;C and more than <span id="tempHighValue"></span>&#176;C</p>
             </div>
-        }
+            <div class="col-lg-6">
+                <label for="tempLow">Lowest</label>
+                <input type="range" class="custom-range range-ruuvi" id="tempLow" min="-163" max="163">
+                <p id="tempLowValue"></p>
+            </div>
+
+            <div class="col-lg-6">
+                <label for="tempHigh">Highest</label>
+                <input type="range" class="custom-range range-ruuvi" id="tempHigh" min="-163" max="163">
+                <p id="tempHighValue"></p>
+            </div>
+        </div>
     </div>
+    <div class="row" id="humidityAlert">
+        <div class="col-lg-12">
+            <a class="btn btn-header-collapse" data-toggle="collapse" href="#collapseHumAlert" role="button" aria-expanded="false" aria-controls="collapseHumAlert">Humidity</a>
+        </div>
+        <div class="collapse collapse-ruuvi" id="collapseHumAlert">
+            <div class="col-lg-12">
+                <p>Alert when less than <span id="humLowValue"></span>% and more than <span id="humHighValue"></span>%</p>
+            </div>
+            <div class="col-lg-6">
+                <label for="humLow">Lowest</label>
+                <input type="range" class="custom-range range-ruuvi" id="humLow" min="0" max="100">
+                <p id="humLowValue"></p>
+            </div>
+
+            <div class="col-lg-6">
+                <label for="humHigh">Highest</label>
+                <input type="range" class="custom-range range-ruuvi" id="humHigh" min="0" max="100">
+                <p id="humHighValue"></p>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="pressureAlert">
+        <div class="col-lg-12">
+            <a class="btn btn-header-collapse" data-toggle="collapse" href="#collapsepressureAlert" role="button" aria-expanded="false" aria-controls="collapsepressureAlert">Air pressure</a>
+        </div>
+        <div class="collapse collapse-ruuvi" id="collapsepressureAlert">
+            <div class="col-lg-12">
+                <p>Alert when less than <span id="pressLowValue"></span>hPa and more than <span id="pressHighValue"></span>hPa</p>
+            </div>
+            <div class="col-lg-6">
+                <label for="pressLow">Lowest</label>
+                <input type="range" class="custom-range range-ruuvi" id="pressLow" min="300" max="1100" step="10">
+                <p id="pressLowValue"></p>
+            </div>
+
+            <div class="col-lg-6">
+                <label for="pressHigh">Highest</label>
+                <input type="range" class="custom-range range-ruuvi" id="pressHigh" min="300" max="1100" step="10">
+                <p id="pressHighValue"></p>
+            </div>
+        </div>
+    </div>
+    <a class="btn btn-header-collapse" data-toggle="collapse" href="#collapseAlertTable" role="button" aria-expanded="false" aria-controls="collapseAlertTable">Manage active alerts</a>
+    <div class="collapse" id="collapseAlertTable">
+        <div id="existingAlerts"></div>
+    </div>
+</div>
 
 <script>
+    // Temperature
     var tempHighSlider = document.getElementById("tempHigh");
     var tempHighOutput = document.getElementById("tempHighValue");
     tempHighOutput.innerHTML = tempHighSlider.value;
@@ -54,4 +103,43 @@
         tempLowOutput.innerHTML = this.value;
         $('#TemperatureLow').val(this.value);
     }
+
+    // Humidity
+    var humHighSlider = document.getElementById("humHigh");
+    var humHighOutput = document.getElementById("humHighValue");
+    humHighOutput.innerHTML = humHighSlider.value;
+
+    var humLowSlider = document.getElementById("humLow");
+    var humLowOutput = document.getElementById("humLowValue");
+    humLowOutput.innerHTML = humLowSlider.value;
+
+    humHighSlider.oninput = function () {
+        humHighOutput.innerHTML = this.value;
+        $('#HumidityHigh').val(this.value);
+    }
+
+    humLowSlider.oninput = function () {
+        humLowOutput.innerHTML = this.value;
+        $('#HumidityLow').val(this.value);
+    }
+
+    // Air pressure
+    var pressHighSlider = document.getElementById("pressHigh");
+    var pressHighOutput = document.getElementById("pressHighValue");
+    pressHighOutput.innerHTML = pressHighSlider.value;
+
+    var pressLowSlider = document.getElementById("pressLow");
+    var pressLowOutput = document.getElementById("pressLowValue");
+    pressLowOutput.innerHTML = pressLowSlider.value;
+
+    pressHighSlider.oninput = function () {
+        pressHighOutput.innerHTML = this.value;
+        $('#PressureHigh').val(this.value);
+    }
+
+    pressLowSlider.oninput = function () {
+        pressLowOutput.innerHTML = this.value;
+        $('#PressureLow').val(this.value);
+    }
 </script>
+

@@ -169,6 +169,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -180,6 +181,7 @@
     <Compile Include="Models\TagAlertModel.cs" />
     <Compile Include="Models\TagAlertType.cs" />
     <Compile Include="Models\TagListRowModel.cs" />
+    <Compile Include="Models\UnpackData.cs" />
     <Compile Include="Models\UnpackRawData.cs" />
     <Compile Include="Models\UserTagListModel.cs" />
     <Compile Include="Models\WhereOSApiRuuvi.cs" />
@@ -187,6 +189,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AddAlertModel.cs" />
     <Compile Include="ViewModels\AddTagModel.cs" />
+    <Compile Include="ViewModels\AddTagToListModel.cs" />
     <Compile Include="ViewModels\MacAddressModel.cs" />
     <Compile Include="ViewModels\NewTagListModel.cs" />
   </ItemGroup>
@@ -356,6 +359,11 @@
     <Content Include="Views\Home\Groups.cshtml" />
     <Content Include="Views\Home\_GroupNav.cshtml" />
     <Content Include="Views\Home\_AddGroupModal.cshtml" />
+    <Content Include="Views\Home\_GetAllAlerts.cshtml" />
+    <Content Include="Views\Home\_AddTagToGroup.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\ServerError.cshtml" />
+    <Content Include="Views\Error\Rejected.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -365,6 +373,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

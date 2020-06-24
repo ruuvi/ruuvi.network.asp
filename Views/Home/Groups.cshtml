@@ -3,11 +3,11 @@
 @{
     ViewBag.Title = "RuuviTag groups";
     @Html.Partial("~/Views/Home/_GroupNav.cshtml")
-    //ListNameModel addList = Model is ListNameModel ? Model : new ListNameModel();
     @Html.Partial("~/Views/Home/_AddGroupModal.cshtml", new NewTagListModel())
 }
 
 <div class="container body-content" id="body-content">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="row" id="userGroups">
         @foreach (var item in Model)
         {
@@ -15,16 +15,16 @@
                 <div class="card card-ruuvi text-center">
                     <div class="card-body">
                         <h5 class="card-title-ruuvi"><a title="Click to view RuuviTags" data-toggle="collapse" href="#collapseGroup-@item.UserTagListId" role="button" aria-expanded="false" aria-controls="collapseGroup" id="@item.ListName">@item.ListName</a></h5>
-
-                        @if (@item.TagListRowModels.Count > 0)
-                        {
-                            <p>@item.TagListRowModels.Count RuuviTags</p>
-                            <div class="collapse" id="collapseGroup-@item.UserTagListId">
+                        <p>@item.TagListRowModels.Count RuuviTags</p>
+                        <div class="collapse" id="collapseGroup-@item.UserTagListId">
+                            @if (item.TagListRowModels.Count > 0)
+                            {
                                 <table class="table table-ruuvi table-ruuvi-hover table-sm">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">RuuviTag</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -38,18 +38,27 @@
                                                     <tr>
                                                         <td>@tableRow</td>
                                                         <td>@(tag.TagName ?? tag.TagMacAddress)</td>
+                                                        <td>
+                                                            @using (Html.BeginForm())
+                                                            {
+                                                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                                                @Html.AntiForgeryToken()
+                                                                <button class="btn btn-sm btn-general" value="@tagRow.ListRowId" name="listRowID">Remove</button>
+                                                            }
+                                                        </td>
                                                     </tr>
                                                 }
                                             }
                                         }
                                     </tbody>
                                 </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <p>Zero RuuviTags in this group</p>
-                        }
+                            }
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" name="tagListID" value="@item.UserTagListId" class="btn btn-general">Delete group</button>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

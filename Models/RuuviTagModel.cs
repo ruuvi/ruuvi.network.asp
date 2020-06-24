@@ -23,6 +23,8 @@ namespace RuuviTagApp.Models
         [StringLength(128)]
         public string UserId { get; set; }
         [ForeignKey("UserId")]
-        public ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ICollection<TagListRowModel> UserTagListRows { get; set; }
+        public virtual ICollection<TagAlertModel> TagAlerts { get; set; }
     }
 }

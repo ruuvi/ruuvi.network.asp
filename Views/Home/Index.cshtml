@@ -3,12 +3,27 @@
 @using RuuviTagApp.ViewModels;
 @{
     ViewBag.Title = "Home";
-    if (Request.IsAuthenticated)
-    {
-        ViewBag.Msg = $"Hello {User.Identity.GetUserName()}!";
-    }
+
     MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
     string containerType;
+
+    <script>
+        //Putting the datas viewbags into "let" variables
+        let labelTime = [@Html.Raw(ViewBag.apiTime)];
+        let labelTemp = [@Html.Raw(ViewBag.apiTempData)];
+        let labelHum = [@Html.Raw(ViewBag.apiHumData)];
+        let labelPress = [@Html.Raw(ViewBag.apiPressData)];
+    </script>
+
+    // Variables to display latest RuuviTag data
+    string lastTemp = "";
+    string lastHumi = "";
+    string lastPressure = "";
+
+    // Partial views
+    @Html.Partial("~/Views/Home/_TemperatureModal.cshtml")
+    @Html.Partial("~/Views/Home/_HumidityModal.cshtml")
+    @Html.Partial("~/Views/Home/_AirpressureModal.cshtml")
 }
 
 
@@ -17,7 +32,7 @@
 {
     @Html.Partial("~/Views/Home/_TagNav.cshtml")
 
-    if(!ViewBag.UserHasEmail)
+    if (!ViewBag.UserHasEmail)
     {
         <script>
             document.getElementById("btn-tagAlerts").classList.add("disabled");
@@ -37,12 +52,7 @@ else
     containerType = "container";
 }
 <div class="@containerType body-content" id="body-content">
-    <div class="row">
-        @*Remove on publish*@
-        <div class="col-lg-12">
-            <p id="alphaInfo">This is alpha version - expect alpha results.</p>
-        </div>
-    </div>
+    <p class="text-danger">@ViewBag.GeneralError</p>
     @* Content visible only when user is not logged in *@
     @if (!Request.IsAuthenticated && ViewBag.TagData == null)
     {
@@ -66,14 +76,14 @@ else
     @* Content visible only when user is logged in *@
     @if (Request.IsAuthenticated)
     {
-        <div id="infoSelectTag">
-            <p>To display data please choose or add a RuuviTag</p>
+        <div id="infoSelectedItem">
+            <p>Select a RuuviTag or a group to display data</p>
         </div>
 
         <div class="home-selectedTag">
-            <h2 id="headerDisplayingTag"></h2>
+            <h2 id="userSelectionHeader"></h2>
         </div>
-        
+
         AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
         @Html.Partial("~/Views/Home/_AddTagModal.cshtml", add)
         if (Model is RuuviTagModel tag)
@@ -84,21 +94,33 @@ else
         {
             <div id="tagSettingsModal"></div>
         }
-        AddAlertModel alarm = Model is AddAlertModel ? Model : new AddAlertModel();
-        @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alarm)
+        AddAlertModel alert = Model is AddAlertModel ? Model : new AddAlertModel();
+        @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alert)
     }@*End of content visible only when user is logged in*@
 
-    @if (ViewBag.TagData != null)
-    {
-        //Example data
-        <h1 class="text-danger" style="opacity:0.6">This is dummy data</h1>
+    <div id="chartarea" style="display:none">
+        @if (ViewBag.TagData != null)
+        {
+            //// Old version to get the last data from RuuviTag
+            //foreach (var item in ViewBag.TagData)
+            //{
+            //    lastTemp = item.Data.temperature;
+            //    lastHumi = item.Data.humidity;
+            //    lastPressure = item.Data.pressure;
+            //}
+
+            // Get the last data from RuuviTag
+            lastTemp = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.temperature;
+            lastHumi = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.humidity;
+            lastPressure = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.pressure;
+        }
         <div class="RuuviTagData">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="row" id="ruuviTagTemperature">
                         <div class="col-lg-12 col-sm-12">
                             <a class="btn btn-tagdata-temp" id="btn-TagTemp" onclick="openTempChartModal()" title="View tag temperature"></a>
-                            <p class="tagdata-value">38.26</p> <span class="celsius">&#176;C</span>
+                            <p class="tagdata-value">@lastTemp</p> <span class="celsius">&#176;C</span>
                             <p class="tagdata-header">Temperature</p>
                             <hr class="tagdata-hr" />
                         </div>
@@ -106,7 +128,7 @@ else
                     <div class="row" id="ruuviTagHumidity">
                         <div class="col-lg-12 col-sm-12">
                             <a class="btn btn-tagdata-hum" id="btn-TagHum" onclick="openHumiChartModal()" title="View tag humidity"></a>
-                            <p class="tagdata-value">85.5</p> <span class="percent">%</span>
+                            <p class="tagdata-value">@lastHumi</p> <span class="percent">%</span>
                             <p class="tagdata-header">Humidity</p>
                             <hr class="tagdata-hr" />
                         </div>
@@ -114,9 +136,10 @@ else
                     <div class="row" id="ruuviTagAirPressure">
                         <div class="col-lg-12 col-sm-12">
                             <a class="btn btn-tagdata-air" id="btn-TagAir" onclick="openAirChartModal()" title="View tag air pressure"></a>
-                            <p class="tagdata-value">1015.36</p> <span class="hpa">hPa</span>
+                            <p class="tagdata-value">@lastPressure</p> <span class="hpa">hPa</span>
                             <p class="tagdata-header">Air pressure</p>
                             <hr class="tagdata-hr" />
+                            <p id="lastUpdated">Not calculated</p>
                         </div>
                     </div>
                 </div>
@@ -126,17 +149,18 @@ else
             <p class="tip d-lg-none">To view charts, please <a class="link" onclick="highlightIcons()" role="button">press the icons</a> above.</p>
             <div id="desktopCharts">
                 <div class="row">
-                    <div class="col-lg-4">
-                        <h1>Temp chart here</h1>
-                        @Html.Partial("~/Views/Home/_TemperatureChart.cshtml")
+                    <div class="col-lg-12 mt-2">
+                        <h1 class="tagdata-header">Temperature</h1>
+                        <canvas id="tempchart"></canvas>
                     </div>
-                    <div class="col-lg-4">
-                        <h1>Humidity chart here</h1>
-                        @Html.Partial("~/Views/Home/_HumidityChart.cshtml")
+                    <div class="col-lg-12 mt-5">
+                        <h1 class="tagdata-header">Humidity</h1>
+                        <canvas id="humchart"></canvas>
                     </div>
-                    <div class="col-lg-4">
-                        <h1>Air chart here</h1>
-                        @Html.Partial("~/Views/Home/_AirpressureChart.cshtml")
+                    <div class="col-lg-12 mt-5">
+                        <h1 class="tagdata-header">Air pressure</h1>
+                        <canvas id="presschart"></canvas>
+
                     </div>
                 </div>
             </div>
@@ -146,16 +170,225 @@ else
             }
         </div>
 
-        // Partial views
-        @Html.Partial("~/Views/Home/_TemperatureModal.cshtml")
-        @Html.Partial("~/Views/Home/_HumidityModal.cshtml")
-        @Html.Partial("~/Views/Home/_AirpressureModal.cshtml")
-    }
+    </div>
 </div>
 
+@{
+    if (ViewBag.TagData != null)
+    {
+        <script>
+            document.getElementById("chartarea").style.display = "block";
+        </script>
+    }
+}
+
 @section scripts{
+
     <script type="text/javascript">
-        var userHasEmail;
+        // For debugging
+        let isLogged = "@Request.IsAuthenticated";
+        if (isLogged == "False") {
+
+                //Line chart script for temperature
+                var ctx = document.getElementById('tempchart').getContext('2d');
+                var tempChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Temperature',
+                            data: labelTemp,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+
+                var ctxm = document.getElementById('tempchartmodal').getContext('2d');
+                var tempChartModal = new Chart(ctxm, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Temperature',
+                            data: labelTemp,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+
+                //Line chart script for humidity
+                var ctz = document.getElementById('humchart').getContext('2d');
+                var humidityChart = new Chart(ctz, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Humidity',
+                            data: labelHum,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+                var ctzm = document.getElementById('humchartmodal').getContext('2d');
+                var humidityChartModal = new Chart(ctzm, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Humidity',
+                            data: labelHum,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+                //Line chart script for pressure
+                var ctc = document.getElementById('presschart').getContext('2d');
+                var pressChart = new Chart(ctc, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Pressure',
+                            data: labelPress,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+                var ctcm = document.getElementById('presschartmodal').getContext('2d');
+                var pressChartModal = new Chart(ctcm, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Pressure',
+                            data: labelPress,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+                    // Get the last updated time
+        let lastUpdatedTimerInterval = 1000; // Defautl 1000 = 1 second
+        let lastUpdatedTimer = setInterval(lastUpdated, lastUpdatedTimerInterval);
+        function lastUpdated() {
+            let date = new Date();
+            let currentTime = date.getTime();
+            let apiCallTime = @((ViewBag.apiCallTime));
+            let timeDiff = Math.abs(apiCallTime - currentTime);
+            let secDiff = Math.ceil(timeDiff / (1000));
+            let lastUpdated = secDiff;
+
+            let sec = 1;
+            let min = 60 * sec;
+
+            if (secDiff < 1 * min) {
+                lastUpdated = "Updated " + secDiff + "s ago";
+            } else if (secDiff < 2 * min) {
+                lastUpdated = "Updated a minute ago";
+            } else if (secDiff >= 2 * min) {
+                lastUpdated = "Updated " + Math.round(secDiff / 60) + " minutes ago";
+            } else if (secDiff >= 60 * min) {
+                lastUpdatedTimerInterval = 900000; // After an hour, let's call the timer every 15min
+            }
+
+            document.getElementById("lastUpdated").innerHTML = lastUpdated;
+        }
+
         $(window).on('load', function () {
             let showRegisterModal = @((ViewBag.ShowRegisterModal ?? false).ToString().ToLower());
             if (showRegisterModal) {
@@ -167,6 +400,12 @@ else
             }
             let showTagSettings = @((ViewBag.ShowTagSettings ?? false).ToString().ToLower());
             if (showTagSettings) {
+                let tagsId = @(ViewBag.Id ?? 0);
+                if (tagsId > 0) {
+                    $('#TagsId').val(tagsId);
+                    selectedTagId = tagsId;
+                    tagIdInModal = tagsId;
+                }
                 $('#tagSettingsModal').modal('show');
             }
             userHasEmail = @((ViewBag.UserHasEmail ?? false).ToString().ToLower());
@@ -217,14 +456,15 @@ else
             $('#TagListDropDown a').on('click', function () {
                 var select = ($(this).text());
                 document.getElementById("btn-tagSettings").classList.remove("disabled"); // Enable button. Otherwise disabled
+
                 if (userHasEmail) {
                     document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
                 }
 
-                document.getElementById("headerDisplayingTag").style.display = "block"; // Displaying header for selected tag
-                document.getElementById("headerDisplayingTag").innerHTML = select; // Adding selected tag to the header
+                document.getElementById("userSelectionHeader").style.display = "block"; // Displaying header for selected item
+                document.getElementById("userSelectionHeader").innerHTML = select; // Adding selected item to the header
 
-                document.getElementById("infoSelectTag").style.display = "none";
+                document.getElementById("infoSelectedItem").style.display = "none";
             });
         });
 
@@ -240,29 +480,111 @@ else
             $.get(url, (data) => {
                 $('#tagSettingsModal').replaceWith(data);
                 tagIdInModal = selectedTagId;
+                $('#TagsId').val(selectedTagId);
                 $('#tagSettingsModal').modal('show');
             });
         });
 
-        //$('#btn-tagAlerts').click(function () {
-        //    let url = '/Home/GetAllAlerts/?tagID=' + setSelectedTagId;
-        //    $.get(url, (data) => {
-        //        if (data.length < 1) {
-        //            return;
-        //        }
-        //        let alertList = document.getElementById('existingAlerts');
-        //        data.forEach(x => {
-        //            let listNode = document.createElement('li');
-        //            let textNode = document.createTextNode(x[1]);
-        //        });
-        //    })
-        //});
+        $('#btn-tagAlerts').click(function () {
+            let url = '/Home/_GetAllAlerts/?tagID=' + selectedTagId;
+            $.get(url, (data) => {
+                $('#existingAlerts').html(data);
+            });
+        });
 
         function setSelectedTagId(tagid) {
             selectedTagId = tagid;
             if (userHasEmail) {
                 $('#addAlarmBtn').val(tagid);
+
+                // Checking if buttons are hidde (because a group was selected), and displaying them
+                let alertBtn = document.getElementById("btn-tagAlerts");
+                let settingsBtn = document.getElementById("btn-tagSettings");
+                if (alertBtn.style.display == "none" || settingsBtn.style.display == "none") {
+                    alertBtn.style.display = "block";
+                    settingsBtn.style.display = "block";
+                }
             }
+            let url;
+            if (dataInterval != 1) {
+                url = `/Home/LoggedInApiData/?TagID=${tagid}&interval=${dataInterval}`;
+            } else {
+                url = "/Home/LoggedInApiData/?TagID=" + tagid;
+            }
+            $.ajax({
+                url: url,
+                dataType: 'json',
+            }).done(function (results) {
+                console.log(results);
+
+                let labelTime = [], labelTemp = [], labelHum = [], labelPress = [];
+                for (let i = 0; i < results.lenght; i++) {
+                    labelTime.push(results[i].Time);
+                    labelTemp.push(results[i].Data.temperature);
+                    labelHum.push(results[i].Data.humidity);
+                    labelPress.push(results[i].Data.pressure);
+
+                }
+                console.log(labelTime);
+                pushToCharts(labelTime, labelTemp, labelHum, labelPress, tagid);
+                document.getElementById("chartarea").style.display = "block";
+
+            });
+
+            function pushToCharts(labelTime, DataTemp, labelHum, labelPress, tagid) {
+                var cot = document.getElementById('tempchart').getContext('2d');
+                var tempChartLogIn = new Chart(cot, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Temperature',
+                            data: DataTemp,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+        }
+
+        function setSelectedGroupId(groupid) {
+            selectedGroupId = groupid;
+            if (userHasEmail) {
+                //Hiding buttons in case user selected a group instead of a tag
+                let alertBtn = document.getElementById("btn-tagAlerts");
+                let settingsBtn = document.getElementById("btn-tagSettings");
+                alertBtn.style.display = "none";
+                settingsBtn.style.display = "none";
+            }
+        }
+
+        function setGroupId(selectedGroup) {
+            let label = document.getElementById('textForTagToGroup');
+            //label.innerHTML = `Add tag to group: ${selectedGroup.text}`;
+            label.innerHTML = `${selectedGroup.text}`;
+            $('#ListsId').val(selectedGroup.id);
+            let container = document.getElementById('addToGroupSubmitDiv');
+            container.style.display = 'block';
+        }
+
+        var dataInterval = 1;
+        function setDataInterval(selectedInterval) {
+            dataInterval = selectedInterval.dataset.interval;
         }
     </script>
 }

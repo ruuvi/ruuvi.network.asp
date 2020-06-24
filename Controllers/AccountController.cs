@@ -12,6 +12,7 @@ using System.Web.Mvc;
 namespace RuuviTagApp.Controllers
 {
     [Authorize]
+    [HandleError]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -128,6 +129,33 @@ namespace RuuviTagApp.Controllers
 
             ViewBag.ShowRegisterModal = true;
             return View("../Home/Index", model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RequestUpdateUserEmail()
+        {
+            return new ChallengeResult("Google", Url.Action("UpdateUserEmail", "Account"));
+        }
+
+        public async Task<ActionResult> UpdateUserEmail()
+        {
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            if (loginInfo == null)
+            {
+                return View("Error");
+            }
+
+            // Sign in the user with this external login provider if the user already has a login
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                string userID = User.Identity.GetUserId();
+                var user = db.Users.Find(userID);
+                user.Email = loginInfo.Email;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         //

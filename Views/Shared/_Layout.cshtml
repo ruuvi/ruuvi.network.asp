@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Careeria Ruuvi Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/chart")
+    @using Microsoft.AspNet.Identity;
+
+
 </head>
 @{
     //var currentUrl = Request.Url.AbsoluteUri;
@@ -90,7 +93,7 @@
                     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
                     {
                         @Html.AntiForgeryToken()
-                        <a class="btn btn-general" href="javascript:document.getElementById('logoutForm').submit()">Sign out</a>
+                        <a class="btn btn-general btn-sm mb-0 mt-1" href="javascript:document.getElementById('logoutForm').submit()">Sign out</a>
                     }
                 }
             </ul>
@@ -120,6 +123,14 @@
     <hr />
     <div class="container body-content">
         <footer class="footer-ruuvi text-center" id="footer-ruuvi">
+            <div style="opacity:0.9">
+                @*Function to tell the user he is logged in with "X" user*@
+                @if (Request.IsAuthenticated)
+                {
+                    ViewBag.Msg = $"Greetings, {User.Identity.GetUserName()}";
+                }
+                @ViewBag.Msg
+            </div>
             <p>ALPHA VERSION</p>
             <div class="footer-ruuvi-logo">
                 <img src="~/Images/web-ruuvi-logo-nega.png" width="130" height="25" alt="Ruuvi logo">
@@ -225,6 +236,8 @@
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         }
+
+
     </script>
 
     @Scripts.Render("~/bundles/jquery")

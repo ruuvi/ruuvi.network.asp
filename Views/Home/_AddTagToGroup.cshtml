@@ -1,0 +1,41 @@
+﻿@model RuuviTagApp.ViewModels.AddTagToListModel
+
+
+<div class="container" id="containerAddTagToGroup">
+    <div class="row">
+        <div class="col-6">
+            <div class="dropdown">
+                <button class="btn btn-tagdropdown dropdown-toggle" type="button" id="UserGroupsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="~/SVG/web-ruuvi-eye-nega.svg" width="28" height="28" alt="Ruuvi logo">
+                    Groups
+                </button>
+                <div class="dropdown-menu dropdown-menu-ruuvi" aria-labelledby="UserGroupsDropdown" id="selectGroupForTag">
+                    @foreach (RuuviTagApp.Models.UserTagListModel group in ViewBag.AvailableGroups)
+                    {
+                        <a class="dropdown-item dropdown-item-ruuvi" onclick="setGroupId(this)" id="@group.UserTagListId">@group.ListName</a>
+                    }
+                </div>
+            </div>
+        </div>
+    @*</div>
+    <div class="row">*@
+        @*<div class="col-12 mt-2 ml-3">*@
+        <div class="col-6">
+            <div id="addToGroupSubmitDiv" style="display:none;">
+                <label id="textForTagToGroup"></label>
+                @using (Html.BeginForm("AddTagToList", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.ListsId)
+                    @Html.HiddenFor(model => model.TagsId)
+                    <button type="submit" class="btn btn-general float-left">Add</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -91,7 +91,7 @@ namespace RuuviTagApp
                 var t = (Convert.ToInt32(data, 16) * 0.005);
                 if (t >= -163.835 && t <= 163.835)
                 {
-                    temperature = t.ToString();
+                    temperature = t.ToString(CultureInfo.GetCultureInfo("en-US"));
                 }
                 else temperature = "NAN";
 
@@ -102,7 +102,7 @@ namespace RuuviTagApp
                 var t = (Convert.ToInt32(data.Substring(0, 2), 16)) + (Convert.ToInt32(data.Substring(2, 2), 16) * 0.01);
                 if (t >= -127.99 && t <= 127.99)
                 {
-                    temperature = t.ToString();
+                    temperature = t.ToString(CultureInfo.GetCultureInfo("en-US"));
                 }
                 else temperature = "NAN";
             }
@@ -115,7 +115,7 @@ namespace RuuviTagApp
                 var t = (Convert.ToInt32(data, 16) * 0.0025);
                 if (t >= 0.000 && t <= 163.8350)
                 {
-                    humidity = t.ToString();
+                    humidity = t.ToString(CultureInfo.GetCultureInfo("en-US"));
                 }
                 else humidity = "NAN";
             }
@@ -124,7 +124,7 @@ namespace RuuviTagApp
                 var t = (Convert.ToInt32(data, 16) * 0.5);
                 if (t >= 0.0 && t <= 127.5)
                 {
-                    humidity = t.ToString();
+                    humidity = t.ToString(CultureInfo.GetCultureInfo("en-US"));
                 }
                 else humidity = "NAN";
             }
@@ -136,6 +136,7 @@ namespace RuuviTagApp
             {
                 if (t >= 5000 && t <= 115534)
                 {
+                    t = t / 100;
                     pressure = t.ToString();
                 }
                 else pressure = "NAN";
@@ -144,11 +145,12 @@ namespace RuuviTagApp
             {
                 if (t >= 50000 && t <= 115535)
                 {
+                    t = t / 100;
                     pressure = t.ToString();
                 }
                 else pressure = "NAN";
             }
-            
+
         }
 
         private void addAccX(string data)
