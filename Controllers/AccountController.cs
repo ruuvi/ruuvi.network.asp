@@ -155,14 +155,10 @@ namespace RuuviTagApp.Controllers
                 {
                     string userID = User.Identity.GetUserId();
                     var user = db.Users.Find(userID);
-                    if (user.Logins.First().ProviderKey != loginInfo.Login.ProviderKey)
-                    {
-                        return View("Error");
-                    }
                     user.Email = loginInfo.Email;
                     await db.SaveChangesAsync();
                 }
-                return RedirectToAction("Index", "Home");
+                return LogOff();
             }
             return View("Error");
         }
