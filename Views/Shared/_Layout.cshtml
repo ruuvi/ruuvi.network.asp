@@ -123,11 +123,11 @@
     <hr />
     <div class="container body-content">
         <footer class="footer-ruuvi text-center" id="footer-ruuvi">
-            <div style="font-size: larger;">
+            <div style="opacity:0.9">
                 @*Function to tell the user he is logged in with "X" user*@
                 @if (Request.IsAuthenticated)
                 {
-                    ViewBag.Msg = $"Hello {User.Identity.GetUserName()}!";
+                    ViewBag.Msg = $"Greetings, {User.Identity.GetUserName()}";
                 }
                 @ViewBag.Msg
             </div>
