@@ -171,23 +171,6 @@ else
 
     </div>
 </div>
-@if (Request.IsAuthenticated)
-{
-    <p>Data has a 15 minute interval by default</p>
-    <div class="dropdown">
-        <button class="btn btn-tagdropdown dropdown-toggle" type="button" id="IntervalDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="~/SVG/web-ruuvi-eye-nega.svg" width="28" height="28" alt="Ruuvi logo">
-            Data Interval
-        </button>
-        <div class="dropdown-menu dropdown-menu-ruuvi" aria-labelledby="IntervalDropdown" id="selectInterval">
-            <a class="dropdown-item dropdown-item-ruuvi" onclick="setDataInterval(this)" data-interval="0">5 minutes</a>
-            <a class="dropdown-item dropdown-item-ruuvi" onclick="setDataInterval(this)" data-interval="1">15 minutes</a>
-            <a class="dropdown-item dropdown-item-ruuvi" onclick="setDataInterval(this)" data-interval="2">30 minutes</a>
-            <a class="dropdown-item dropdown-item-ruuvi" onclick="setDataInterval(this)" data-interval="3">1 hour</a>
-            <a class="dropdown-item dropdown-item-ruuvi" onclick="setDataInterval(this)" data-interval="4">2 hours</a>
-        </div>
-    </div>
-}
 
 @section scripts{
 
