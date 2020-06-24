@@ -39,10 +39,20 @@
         </div>
     </div>
 }
-@if (ViewBag.AvailableGroups != null && ViewBag.AvailableGroups.Count > 0)
-{
-    @Html.Partial("~/Views/Home/_AddTagToGroup.cshtml", new RuuviTagApp.ViewModels.AddTagToListModel())
-}
+
+<a class="btn btn-header-collapse" data-toggle="collapse" href="#collapseAddToGroup" role="button" aria-expanded="false" aria-controls="collapseAddToGroup">Add to group</a>
+<div class="collapse" id="collapseAddToGroup">
+    <p>Choose a group in the dropdown form below and press Add.</p>
+    <div class="form-group">
+        <div class="col-md-10 pl-0">
+            @if (ViewBag.AvailableGroups != null && ViewBag.AvailableGroups.Count > 0)
+            {
+                @Html.Partial("~/Views/Home/_AddTagToGroup.cshtml", new RuuviTagApp.ViewModels.AddTagToListModel())
+            }
+        </div>
+    </div>
+</div>
+
 @using (Html.BeginForm())
 {
     @Html.HttpMethodOverride(HttpVerbs.Delete)
