@@ -205,16 +205,33 @@ namespace RuuviTagApp.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> LoggedInApiData(int? TagID)
+        public async Task<ActionResult> LoggedInApiData(int? tagID, int? interval)
         {
-            if (TagID == null)
+            if (tagID == null)
             {
+                TempData["GeneralError"] = "Something went wrong while fetching data. Please try again";
                 return RedirectToAction("Index");
             }
-
-            var tag = db.RuuviTagModels.Find(TagID);
-
-            List<WhereOSApiRuuvi> apiResponse = await GetTagData(tag.TagMacAddress);
+            RuuviTagModel tag = db.RuuviTagModels.Find(tagID);
+            if (tag == null)
+            {
+                TempData["GeneralError"] = "Something went wrong while fetching data. Please try again";
+                return RedirectToAction("Index");
+            }
+            if (tag.UserId != User.Identity.GetUserId())
+            {
+                TempData["GeneralError"] = "You do not have permission to do that.";
+                return RedirectToAction("Index");
+            }
+            List<WhereOSApiRuuvi> apiResponse;
+            if (interval != null)
+            {
+                apiResponse = await GetTagData(tag.TagMacAddress, (int)interval);
+            }
+            else
+            {
+                apiResponse = await GetTagData(tag.TagMacAddress); 
+            }
 
             List<UnpackData> lstapiData = new List<UnpackData>();
 
@@ -364,6 +381,34 @@ namespace RuuviTagApp.Controllers
         private async Task<List<WhereOSApiRuuvi>> GetTagData(string macAddress)
         {
             string url = ApiHelper.ApiClient.BaseAddress + macAddress;
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var data = JsonConvert.DeserializeObject<List<WhereOSApiRuuvi>>(json);
+
+                    return data;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        private async Task<List<WhereOSApiRuuvi>> GetTagData(string macAddress, int interval)
+        {
+            string[] intervals = { "5m", "15m", "30m", "1h", "2h" };
+            string url = ApiHelper.ApiClient.BaseAddress + macAddress + "?p_aggregation=";
+            if (intervals.ElementAtOrDefault(interval) is string val)
+            {
+                url += val;
+            }
+            else
+            {
+                url += intervals[1];
+            }
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
                 if (response.IsSuccessStatusCode)
