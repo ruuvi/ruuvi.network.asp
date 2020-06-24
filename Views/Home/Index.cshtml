@@ -177,178 +177,180 @@ else
         // For debugging
         let isLogged = "@Request.IsAuthenticated";
         if (isLogged == "False") {
-            //Line chart script for temperature
-            var ctx = document.getElementById('tempchart').getContext('2d');
-            window.tempChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labelTime,
-                    datasets: [{
-                        label: 'Temperature',
-                        data: labelTemp,
-                        backgroundColor: [
-                            'rgba(107, 234, 225, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(107, 234, 225, 1)'
-                        ],
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
-                }
-            });
-            
 
-            var ctxm = document.getElementById('tempchartmodal').getContext('2d');
-            var tempChartModal = new Chart(ctxm, {
-                type: 'line',
-                data: {
-                    labels: labelTime,
-                    datasets: [{
-                        label: 'Temperature',
-                        data: labelTemp,
-                        backgroundColor: [
-                            'rgba(107, 234, 225, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(107, 234, 225, 1)'
-                        ],
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
+                //Line chart script for temperature
+                var ctx = document.getElementById('tempchart').getContext('2d');
+                var tempChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Temperature',
+                            data: labelTemp,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
                         }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                }
-            });
+                });
 
-            //Line chart script for humidity
-            var ctz = document.getElementById('humchart').getContext('2d');
-            window.humidityChart = new Chart(ctz, {
-                type: 'line',
-                data: {
-                    labels: labelTime,
-                    datasets: [{
-                        label: 'Humidity',
-                        data: labelHum,
-                        backgroundColor: [
-                            'rgba(107, 234, 225, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(107, 234, 225, 1)'
-                        ],
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
+
+                var ctxm = document.getElementById('tempchartmodal').getContext('2d');
+                var tempChartModal = new Chart(ctxm, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Temperature',
+                            data: labelTemp,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
                         }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                }
-            });
+                });
 
-            var ctzm = document.getElementById('humchartmodal').getContext('2d');
-            var humidityChartModal = new Chart(ctzm, {
-                type: 'line',
-                data: {
-                    labels: labelTime,
-                    datasets: [{
-                        label: 'Humidity',
-                        data: labelHum,
-                        backgroundColor: [
-                            'rgba(107, 234, 225, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(107, 234, 225, 1)'
-                        ],
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
+
+                //Line chart script for humidity
+                var ctz = document.getElementById('humchart').getContext('2d');
+                var humidityChart = new Chart(ctz, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Humidity',
+                            data: labelHum,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
                         }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                }
-            });
+                });
 
-            //Line chart script for pressure
-            var ctc = document.getElementById('presschart').getContext('2d');
-            window.pressChart = new Chart(ctc, {
-                type: 'line',
-                data: {
-                    labels: labelTime,
-                    datasets: [{
-                        label: 'Pressure',
-                        data: labelPress,
-                        backgroundColor: [
-                            'rgba(107, 234, 225, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(107, 234, 225, 1)'
-                        ],
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
+                var ctzm = document.getElementById('humchartmodal').getContext('2d');
+                var humidityChartModal = new Chart(ctzm, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Humidity',
+                            data: labelHum,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
                         }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                }
-            });
+                });
 
-            var ctcm = document.getElementById('presschartmodal').getContext('2d');
-            var pressChartModal = new Chart(ctcm, {
-                type: 'line',
-                data: {
-                    labels: labelTime,
-                    datasets: [{
-                        label: 'Pressure',
-                        data: labelPress,
-                        backgroundColor: [
-                            'rgba(107, 234, 225, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(107, 234, 225, 1)'
-                        ],
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
+                //Line chart script for pressure
+                var ctc = document.getElementById('presschart').getContext('2d');
+                var pressChart = new Chart(ctc, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Pressure',
+                            data: labelPress,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
                         }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                }
-            });
+                });
 
+                var ctcm = document.getElementById('presschartmodal').getContext('2d');
+                var pressChartModal = new Chart(ctcm, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Pressure',
+                            data: labelPress,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
                     // Get the last updated time
         let lastUpdatedTimerInterval = 1000; // Defautl 1000 = 1 second
         let lastUpdatedTimer = setInterval(lastUpdated, lastUpdatedTimerInterval);
@@ -375,7 +377,7 @@ else
 
             document.getElementById("lastUpdated").innerHTML = lastUpdated;
         }
-        }
+        
         $(window).on('load', function () {
             let showRegisterModal = @((ViewBag.ShowRegisterModal ?? false).ToString().ToLower());
             if (showRegisterModal) {
@@ -500,18 +502,49 @@ else
             }).done(function (results) {
                 console.log(results);
 
-                var labelTime = [], labelTemp = [], labelHum = [], labelPress = [];
+                let labelTime = [], labelTemp = [], labelHum = [], labelPress = [];
                 for (let i = 0; i < results.lenght; i++) {
                     labelTime.push(results[i].Time);
                     labelTemp.push(results[i].Data.temperature);
                     labelHum.push(results[i].Data.humidity);
                     labelPress.push(results[i].Data.pressure);
+                    
                 }
+                console.log(labelTime);
+                pushToCharts(labelTime, labelTemp, labelHum, labelPress, tagid);
                 document.getElementById("chartarea").style.display = "block";
+
             });
-            window.tempChart.update();
-            window.humidityChart.update();
-            window.pressChart.update();
+
+            function pushToCharts(labelTime, DataTemp, labelHum, labelPress, tagid) {
+                var cot = document.getElementById('tempchart').getContext('2d');
+                var tempChartLogIn = new Chart(cot, {
+                    type: 'line',
+                    data: {
+                        labels: labelTime,
+                        datasets: [{
+                            label: 'Temperature',
+                            data: DataTemp,
+                            backgroundColor: [
+                                'rgba(107, 234, 225, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(107, 234, 225, 1)'
+                            ],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
         }
 
         function setSelectedGroupId(groupid) {
