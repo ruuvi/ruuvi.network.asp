@@ -131,6 +131,38 @@ namespace RuuviTagApp.Controllers
             return View("../Home/Index", model);
         }
 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RequestUpdateUserEmail()
+        {
+            return new ChallengeResult("Google", Url.Action("UpdateUserEmail", "Account"));
+        }
+
+        public async Task<ActionResult> UpdateUserEmail()
+        {
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            if (loginInfo == null)
+            {
+                return View("Error");
+            }
+
+            // Sign in the user with this external login provider if the user already has a login
+            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            if (result == SignInStatus.Success)
+            {
+                using (ApplicationDbContext db = new ApplicationDbContext())
+                {
+                    string userID = User.Identity.GetUserId();
+                    var user = db.Users.Find(userID);
+                    user.Email = loginInfo.Email;
+                    await db.SaveChangesAsync();
+                }
+                return LogOff();
+            }
+            return View("Error");
+        }
+
         //
         // POST: /Account/LogOff
         [HttpPost]

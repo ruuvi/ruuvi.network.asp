@@ -452,6 +452,8 @@ namespace RuuviTagApp.Controllers
         [Authorize]
         public ActionResult AppSettings()
         {
+            string userID = User.Identity.GetUserId();
+            ViewBag.UserHasEmail = db.Users.Find(userID).Email != null;
             return View();
         }
 
