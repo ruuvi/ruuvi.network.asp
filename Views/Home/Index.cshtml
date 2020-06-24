@@ -99,7 +99,8 @@ else
     }@*End of content visible only when user is logged in*@
 
     <div id="chartarea" style="display:none">
-        @if (ViewBag.TagData != null) {
+        @if (ViewBag.TagData != null)
+        {
             //// Old version to get the last data from RuuviTag
             //foreach (var item in ViewBag.TagData)
             //{
@@ -171,6 +172,15 @@ else
 
     </div>
 </div>
+
+@{
+    if (ViewBag.TagData != null)
+    {
+        <script>
+            document.getElementById("chartarea").style.display = "block";
+        </script>
+    }
+}
 
 @section scripts{
 
