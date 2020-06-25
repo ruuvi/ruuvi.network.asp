@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using RuuviTagApp.Models;
 using RuuviTagApp.ViewModels;
@@ -301,20 +302,21 @@ namespace RuuviTagApp.Controllers
                 TempData["GeneralError"] = "You do not have permission to do that.";
                 return RedirectToAction("Index");
             }
-            List<TagAlertType> alarmTypes = await db.TagAlertTypes.ToListAsync();
+            List<TagAlertType> alertTypes = await db.TagAlertTypes.ToListAsync();
             bool NoAlertsAdded = true;
+            List<TagAlertModel> existingAlerts = await db.TagAlertModels.ToListAsync();
             foreach (PropertyInfo pi in alert.GetType().GetProperties())
             {
                 if (pi.GetValue(alert) != null)
                 {
-                    int? alarmTypeId = alarmTypes
+                    int? alertTypeId = alertTypes
                         .Where(at => string.Equals(at.TypeName, pi.Name, StringComparison.OrdinalIgnoreCase))
                         .Select(at => at.AlertTypeId).FirstOrDefault();
-                    if (alarmTypeId == null)
+                    if (alertTypeId == null)
                     {
                         continue;
                     }
-                    if (await TagHasAlertOfType((int)tagID, (int)alarmTypeId) is TagAlertModel oldAlert && oldAlert != null)
+                    if (await TagHasAlertOfType((int)tagID, (int)alertTypeId) is TagAlertModel oldAlert && oldAlert != null)
                     {
                         oldAlert.AlertLimit = (double)pi.GetValue(alert);
                         db.Entry(oldAlert).State = EntityState.Modified;
@@ -323,7 +325,7 @@ namespace RuuviTagApp.Controllers
                     {
                         db.TagAlertModels.Add(new TagAlertModel
                         {
-                            AlertTypeId = (int)alarmTypeId,
+                            AlertTypeId = (int)alertTypeId,
                             TagId = (int)tagID,
                             AlertLimit = (double)pi.GetValue(alert)
                         });
@@ -341,6 +343,27 @@ namespace RuuviTagApp.Controllers
             }
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        private async Task<List<string>> CheckTagAlertLimitsValidity(int tagID)
+        {
+            int lastHighAlertTypeId = 0;
+            double lastHighLimit = 0;
+            List<string> inconsistencies = new List<string>();
+            foreach (TagAlertModel alert in await db.TagAlertModels.Where(a => a.TagId == tagID).Include(t => t.TagAlertType).ToListAsync())
+            {
+                if (alert.TagAlertType.TypeName.EndsWith("high"))
+                {
+                    lastHighAlertTypeId = alert.AlertTypeId;
+                    lastHighLimit = alert.AlertLimit;
+                }
+                else if (alert.TagAlertType.TypeName.EndsWith("low") && lastHighAlertTypeId == alert.AlertTypeId - 1 && lastHighLimit < alert.AlertLimit)
+                {
+                    string type = $"{alert.TagAlertType.TypeName.Substring(0, alert.TagAlertType.TypeName.IndexOf("low"))}";
+                    inconsistencies.Add($"{type} low and high alerts are mixed. Please consider changing them for proper alert.");
+                }
+            }
+            return inconsistencies;
         }
 
         [Authorize]
