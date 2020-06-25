@@ -83,6 +83,9 @@ else
         <div class="home-selectedTag">
             <h2 id="userSelectionHeader"></h2>
         </div>
+        <p id="intervalInfo"></p>
+        <p id="intervalUpdateInfo"></p>
+
 
         AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
         @Html.Partial("~/Views/Home/_AddTagModal.cshtml", add)
@@ -400,6 +403,7 @@ else
                 updateCharts(labelTime, labelTemp, labelHum, labelPress);
 
                 document.getElementById("chartarea").style.display = "block";
+                document.getElementById("intervalUpdateInfo").innerHTML = "";
             });
         }
 
@@ -466,6 +470,10 @@ else
         var dataInterval = 1;
         function setDataInterval(selectedInterval) {
             dataInterval = selectedInterval.dataset.interval;
+            let intervalDefaultText = "Data interval is ";
+            let intervalUpdateText = " - Please select a RuuviTag to apply new interval.";
+            document.getElementById("intervalInfo").innerHTML = intervalDefaultText + selectedInterval.text;
+            document.getElementById("intervalUpdateInfo").innerHTML = intervalUpdateText;
         }
     </script>
 }

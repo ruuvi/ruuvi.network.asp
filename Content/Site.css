@@ -823,3 +823,14 @@ label {
     padding-left: 0;
     margin-left: 0;
 }
+
+#intervalInfo, #intervalUpdateInfo {
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    margin-left: 2.2rem;
+    display: inline;
+}
+
+#intervalUpdateInfo {
+    margin-left: 0;
+}
