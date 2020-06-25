@@ -515,21 +515,29 @@ else
                 url: url,
                 dataType: 'json',
             }).done(function (results) {
-                console.log(results);
-
                 let labelTime = [], labelTemp = [], labelHum = [], labelPress = [];
-                for (let i = 0; i < results.lenght; i++) {
-                    labelTime.push(results[i].Time);
-                    labelTemp.push(results[i].Data.temperature);
-                    labelHum.push(results[i].Data.humidity);
-                    labelPress.push(results[i].Data.pressure);
+                results.forEach(row => {
+                    labelTime.push(parseDate(row.Time));
+                    labelTemp.push(row.Data.temperature);
+                    labelHum.push(row.Data.humidity);
+                    labelPress.push(row.Data.pressure);
 
-                }
-                console.log(labelTime);
+                });
                 pushToCharts(labelTime, labelTemp, labelHum, labelPress, tagid);
                 document.getElementById("chartarea").style.display = "block";
 
             });
+
+            function parseDate(date) {
+                let d = /\/Date\((\d*)\)\//.exec(date);
+                if (d) {
+                    let time = new Date(+d[1]);
+                    return time.toLocaleDateString(navigator.language, {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+            }
 
             function pushToCharts(labelTime, DataTemp, labelHum, labelPress, tagid) {
                 var cot = document.getElementById('tempchart').getContext('2d');
