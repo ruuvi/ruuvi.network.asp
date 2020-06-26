@@ -465,6 +465,7 @@ else
             $.get(url, (data) => {
                 $("#groupchartarea").html(data);
             });
+            document.getElementById("chartarea").style.display = "none";
         }
 
         function setGroupId(selectedGroup) {

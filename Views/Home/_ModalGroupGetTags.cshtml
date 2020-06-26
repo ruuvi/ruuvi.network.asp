@@ -80,7 +80,7 @@
 
 
         //Putting the datas viewbags into "let" variables
-        let groupAllData = [];
+       
         @foreach (var i in Model)
         {
             var lastTemp = @Html.Raw(i.Temperature.Substring( i.Temperature.LastIndexOf(",") +1));
@@ -205,7 +205,7 @@
            </text>
         }
 
-        console.log(groupAllData);
+        
 
 </script>
 @*}*@
