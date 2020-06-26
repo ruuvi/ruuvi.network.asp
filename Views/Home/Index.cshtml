@@ -18,11 +18,6 @@
     string lastTemp = "";
     string lastHumi = "";
     string lastPressure = "";
-
-    // Partial views
-    @Html.Partial("~/Views/Home/_TemperatureModal.cshtml")
-    @Html.Partial("~/Views/Home/_HumidityModal.cshtml")
-    @Html.Partial("~/Views/Home/_AirpressureModal.cshtml")
 }
 
 
@@ -106,7 +101,7 @@
                 <div class="col-lg-6">
                     <div class="row" id="ruuviTagTemperature">
                         <div class="col-lg-12 col-sm-12">
-                            <a class="btn btn-tagdata-temp" id="btn-TagTemp" onclick="openTempChartModal()" title="View tag temperature"></a>
+                            <a class="btn btn-tagdata-temp" id="btn-TagTemp" onclick="highlightTempChart()" title="Highlight temperature"></a>
                             <p id="tagTempNow" class="tagdata-value">@lastTemp</p> <span class="celsius">&#176;C</span>
                             <p class="tagdata-header">Temperature</p>
                             <hr class="tagdata-hr" />
@@ -114,7 +109,7 @@
                     </div>
                     <div class="row" id="ruuviTagHumidity">
                         <div class="col-lg-12 col-sm-12">
-                            <a class="btn btn-tagdata-hum" id="btn-TagHum" onclick="openHumiChartModal()" title="View tag humidity"></a>
+                            <a class="btn btn-tagdata-hum" id="btn-TagHum" onclick="highlightHumiChart()" title="Highlight humidity"></a>
                             <p id="tagHumNow" class="tagdata-value">@lastHumi</p> <span class="percent">%</span>
                             <p class="tagdata-header">Humidity</p>
                             <hr class="tagdata-hr" />
@@ -122,7 +117,7 @@
                     </div>
                     <div class="row" id="ruuviTagAirPressure">
                         <div class="col-lg-12 col-sm-12">
-                            <a class="btn btn-tagdata-air" id="btn-TagAir" onclick="openAirChartModal()" title="View tag air pressure"></a>
+                            <a class="btn btn-tagdata-air" id="btn-TagAir" onclick="highlightPressChart()" title="Highlight air pressure"></a>
                             <p id="tagPressNow" class="tagdata-value">@lastPressure</p> <span class="hpa">hPa</span>
                             <p class="tagdata-header">Air pressure</p>
                             <hr class="tagdata-hr" />
@@ -132,18 +127,19 @@
                 </div>
                 <div class="col-lg-6 ruuvi-eye-home d-none d-md-block" id="RuuviEyeBg" onmouseover="highlightEye()"> </div>
             </div>
-            <p class="tip d-lg-none">To view charts, please <a class="link" onclick="highlightIcons()" role="button">press the icons</a> above.</p>
+            <p class="tip d-none d-lg-block">Get bigger charts by clicking <a class="link" onclick="highlightIcons()" role="button">the icons</a> above.</p>
+
             <div id="desktopCharts">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4" id="col-chart-temperature">
                         <h1 class="tagdata-header">Temperature</h1>
                         <canvas id="tempchart"></canvas>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4" id="col-chart-humidity">
                         <h1 class="tagdata-header">Humidity</h1>
                         <canvas id="humchart"></canvas>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4" id="col-chart-pressure">
                         <h1 class="tagdata-header">Air pressure</h1>
                         <canvas id="presschart"></canvas>
 
@@ -164,11 +160,8 @@
 @section scripts{
     <script type="text/javascript">
         const ctxTemp = document.getElementById('tempchart').getContext('2d');
-        const ctxTempMod = document.getElementById('tempchartmodal').getContext('2d');
         const ctxHum = document.getElementById('humchart').getContext('2d');
-        const ctxHumMod = document.getElementById('humchartmodal').getContext('2d');
         const ctxPress = document.getElementById('presschart').getContext('2d');
-        const ctxPressMod = document.getElementById('presschartmodal').getContext('2d');
 
         class ChartConfig {
             constructor(label) {
@@ -205,18 +198,12 @@
         }
 
         const configTemp = new ChartConfig('Temperature').make();
-        const configTempModal = new ChartConfig('Temperature').make();
         const configHum = new ChartConfig('Humidity').make();
-        const configHumModal = new ChartConfig('Humidity').make();
         const configPress = new ChartConfig('Pressure').make();
-        const configPressModal = new ChartConfig('Pressure').make();
 
         window.tempChart = new Chart(ctxTemp, configTemp);
-        window.tempChartModal = new Chart(ctxTempMod, configTempModal);
         window.humChart = new Chart(ctxHum, configHum);
-        window.humChartModal = new Chart(ctxHumMod, configHumModal);
         window.pressChart = new Chart(ctxPress, configPress);
-        window.pressChartModal = new Chart(ctxPressMod, configPressModal);
 
         // Function for setting api call time for function lastUpdated
         var ApiCallTime;
@@ -281,21 +268,6 @@
         $('.svg-btn-new').click(function () {
             $('#addTag').toggleClass('shown');
         });
-
-        // Temperature chart Modal
-        function openTempChartModal() {
-            $('#temperatureChartModal').modal('show')
-        }
-
-        // Humidity chart Modal
-        function openHumiChartModal() {
-            $('#humidityChartModal').modal('show')
-        }
-
-        // Air pressure chart Modal
-        function openAirChartModal() {
-            $('#airpressureChartModal').modal('show')
-        }
 
         // Highight icons when user presses the tip (if user is lost)
         function highlightIcons() {
@@ -399,23 +371,20 @@
                 document.getElementById("chartarea").style.display = "block";
                 document.getElementById("intervalUpdateInfo").innerHTML = "";
                 setApiCallTime(); // Set api call time for "Updated x ago"
+
+                highlightEye();
+                highlightIcons();
             });
         }
 
         function updateCharts(labels, temp, hum, press) {
             configTemp.data.labels = labels;
-            configTempModal.data.labels = labels;
             configHum.data.labels = labels;
-            configHumModal.data.labels = labels;
             configPress.data.labels = labels;
-            configPressModal.data.labels = labels;
 
             configTemp.data.datasets[0].data = temp;
-            configTempModal.data.datasets[0].data = temp;
             configHum.data.datasets[0].data = hum;
-            configHumModal.data.datasets[0].data = hum;
             configPress.data.datasets[0].data = press;
-            configPressModal.data.datasets[0].data = press;
 
             if (!hasData) {
                 document.getElementById('tagTempNow').textContent = temp[temp.length - 1];
@@ -424,11 +393,8 @@
             }
 
             window.tempChart.update();
-            window.tempChartModal.update();
             window.humChart.update();
-            window.humChartModal.update();
             window.pressChart.update();
-            window.pressChartModal.update();
         }
 
         function parseDate(date) {
@@ -457,6 +423,8 @@
                 $("#groupchartarea").html(data);
             });
             document.getElementById("chartarea").style.display = "none";
+
+            highlightEye();
         }
 
         function setGroupId(selectedGroup) {
@@ -475,6 +443,43 @@
             let intervalUpdateText = " - Please select a RuuviTag to apply new interval.";
             document.getElementById("intervalInfo").innerHTML = intervalDefaultText + selectedInterval.text;
             document.getElementById("intervalUpdateInfo").innerHTML = intervalUpdateText;
+        }
+
+        let tempChartColumn = document.getElementById("col-chart-temperature");
+        let humiChartColumn = document.getElementById("col-chart-humidity");
+        let pressChartColumn = document.getElementById("col-chart-pressure");
+
+        // Temperature chart highlighting
+        function highlightTempChart() {
+            if (tempChartColumn.classList.contains("col-lg-4")) {
+                tempChartColumn.classList.remove("col-lg-4");
+                tempChartColumn.classList.add("col-lg-12");
+            } else {
+                tempChartColumn.classList.remove("col-lg-12");
+                tempChartColumn.classList.add("col-lg-4");
+            }
+        }
+
+        // Humidity chart highlighting
+        function highlightHumiChart() {
+            if (humiChartColumn.classList.contains("col-lg-4")) {
+                humiChartColumn.classList.remove("col-lg-4");
+                humiChartColumn.classList.add("col-lg-12");
+            } else {
+                humiChartColumn.classList.remove("col-lg-12");
+                humiChartColumn.classList.add("col-lg-4");
+            }
+        }
+
+        // Air pressure chart highlighting
+        function highlightPressChart() {
+            if (pressChartColumn.classList.contains("col-lg-4")) {
+                pressChartColumn.classList.remove("col-lg-4");
+                pressChartColumn.classList.add("col-lg-12");
+            } else {
+                pressChartColumn.classList.remove("col-lg-12");
+                pressChartColumn.classList.add("col-lg-4");
+            }
         }
     </script>
 

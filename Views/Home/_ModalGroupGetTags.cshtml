@@ -9,8 +9,7 @@
                 <div class="col-lg-6">
                     <div class="row" id="ruuviTagTemperature">
                         <div class="col-lg-12 col-sm-12">
-                            @*<a class="btn btn-tagdata-temp" id="btn-TagTemp" onclick="openTempChartModal()" title="View tag temperature"></a>*@
-                            <a class="btn btn-tagdata-temp" id="btn-TagTemp" href="#tempchart_@item.TagID" title="View tag temperature"></a>
+                            <a class="btn btn-tagdata-temp" id="btn-TagTemp-grp"></a>
                             <p id="tagTempNow_@item.TagID" class="tagdata-value"></p> <span class="celsius">&#176;C</span>
                             <p class="tagdata-header">Temperature</p>
                             <hr class="tagdata-hr" />
@@ -18,8 +17,7 @@
                     </div>
                     <div class="row" id="ruuviTagHumidity">
                         <div class="col-lg-12 col-sm-12">
-                            @*<a class="btn btn-tagdata-hum" id="btn-TagHum" onclick="openHumiChartModal()" title="View tag humidity"></a>*@
-                            <a class="btn btn-tagdata-hum" id="btn-TagHum" href="#humchart_@item.TagID" title="View tag humidity"></a>
+                            <a class="btn btn-tagdata-hum" id="btn-TagHum-grp"></a>
                             <p id="tagHumNow_@item.TagID" class="tagdata-value"></p> <span class="percent">%</span>
                             <p class="tagdata-header">Humidity</p>
                             <hr class="tagdata-hr" />
@@ -27,8 +25,7 @@
                     </div>
                     <div class="row" id="ruuviTagAirPressure">
                         <div class="col-lg-12 col-sm-12">
-                            @*<a class="btn btn-tagdata-air" id="btn-TagAir" onclick="openAirChartModal()" title="View tag air pressure"></a>*@
-                            <a class="btn btn-tagdata-air" id="btn-TagAir" href="#presschart_@item.TagID" title="View tag air pressure"></a>
+                            <a class="btn btn-tagdata-air" id="btn-TagAir-grp"></a>
                             <p id="tagPressNow_@item.TagID" class="tagdata-value"></p> <span class="hpa">hPa</span>
                             <p class="tagdata-header">Air pressure</p>
                             <hr class="tagdata-hr" />
@@ -38,7 +35,6 @@
                 </div>
                 <div class="col-lg-6 ruuvi-eye-home d-none d-md-block" id="RuuviEyeBg" onmouseover="highlightEye()"></div>
             </div>
-            <p class="tip d-lg-none">To view charts, please <a class="link" onclick="highlightIcons()" role="button">press the icons</a> above.</p>
             <div id="desktopCharts">
                 <div class="row" id="desktopChartsRow">
                     <div class="col-lg-4 mt-sm-3">
