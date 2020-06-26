@@ -34,9 +34,6 @@ namespace RuuviTagApp.Controllers
             ViewBag.apiHumData = TempData["apiHumData"];
             ViewBag.apiPressData = TempData["apiPressData"];
 
-            // Get the time when site was loaded (when api was called) in milliseconds
-            long currentTimeMs = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            ViewBag.apiCallTime = currentTimeMs;
             string userID = string.Empty;
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)

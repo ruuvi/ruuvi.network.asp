@@ -104,14 +104,6 @@ else
     <div id="chartarea" style="display:none">
         @if (ViewBag.TagData != null)
         {
-            //// Old version to get the last data from RuuviTag
-            //foreach (var item in ViewBag.TagData)
-            //{
-            //    lastTemp = item.Data.temperature;
-            //    lastHumi = item.Data.humidity;
-            //    lastPressure = item.Data.pressure;
-            //}
-
             // Get the last data from RuuviTag
             lastTemp = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.temperature;
             lastHumi = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.humidity;
@@ -233,13 +225,21 @@ else
         window.humChartModal = new Chart(ctxHumMod, configHumModal);
         window.pressChart = new Chart(ctxPress, configPress);
         window.pressChartModal = new Chart(ctxPressMod, configPressModal);
-                    // Get the last updated time
+
+        // Function for setting api call time for function lastUpdated
+        var ApiCallTime;
+        function setApiCallTime() {
+            let date = new Date();
+            ApiCallTime = date.getTime();
+        }
+
+        // Get the last updated time
         let lastUpdatedTimerInterval = 1000; // Defautl 1000 = 1 second
         let lastUpdatedTimer = setInterval(lastUpdated, lastUpdatedTimerInterval);
         function lastUpdated() {
             let date = new Date();
             let currentTime = date.getTime();
-            let apiCallTime = @((ViewBag.apiCallTime));
+            let apiCallTime = ApiCallTime;
             let timeDiff = Math.abs(apiCallTime - currentTime);
             let secDiff = Math.ceil(timeDiff / (1000));
             let lastUpdated = secDiff;
@@ -248,16 +248,16 @@ else
             let min = 60 * sec;
 
             if (secDiff < 1 * min) {
-                lastUpdated = "Updated " + secDiff + "s ago";
+                lastUpdated = "Page updated " + secDiff + "s ago";
             } else if (secDiff < 2 * min) {
-                lastUpdated = "Updated a minute ago";
+                lastUpdated = "Page updated a minute ago";
             } else if (secDiff >= 2 * min) {
-                lastUpdated = "Updated " + Math.round(secDiff / 60) + " minutes ago";
+                lastUpdated = "Page updated " + Math.round(secDiff / 60) + " minutes ago";
             } else if (secDiff >= 60 * min) {
                 lastUpdatedTimerInterval = 900000; // After an hour, let's call the timer every 15min
             }
 
-            document.getElementById("lastUpdated").innerHTML = lastUpdated;
+            document.getElementById("lastUpdated").innerHTML = lastUpdated
         }
         var hasData, userHasEmail;
         $(window).on('load', function () {
@@ -404,6 +404,7 @@ else
 
                 document.getElementById("chartarea").style.display = "block";
                 document.getElementById("intervalUpdateInfo").innerHTML = "";
+                setApiCallTime(); // Set api call time for "Updated x ago"
             });
         }
 
@@ -476,4 +477,12 @@ else
             document.getElementById("intervalUpdateInfo").innerHTML = intervalUpdateText;
         }
     </script>
+
+    @* Set api call time when user is not logged in and viewing tag data *@
+    @if (ViewBag.TagData != null)
+    {
+        <script>
+            setApiCallTime();
+        </script>
+    }
 }
