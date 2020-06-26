@@ -166,6 +166,7 @@ else
         </div>
 
     </div>
+    <div id="groupchartarea"></div>
 </div>
 
 
@@ -370,7 +371,9 @@ else
 
         function setSelectedTagId(tagid) {
             selectedTagId = tagid;
+            $("#groupchartarea").html("");
             if (userHasEmail) {
+
                 $('#addAlarmBtn').val(tagid);
 
                 // Checking if buttons are hidde (because a group was selected), and displaying them
@@ -457,6 +460,11 @@ else
                 alertBtn.style.display = "none";
                 settingsBtn.style.display = "none";
             }
+
+            let url = "/Home/_ModalGroupGetTags/?groupID=" + groupid;
+            $.get(url, (data) => {
+                $("#groupchartarea").html(data);
+            });
         }
 
         function setGroupId(selectedGroup) {

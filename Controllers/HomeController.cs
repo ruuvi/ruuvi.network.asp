@@ -124,6 +124,7 @@ namespace RuuviTagApp.Controllers
                 string dataTempList;
                 string dataHumList;
                 string dataPressList;
+
                 List<UnpackData> lstapiData = new List<UnpackData>();
 
                 foreach (WhereOSApiRuuvi apiRuuviTag in apiResponse)
@@ -709,10 +710,40 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Groups");
         }
 
-        public async Task<List<int>> GetTagIdsInGroup(int? groupID)
+        public async Task<ActionResult> _ModalGroupGetTags(int groupID)
         {
-            var group = await db.TagListRowModels.Where(r => r.ListId == groupID).ToListAsync();
-            return group.Select(g => g.TagId).ToList();
+            List<GroupDataModel> groupData = new List<GroupDataModel>();
+
+            foreach (TagListRowModel row in await db.TagListRowModels.Where(r => r.ListId == groupID).Include(t => t.RuuviTagModel).ToListAsync())
+            {
+                List<WhereOSApiRuuvi> apiResponse = await GetTagData(row.RuuviTagModel.TagMacAddress);
+
+                List<UnpackData> lstapiData = new List<UnpackData>();
+
+                foreach (WhereOSApiRuuvi apiRuuviTag in apiResponse)
+                {
+                    UnpackData ApiRowData = new UnpackData();
+                    UnpackRawData RawDataRow = new UnpackRawData();
+                    RawDataRow.UnpackAllData(apiRuuviTag.data);
+                    ApiRowData.Data = RawDataRow;
+                    ApiRowData.Time = apiRuuviTag.time;
+                    lstapiData.Add(ApiRowData);
+                }
+
+                groupData.Add(new GroupDataModel
+                {
+                    TagID = row.RuuviTagModel.TagId,
+                    TagDisplay = row.RuuviTagModel.TagName??row.RuuviTagModel.TagMacAddress,
+                    Time = "'" + string.Join("','", lstapiData.Select(n => n.Time.TimeOfDay).ToList()) + "'",
+                    Temperature = "'" + string.Join("','", lstapiData.Select(n => n.Data.temperature).ToList()) + "'",
+                    Humidity = "'" + string.Join("','", lstapiData.Select(n => n.Data.humidity).ToList()) + "'",
+                    Pressure = string.Join(",", lstapiData.Select(n => n.Data.pressure).ToList())
+                }); 
+            }
+            
+            return PartialView(groupData);
         }
+
+
     }
 }

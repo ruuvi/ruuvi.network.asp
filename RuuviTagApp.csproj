@@ -190,6 +190,7 @@
     <Compile Include="ViewModels\AddAlertModel.cs" />
     <Compile Include="ViewModels\AddTagModel.cs" />
     <Compile Include="ViewModels\AddTagToListModel.cs" />
+    <Compile Include="ViewModels\GroupDataModel.cs" />
     <Compile Include="ViewModels\MacAddressModel.cs" />
     <Compile Include="ViewModels\NewTagListModel.cs" />
   </ItemGroup>
@@ -364,6 +365,7 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\ServerError.cshtml" />
     <Content Include="Views\Error\Rejected.cshtml" />
+    <Content Include="Views\Home\_ModalGroupGetTags.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
