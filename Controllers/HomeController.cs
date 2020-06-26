@@ -711,5 +711,11 @@ namespace RuuviTagApp.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Groups");
         }
+
+        public async Task<List<int>> GetTagIdsInGroup(int? groupID)
+        {
+            var group = await db.TagListRowModels.Where(r => r.ListId == groupID).ToListAsync();
+            return group.Select(g => g.TagId).ToList();
+        }
     }
 }
