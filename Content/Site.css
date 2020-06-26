@@ -813,10 +813,15 @@ label {
     letter-spacing: 0.6rem;
 }
 
-#lastUpdated {
+#lastUpdated, #lastUpdated-grp {
     font-size: 70%;
     opacity: 0.8;
     float: right;
+}
+
+#lastUpdated-grp {
+    float: left;
+    margin-left: 2.2rem;
 }
 
 #containerAddTagToGroup {

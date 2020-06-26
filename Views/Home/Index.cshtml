@@ -72,6 +72,7 @@
         </div>
         <p id="intervalInfo"></p>
         <p id="intervalUpdateInfo"></p>
+        <p id="lastUpdated-grp" style="display: none" class="mb-1">Not calculated</p>
 
 
         AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
@@ -207,9 +208,19 @@
 
         // Function for setting api call time for function lastUpdated
         var ApiCallTime;
-        function setApiCallTime() {
+        var LastUpdatedElement;
+        LastUpdatedElement = document.getElementById("lastUpdated");
+        function setApiCallTime(v) {
             let date = new Date();
             ApiCallTime = date.getTime();
+
+            if (v == "grp") {
+                LastUpdatedElement = document.getElementById("lastUpdated-grp");
+                document.getElementById("lastUpdated-grp").style.display = "block";
+            } else {
+                LastUpdatedElement = document.getElementById("lastUpdated");
+                document.getElementById("lastUpdated-grp").style.display = "none";
+            }
         }
 
         // Get the last updated time
@@ -222,6 +233,7 @@
             let timeDiff = Math.abs(apiCallTime - currentTime);
             let secDiff = Math.ceil(timeDiff / (1000));
             let lastUpdated = secDiff;
+            let updateElement = LastUpdatedElement;
 
             let sec = 1;
             let min = 60 * sec;
@@ -236,7 +248,7 @@
                 lastUpdatedTimerInterval = 900000; // After an hour, let's call the timer every 15min
             }
 
-            document.getElementById("lastUpdated").innerHTML = lastUpdated
+            updateElement.innerHTML = lastUpdated;
         }
         var hasData, userHasEmail;
         $(window).on('load', function () {
@@ -424,6 +436,7 @@
             });
             document.getElementById("chartarea").style.display = "none";
 
+            setApiCallTime("grp"); // Set api call time for "Updated x ago"
             highlightEye();
         }
 
