@@ -1,21 +1,11 @@
 ﻿@model IEnumerable<RuuviTagApp.ViewModels.GroupDataModel>
 
-
-
 @foreach (var item in Model)
 {
     <div>
-
-        @*@{
-            // Get the last data from RuuviTag
-            var lastTemp = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.temperature;
-            var lastHumi = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.humidity;
-            var lastPressure = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.pressure;
-        }*@
         <h2>@item.TagDisplay</h2>
         <div class="RuuviTagData">
             <div class="row">
-
                 <div class="col-lg-6">
                     <div class="row" id="ruuviTagTemperature">
                         <div class="col-lg-12 col-sm-12">
@@ -43,8 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 ruuvi-eye-home d-none d-md-block" id="RuuviEyeBg" onmouseover="highlightEye()">
-                </div>
+                <div class="col-lg-6 ruuvi-eye-home d-none d-md-block" id="RuuviEyeBg" onmouseover="highlightEye()"></div>
             </div>
             <p class="tip d-lg-none">To view charts, please <a class="link" onclick="highlightIcons()" role="button">press the icons</a> above.</p>
             <div id="desktopCharts">
@@ -60,152 +49,105 @@
                     <div class="col-lg-12 mt-5">
                         <h1 class="tagdata-header">Air pressure</h1>
                         <canvas id="presschart_@item.TagID"></canvas>
-
                     </div>
                 </div>
             </div>
-            @if (ViewBag.TagData != null)
-            {
-                <a class="btn btn-general mt-5" href="/Home/Index">Sign in or search another RuuviTag</a>
-            }
         </div>
-
     </div>
-
 }
 
-
-@*@section scripts {*@
 <script>
+@foreach (var i in Model)
+{
+    var lastTemp = @Html.Raw(i.Temperature.Substring( i.Temperature.LastIndexOf(",") +1));
+    var lastHum = @Html.Raw(i.Humidity.Substring(i.Humidity.LastIndexOf(",") + 1));
+    var lastPress = @Html.Raw(i.Pressure.Substring(i.Pressure.LastIndexOf(",") + 1));
 
+    <text>
+    document.getElementById("tagTempNow_@i.TagID").innerHTML = @lastTemp;
+    document.getElementById("tagHumNow_@i.TagID").innerHTML = @lastHum;
+    document.getElementById("tagPressNow_@i.TagID").innerHTML = @lastPress;
 
-        //Putting the datas viewbags into "let" variables
-       
-        @foreach (var i in Model)
-        {
-            var lastTemp = @Html.Raw(i.Temperature.Substring( i.Temperature.LastIndexOf(",") +1));
-            var lastHum = @Html.Raw(i.Humidity.Substring(i.Humidity.LastIndexOf(",") + 1));
-            var lastPress = @Html.Raw(i.Pressure.Substring(i.Pressure.LastIndexOf(",") + 1));
-
-
-           <text>
-
-            document.getElementById("tagTempNow_@i.TagID").innerHTML = @lastTemp;
-            document.getElementById("tagHumNow_@i.TagID").innerHTML = @lastHum;
-            document.getElementById("tagPressNow_@i.TagID").innerHTML = @lastPress;
-
-
-           new Chart(document.getElementById("tempchart_@i.TagID"), {
-           type: 'line',
-           data:
-                {
-                        labels:[@Html.Raw(i.Time)],
-                datasets:
-                            [{
-                            label: 'Temperature',
-                    data:[@Html.Raw(i.Temperature)],
-                    backgroundColor:[
-                        'rgba(107, 234, 225, 0.2)',
-
-                    ],
-                    borderColor:[
-                        'rgba(107, 234, 225, 1)',
-
-                    ],
-                    borderWidth: 3
-                }]
-            },
-            options:
-                        {
-                        scales:
-                            {
-                            yAxes:
-                                [{
-                                ticks:
-                                    {
-                                    beginAtZero: true
-                                }
-                                }]
-                }
-                        }
-                    });
-
-                    //Hum chart group'
-
-                    new Chart(document.getElementById("humchart_@i.TagID"), {
-           type: 'line',
-           data:
-                {
-                    labels:[@Html.Raw(i.Time)],
-                datasets:
-                        [{
-                        label: 'Humidity',
-                    data:[@Html.Raw(i.Humidity)],
-                    backgroundColor:[
-                        'rgba(107, 234, 225, 0.2)',
-
-                    ],
-                    borderColor:[
-                        'rgba(107, 234, 225, 1)',
-
-                    ],
-                    borderWidth: 3
-                }]
-            },
-            options:
-                    {
-                    scales:
-                        {
-                        yAxes:
-                            [{
-                            ticks:
-                                {
-                                beginAtZero: true
-                            }
-                            }]
-                }
+    new Chart(document.getElementById("tempchart_@i.TagID"), {
+        type: 'line',
+        data: {
+            labels: [@Html.Raw(i.Time)],
+            datasets: [{
+                label: 'Temperature',
+                data: [@Html.Raw(i.Temperature)],
+                backgroundColor: [
+                    'rgba(107, 234, 225, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(107, 234, 225, 1)',
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
                     }
-                });
-
-           //Pressure chart group
-           new Chart(document.getElementById("presschart_@i.TagID"), {
-           type: 'line',
-           data:
-                {
-                labels:[@Html.Raw(i.Time)],
-                datasets:
-                    [{
-                    label: 'Pressure',
-                    data:[@Html.Raw(i.Pressure)],
-                    backgroundColor:[
-                        'rgba(107, 234, 225, 0.2)',
-
-                    ],
-                    borderColor:[
-                        'rgba(107, 234, 225, 1)',
-
-                    ],
-                    borderWidth: 3
                 }]
-            },
-            options:
-                {
-                scales:
-                    {
-                    yAxes:
-                        [{
-                        ticks:
-                            {
-                            beginAtZero: true
-                        }
-                        }]
-                }
-                }
-           });
-           </text>
+            }
         }
+    });
 
-        
+    new Chart(document.getElementById("humchart_@i.TagID"), {
+        type: 'line',
+        data: {
+            labels: [@Html.Raw(i.Time)],
+            datasets: [{
+                label: 'Humidity',
+                data: [@Html.Raw(i.Humidity)],
+                backgroundColor: [
+                    'rgba(107, 234, 225, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(107, 234, 225, 1)',
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
 
+    new Chart(document.getElementById("presschart_@i.TagID"), {
+        type: 'line',
+        data: {
+            labels: [@Html.Raw(i.Time)],
+            datasets: [{
+                label: 'Pressure',
+                data: [@Html.Raw(i.Pressure)],
+                backgroundColor: [
+                    'rgba(107, 234, 225, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(107, 234, 225, 1)',
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    </text>
+}
 </script>
-@*}*@

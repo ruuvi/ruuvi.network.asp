@@ -195,7 +195,7 @@ namespace RuuviTagApp.Controllers
                 }
                 catch (InvalidOperationException)
                 {
-                    TempData["TagErrorList"] = new List<string> { "Tag data is in unsupported format." };
+                    TempData["TagErrorList"] = new List<string> { "Tag data is in an unsupported format." };
                     TempData["ShowAddTag"] = true;
                     TempData["TagModel"] = tag;
                     return RedirectToAction("Index");
