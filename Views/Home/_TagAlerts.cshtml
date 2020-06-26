@@ -88,20 +88,37 @@
     // Temperature
     var tempHighSlider = document.getElementById("tempHigh");
     var tempHighOutput = document.getElementById("tempHighValue");
-    tempHighOutput.innerHTML = tempHighSlider.value;
+    //tempHighOutput.innerHTML = tempHighSlider.value;
 
     var tempLowSlider = document.getElementById("tempLow");
     var tempLowOutput = document.getElementById("tempLowValue");
-    tempLowOutput.innerHTML = tempLowSlider.value;
+
+    //tempLowOutput.innerHTML = tempLowSlider.value;
 
     tempHighSlider.oninput = function () {
         tempHighOutput.innerHTML = this.value;
         $('#TemperatureHigh').val(this.value);
+        checkTempValidity();
     }
 
     tempLowSlider.oninput = function () {
         tempLowOutput.innerHTML = this.value;
         $('#TemperatureLow').val(this.value);
+        checkTempValidity();
+    }
+
+    function checkTempValidity() {
+        if (parseFloat(tempLowSlider.value) > parseFloat(tempHighSlider.value)) {
+            if (!document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
+                document.getElementById("addAlarmBtn").setAttribute("disabled", true);
+                tempLowOutput.classList.add("text-danger");
+            }
+        } else {
+            if (document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
+                document.getElementById("addAlarmBtn").removeAttribute("disabled");
+                tempLowOutput.classList.remove("text-danger");
+            }
+        }
     }
 
     // Humidity
@@ -116,11 +133,27 @@
     humHighSlider.oninput = function () {
         humHighOutput.innerHTML = this.value;
         $('#HumidityHigh').val(this.value);
+        checkHumValidity();
     }
 
     humLowSlider.oninput = function () {
         humLowOutput.innerHTML = this.value;
         $('#HumidityLow').val(this.value);
+        checkHumValidity();
+    }
+
+    function checkHumValidity() {
+        if (parseFloat(humLowSlider.value) > parseFloat(humHighSlider.value)) {
+            if (!document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
+                document.getElementById("addAlarmBtn").setAttribute("disabled", true);
+                humLowOutput.classList.add("text-danger");
+            }
+        } else {
+            if (document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
+                document.getElementById("addAlarmBtn").removeAttribute("disabled");
+                humLowOutput.classList.remove("text-danger");
+            }
+        }
     }
 
     // Air pressure
@@ -135,11 +168,27 @@
     pressHighSlider.oninput = function () {
         pressHighOutput.innerHTML = this.value;
         $('#PressureHigh').val(this.value);
+        checkPressValidity();
     }
 
     pressLowSlider.oninput = function () {
         pressLowOutput.innerHTML = this.value;
         $('#PressureLow').val(this.value);
+        checkPressValidity();
+    }
+
+    function checkPressValidity() {
+        if (parseFloat(pressLowSlider.value) > parseFloat(pressHighSlider.value)) {
+            if (!document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
+                document.getElementById("addAlarmBtn").setAttribute("disabled", true);
+                pressLowOutput.classList.add("text-danger");
+            }
+        } else {
+            if (document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
+                document.getElementById("addAlarmBtn").removeAttribute("disabled");
+                pressLowOutput.classList.remove("text-danger");
+            }
+        }
     }
 </script>
 
