@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using RuuviTagApp.Models;
 using RuuviTagApp.ViewModels;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
@@ -284,8 +285,8 @@ namespace RuuviTagApp.Controllers
                                                                                            select l).FirstOrDefaultAsync() != null;
 
         private async Task<bool> TagIsInListAsync(int tagsId, int listsId) => await (from r in db.TagListRowModels
-                                                                                where r.TagId == tagsId && r.ListId == listsId
-                                                                                select r).FirstOrDefaultAsync() != null;
+                                                                                     where r.TagId == tagsId && r.ListId == listsId
+                                                                                     select r).FirstOrDefaultAsync() != null;
 
         [Authorize]
         [HttpPost]
@@ -360,6 +361,7 @@ namespace RuuviTagApp.Controllers
                 else if (alert.TagAlertType.TypeName.EndsWith("low") && lastHighAlertTypeId == alert.AlertTypeId - 1 && lastHighLimit < alert.AlertLimit)
                 {
                     string type = $"{alert.TagAlertType.TypeName.Substring(0, alert.TagAlertType.TypeName.IndexOf("low"))}";
+                    type = char.ToUpper(type[0]) + type.Substring(1);
                     inconsistencies.Add($"{type} low and high alerts are mixed. Please consider changing them for proper alert.");
                 }
             }
@@ -380,6 +382,7 @@ namespace RuuviTagApp.Controllers
                 return RedirectToAction("Index");
             }
             var alerts = await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync();
+            ViewBag.AlertErrors = await CheckTagAlertLimitsValidity((int)tagID);
             return PartialView(alerts);
         }
 
