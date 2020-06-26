@@ -188,11 +188,21 @@ namespace RuuviTagApp.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // DECODE DATA HERE ?
+                try
+                {
+                    UnpackRawData test = new UnpackRawData();
+                    test.UnpackAllData(apiResponse.First().data);
+                }
+                catch (InvalidOperationException)
+                {
+                    TempData["TagErrorList"] = new List<string> { "Tag data is in unsupported format." };
+                    TempData["ShowAddTag"] = true;
+                    TempData["TagModel"] = tag;
+                    return RedirectToAction("Index");
+                }
 
                 var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
                 await db.SaveChangesAsync();
-                // use data and tag to refresh view
                 return RedirectToAction("Index");
             }
 
