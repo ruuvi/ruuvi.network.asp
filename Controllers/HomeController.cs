@@ -91,7 +91,6 @@ namespace RuuviTagApp.Controllers
             {
                 foreach (var e in ViewBag.TagErrors)
                 {
-                    // When more thigs are added to settings "TagName" will need to be changed to 'string.Empty'.
                     ModelState.AddModelError("TagName", e);
                 }
                 ViewBag.AvailableGroups = await GetAvailableGroupsForTag(tag.TagId, userID);
@@ -149,9 +148,6 @@ namespace RuuviTagApp.Controllers
                 TempData["apiHumData"] = dataHumList;
                 TempData["apiPressData"] = dataPressList;
 
-
-                // DECODE DATA HERE ?
-
                 TempData["ApiResponse"] = lstapiData;
                 return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
@@ -203,7 +199,7 @@ namespace RuuviTagApp.Controllers
                     return RedirectToAction("Index");
                 }
 
-                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
+                db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -362,7 +358,7 @@ namespace RuuviTagApp.Controllers
                 {
                     string type = $"{alert.TagAlertType.TypeName.Substring(0, alert.TagAlertType.TypeName.IndexOf("low"))}";
                     type = char.ToUpper(type[0]) + type.Substring(1);
-                    inconsistencies.Add($"{type} low and high alerts are mixed. Please consider changing them for proper alert.");
+                    inconsistencies.Add($"{type} low and high alerts are swapped.");
                 }
             }
             return inconsistencies;
@@ -405,11 +401,6 @@ namespace RuuviTagApp.Controllers
             db.TagAlertModels.Remove(alert);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        public ActionResult TagNav()
-        {
-            return View();
         }
 
         private async Task<List<WhereOSApiRuuvi>> GetTagData(string macAddress)
@@ -466,21 +457,6 @@ namespace RuuviTagApp.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public ActionResult TemperatureChart()
-        {
-            return View();
-        }
-
-        public ActionResult HumidityChart()
-        {
-            return View();
-        }
-
-        public ActionResult AirpressureChart()
-        {
-            return View();
         }
 
         [Authorize]
@@ -746,7 +722,7 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Groups");
         }
 
-        public async Task<ActionResult> _ModalGroupGetTags(int groupID)
+        public async Task<ActionResult> _GroupTagDataPartial(int groupID)
         {
             List<GroupDataModel> groupData = new List<GroupDataModel>();
 
@@ -779,7 +755,5 @@ namespace RuuviTagApp.Controllers
             
             return PartialView(groupData);
         }
-
-
     }
 }

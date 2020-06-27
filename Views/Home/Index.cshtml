@@ -193,12 +193,12 @@
                                 }
                             }],
                             xAxes: [{
-                                type: 'time',
-                                time: {
-                                    displayFormats: {
-                                        quarter: 'MMM YYYY'
-                                    }
-                                }
+                                //type: 'time',
+                                //time: {
+                                //    displayFormats: {
+                                //        quarter: 'MMM YYYY'
+                                //    }
+                                //}
                             }]
                         }
                     }
@@ -438,7 +438,7 @@
                 settingsBtn.style.display = "none";
             }
 
-            let url = "/Home/_ModalGroupGetTags/?groupID=" + groupid;
+            let url = "/Home/_GroupTagDataPartial/?groupID=" + groupid;
             $.get(url, (data) => {
                 $("#groupchartarea").html(data);
             });
