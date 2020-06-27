@@ -57,97 +57,33 @@
 }
 
 <script>
+    function makeChartsForTag(tagid, data) {
+        document.getElementById(`tagTempNow_${tagid}`).innerHTML = data[data.length - 1].Data.temperature;
+        document.getElementById(`tagHumNow_${tagid}`).innerHTML = data[data.length - 1].Data.humidity;
+        document.getElementById(`tagPressNow_${tagid}`).innerHTML = data[data.length - 1].Data.pressure;
+
+        let confTemp = new ChartConfig('Temperature').make();
+        let confHum = new ChartConfig('Humidity').make();
+        let confPress = new ChartConfig('Pressure').make();
+
+        data.forEach(row => {
+            confTemp.data.labels.push(parseDate(row.Time));
+            confTemp.data.datasets[0].data.push(row.Data.temperature);
+
+            confHum.data.labels.push(parseDate(row.Time));
+            confHum.data.datasets[0].data.push(row.Data.humidity);
+
+            confPress.data.labels.push(parseDate(row.Time));
+            confPress.data.datasets[0].data.push(row.Data.pressure);
+        });
+
+        new Chart(document.getElementById(`tempchart_${tagid}`), confTemp);
+        new Chart(document.getElementById(`humchart_${tagid}`), confHum);
+        new Chart(document.getElementById(`presschart_${tagid}`), confPress);
+    }
+
 @foreach (var i in Model)
 {
-    var lastTemp = @Html.Raw(i.Temperature.Substring( i.Temperature.LastIndexOf(",") +1));
-    var lastHum = @Html.Raw(i.Humidity.Substring(i.Humidity.LastIndexOf(",") + 1));
-    var lastPress = @Html.Raw(i.Pressure.Substring(i.Pressure.LastIndexOf(",") + 1));
-
-    <text>
-    document.getElementById("tagTempNow_@i.TagID").innerHTML = @lastTemp;
-    document.getElementById("tagHumNow_@i.TagID").innerHTML = @lastHum;
-    document.getElementById("tagPressNow_@i.TagID").innerHTML = @lastPress;
-
-    new Chart(document.getElementById("tempchart_@i.TagID"), {
-        type: 'line',
-        data: {
-            labels: [@Html.Raw(i.Time)],
-            datasets: [{
-                label: 'Temperature',
-                data: [@Html.Raw(i.Temperature)],
-                backgroundColor: [
-                    'rgba(107, 234, 225, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(107, 234, 225, 1)',
-                ],
-                borderWidth: 3
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-
-    new Chart(document.getElementById("humchart_@i.TagID"), {
-        type: 'line',
-        data: {
-            labels: [@Html.Raw(i.Time)],
-            datasets: [{
-                label: 'Humidity',
-                data: [@Html.Raw(i.Humidity)],
-                backgroundColor: [
-                    'rgba(107, 234, 225, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(107, 234, 225, 1)',
-                ],
-                borderWidth: 3
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-
-    new Chart(document.getElementById("presschart_@i.TagID"), {
-        type: 'line',
-        data: {
-            labels: [@Html.Raw(i.Time)],
-            datasets: [{
-                label: 'Pressure',
-                data: [@Html.Raw(i.Pressure)],
-                backgroundColor: [
-                    'rgba(107, 234, 225, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(107, 234, 225, 1)',
-                ],
-                borderWidth: 3
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-    </text>
+    @:makeChartsForTag(@i.TagID, @Html.Raw(Json.Encode(i.TagData)));
 }
 </script>

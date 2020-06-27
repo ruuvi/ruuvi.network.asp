@@ -5,19 +5,6 @@
     ViewBag.Title = "Home";
 
     MacAddressModel mam = Model is MacAddressModel ? Model : new MacAddressModel();
-
-    <script>
-        //Putting the datas viewbags into "let" variables
-        let labelTime = [@Html.Raw(ViewBag.apiTime)];
-        let labelTemp = [@Html.Raw(ViewBag.apiTempData)];
-        let labelHum = [@Html.Raw(ViewBag.apiHumData)];
-        let labelPress = [@Html.Raw(ViewBag.apiPressData)];
-    </script>
-
-    // Variables to display latest RuuviTag data
-    string lastTemp = "";
-    string lastHumi = "";
-    string lastPressure = "";
 }
 
 
@@ -90,20 +77,13 @@
     }@*End of content visible only when user is logged in*@
 
     <div id="chartarea" style="display:none">
-        @if (ViewBag.TagData != null)
-        {
-            // Get the last data from RuuviTag
-            lastTemp = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.temperature;
-            lastHumi = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.humidity;
-            lastPressure = ViewBag.TagData[ViewBag.TagData.Count - 1].Data.pressure;
-        }
         <div class="RuuviTagData">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="row" id="ruuviTagTemperature">
                         <div class="col-lg-12 col-sm-12">
                             <a class="btn btn-tagdata-temp" id="btn-TagTemp" onclick="highlightTempChart()" title="Highlight temperature"></a>
-                            <p id="tagTempNow" class="tagdata-value">@lastTemp</p> <span class="celsius">&#176;C</span>
+                            <p id="tagTempNow" class="tagdata-value"></p> <span class="celsius">&#176;C</span>
                             <p class="tagdata-header">Temperature</p>
                             <hr class="tagdata-hr" />
                         </div>
@@ -111,7 +91,7 @@
                     <div class="row" id="ruuviTagHumidity">
                         <div class="col-lg-12 col-sm-12">
                             <a class="btn btn-tagdata-hum" id="btn-TagHum" onclick="highlightHumiChart()" title="Highlight humidity"></a>
-                            <p id="tagHumNow" class="tagdata-value">@lastHumi</p> <span class="percent">%</span>
+                            <p id="tagHumNow" class="tagdata-value"></p> <span class="percent">%</span>
                             <p class="tagdata-header">Humidity</p>
                             <hr class="tagdata-hr" />
                         </div>
@@ -119,7 +99,7 @@
                     <div class="row" id="ruuviTagAirPressure">
                         <div class="col-lg-12 col-sm-12">
                             <a class="btn btn-tagdata-air" id="btn-TagAir" onclick="highlightPressChart()" title="Highlight air pressure"></a>
-                            <p id="tagPressNow" class="tagdata-value">@lastPressure</p> <span class="hpa">hPa</span>
+                            <p id="tagPressNow" class="tagdata-value"></p> <span class="hpa">hPa</span>
                             <p class="tagdata-header">Air pressure</p>
                             <hr class="tagdata-hr" />
                             <p id="lastUpdated">Not calculated</p>
@@ -191,14 +171,6 @@
                                 ticks: {
                                     beginAtZero: true
                                 }
-                            }],
-                            xAxes: [{
-                                //type: 'time',
-                                //time: {
-                                //    displayFormats: {
-                                //        quarter: 'MMM YYYY'
-                                //    }
-                                //}
                             }]
                         }
                     }
@@ -258,7 +230,7 @@
 
             updateElement.innerHTML = lastUpdated;
         }
-        var hasData, userHasEmail;
+        var userHasEmail;
         $(window).on('load', function () {
             let showRegisterModal = @((ViewBag.ShowRegisterModal ?? false).ToString().ToLower());
             if (showRegisterModal) {
@@ -279,10 +251,18 @@
                 $('#tagSettingsModal').modal('show');
             }
             userHasEmail = @((ViewBag.UserHasEmail ?? false).ToString().ToLower());
-            hasData = @((ViewBag.TagData != null).ToString().ToLower());
+            let hasData = @((ViewBag.TagData != null).ToString().ToLower());
             if (hasData) {
+                const unpackedTagData = @Html.Raw(Json.Encode(ViewBag.TagData));
+                let time = [], temp = [], hum = [], press = []
+                unpackedTagData.forEach(row => {
+                    time.push(parseDate(row.Time));
+                    temp.push(row.Data.temperature);
+                    hum.push(row.Data.humidity);
+                    press.push(row.Data.pressure);
+                });
+                updateCharts(time, temp, hum, press);
                 document.getElementById("chartarea").style.display = "block";
-                updateCharts(labelTime, labelTemp, labelHum, labelPress);
             }
         });
         $('.svg-btn-new').click(function () {
@@ -377,16 +357,15 @@
                 url: url,
                 dataType: 'json',
             }).done(function (results) {
-                let labelTime = [], labelTemp = [], labelHum = [], labelPress = [];
+                let time = [], temp = [], hum = [], press = [];
                 results.forEach(row => {
-                    labelTime.push(parseDate(row.Time));
-                    labelTemp.push(row.Data.temperature);
-                    labelHum.push(row.Data.humidity);
-                    labelPress.push(row.Data.pressure);
+                    time.push(parseDate(row.Time));
+                    temp.push(row.Data.temperature);
+                    hum.push(row.Data.humidity);
+                    press.push(row.Data.pressure);
 
                 });
-                //pushToCharts(labelTime, labelTemp, labelHum, labelPress, tagid);
-                updateCharts(labelTime, labelTemp, labelHum, labelPress);
+                updateCharts(time, temp, hum, press);
 
                 document.getElementById("chartarea").style.display = "block";
                 document.getElementById("intervalUpdateInfo").innerHTML = "";
@@ -406,11 +385,9 @@
             configHum.data.datasets[0].data = hum;
             configPress.data.datasets[0].data = press;
 
-            if (!hasData) {
-                document.getElementById('tagTempNow').textContent = temp[temp.length - 1];
-                document.getElementById('tagHumNow').textContent = hum[hum.length - 1];
-                document.getElementById('tagPressNow').textContent = press[press.length - 1];
-            }
+            document.getElementById('tagTempNow').textContent = temp[temp.length - 1];
+            document.getElementById('tagHumNow').textContent = hum[hum.length - 1];
+            document.getElementById('tagPressNow').textContent = press[press.length - 1];
 
             window.tempChart.update();
             window.humChart.update();
@@ -421,10 +398,10 @@
             let d = /\/Date\((\d*)\)\//.exec(date);
             if (d) {
                 let time = new Date(+d[1]);
-                return time.toLocaleDateString(navigator.language, {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
+                let options = { year: '2-digit', month: 'numeric', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+                //let options = { dateStyle: 'short', timeStyle: 'short' };
+                //let options = { timeStyle: 'short' };
+                return time.toLocaleDateString(navigator.language, options);
             }
         }
 
@@ -437,8 +414,12 @@
                 alertBtn.style.display = "none";
                 settingsBtn.style.display = "none";
             }
-
-            let url = "/Home/_GroupTagDataPartial/?groupID=" + groupid;
+            let url;
+            if (dataInterval != 1) {
+                url = `/Home/_GroupTagDataPartial/?groupID=${groupid}&interval=${dataInterval}`;
+            } else {
+                url = "/Home/_GroupTagDataPartial/?groupID=" + groupid;
+            }
             $.get(url, (data) => {
                 $("#groupchartarea").html(data);
             });

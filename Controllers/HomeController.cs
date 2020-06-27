@@ -1,17 +1,15 @@
-﻿using Microsoft.Ajax.Utilities;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using RuuviTagApp.Models;
 using RuuviTagApp.ViewModels;
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -31,18 +29,14 @@ namespace RuuviTagApp.Controllers
             ViewBag.ShowTagSettings = TempData["ShowTagSettings"];
             ViewBag.TagErrors = TempData["TagErrorList"];
             ViewBag.GeneralError = TempData["GeneralError"];
-            ViewBag.apiTime = TempData["apiTime"];
-            ViewBag.apiTempData = TempData["apiTempData"];
-            ViewBag.apiHumData = TempData["apiHumData"];
-            ViewBag.apiPressData = TempData["apiPressData"];
-
+            
             string userID = string.Empty;
 
             if (!string.IsNullOrWhiteSpace(tagMac) && !Request.IsAuthenticated)
             {
-                if (TempData["ApiResponse"] != null)
+                if (TempData["UnpackedTagData"] != null)
                 {
-                    ViewBag.TagData = TempData["ApiResponse"];
+                    ViewBag.TagData = TempData["UnpackedTagData"];
                 }
                 else
                 {
@@ -121,11 +115,6 @@ namespace RuuviTagApp.Controllers
                     return View("Index", mac);
                 }
 
-                string dataTimeList;
-                string dataTempList;
-                string dataHumList;
-                string dataPressList;
-
                 List<UnpackData> lstapiData = new List<UnpackData>();
 
                 foreach (WhereOSApiRuuvi apiRuuviTag in apiResponse)
@@ -138,17 +127,7 @@ namespace RuuviTagApp.Controllers
                     lstapiData.Add(ApiRowData);
                 }
 
-                dataTimeList = "'" + string.Join("','", lstapiData.Select(n => n.Time.TimeOfDay).ToList()) + "'";
-                dataTempList = "'" + string.Join("','", lstapiData.Select(n => n.Data.temperature).ToList()) + "'";
-                dataHumList = "'" + string.Join("','", lstapiData.Select(n => n.Data.humidity).ToList()) + "'";
-                dataPressList = string.Join(",", lstapiData.Select(n => n.Data.pressure).ToList());
-
-                TempData["apiTime"] = dataTimeList;
-                TempData["apiTempData"] = dataTempList;
-                TempData["apiHumData"] = dataHumList;
-                TempData["apiPressData"] = dataPressList;
-
-                TempData["ApiResponse"] = lstapiData;
+                TempData["UnpackedTagData"] = lstapiData;
                 return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
             return View("Index", mac);
@@ -722,13 +701,22 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Groups");
         }
 
-        public async Task<ActionResult> _GroupTagDataPartial(int groupID)
+        public async Task<ActionResult> _GroupTagDataPartial(int groupID, int? interval)
         {
             List<GroupDataModel> groupData = new List<GroupDataModel>();
 
             foreach (TagListRowModel row in await db.TagListRowModels.Where(r => r.ListId == groupID).Include(t => t.RuuviTagModel).ToListAsync())
             {
-                List<WhereOSApiRuuvi> apiResponse = await GetTagData(row.RuuviTagModel.TagMacAddress);
+                List<WhereOSApiRuuvi> apiResponse;
+
+                if (interval == null)
+                {
+                    apiResponse = await GetTagData(row.RuuviTagModel.TagMacAddress); 
+                }
+                else
+                {
+                    apiResponse = await GetTagData(row.RuuviTagModel.TagMacAddress, (int)interval);
+                }
 
                 List<UnpackData> lstapiData = new List<UnpackData>();
 
@@ -745,12 +733,9 @@ namespace RuuviTagApp.Controllers
                 groupData.Add(new GroupDataModel
                 {
                     TagID = row.RuuviTagModel.TagId,
-                    TagDisplay = row.RuuviTagModel.TagName??row.RuuviTagModel.TagMacAddress,
-                    Time = "'" + string.Join("','", lstapiData.Select(n => n.Time.TimeOfDay).ToList()) + "'",
-                    Temperature = "'" + string.Join("','", lstapiData.Select(n => n.Data.temperature).ToList()) + "'",
-                    Humidity = "'" + string.Join("','", lstapiData.Select(n => n.Data.humidity).ToList()) + "'",
-                    Pressure = string.Join(",", lstapiData.Select(n => n.Data.pressure).ToList())
-                }); 
+                    TagDisplay = row.RuuviTagModel.TagName ?? row.RuuviTagModel.TagMacAddress,
+                    TagData = lstapiData
+                });
             }
             
             return PartialView(groupData);

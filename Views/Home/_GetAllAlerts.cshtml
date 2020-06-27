@@ -15,10 +15,10 @@
     if (ViewBag.AlertErrors.Count > 0)
     {
         <p class="text-danger">To receive proper alert notifications, please fix the following alerts:</p>
-        <ul>
+        <ul class="text-danger">
             @foreach (var er in ViewBag.AlertErrors)
             {
-                <li><p class="text-danger">@er</p></li>
+                <li><p>@er</p></li>
             }
         </ul>
     }
