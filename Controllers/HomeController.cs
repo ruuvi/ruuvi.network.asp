@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using RuuviTagApp.Models;
 using RuuviTagApp.ViewModels;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
@@ -89,7 +91,6 @@ namespace RuuviTagApp.Controllers
             {
                 foreach (var e in ViewBag.TagErrors)
                 {
-                    // When more thigs are added to settings "TagName" will need to be changed to 'string.Empty'.
                     ModelState.AddModelError("TagName", e);
                 }
                 ViewBag.AvailableGroups = await GetAvailableGroupsForTag(tag.TagId, userID);
@@ -147,9 +148,6 @@ namespace RuuviTagApp.Controllers
                 TempData["apiHumData"] = dataHumList;
                 TempData["apiPressData"] = dataPressList;
 
-
-                // DECODE DATA HERE ?
-
                 TempData["ApiResponse"] = lstapiData;
                 return RedirectToAction("Index", "Home", new { tagMac = mac.GetAddress() });
             }
@@ -201,7 +199,7 @@ namespace RuuviTagApp.Controllers
                     return RedirectToAction("Index");
                 }
 
-                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
+                db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -283,8 +281,8 @@ namespace RuuviTagApp.Controllers
                                                                                            select l).FirstOrDefaultAsync() != null;
 
         private async Task<bool> TagIsInListAsync(int tagsId, int listsId) => await (from r in db.TagListRowModels
-                                                                                where r.TagId == tagsId && r.ListId == listsId
-                                                                                select r).FirstOrDefaultAsync() != null;
+                                                                                     where r.TagId == tagsId && r.ListId == listsId
+                                                                                     select r).FirstOrDefaultAsync() != null;
 
         [Authorize]
         [HttpPost]
@@ -301,20 +299,21 @@ namespace RuuviTagApp.Controllers
                 TempData["GeneralError"] = "You do not have permission to do that.";
                 return RedirectToAction("Index");
             }
-            List<TagAlertType> alarmTypes = await db.TagAlertTypes.ToListAsync();
+            List<TagAlertType> alertTypes = await db.TagAlertTypes.ToListAsync();
             bool NoAlertsAdded = true;
+            List<TagAlertModel> existingAlerts = await db.TagAlertModels.ToListAsync();
             foreach (PropertyInfo pi in alert.GetType().GetProperties())
             {
                 if (pi.GetValue(alert) != null)
                 {
-                    int? alarmTypeId = alarmTypes
+                    int? alertTypeId = alertTypes
                         .Where(at => string.Equals(at.TypeName, pi.Name, StringComparison.OrdinalIgnoreCase))
                         .Select(at => at.AlertTypeId).FirstOrDefault();
-                    if (alarmTypeId == null)
+                    if (alertTypeId == null)
                     {
                         continue;
                     }
-                    if (await TagHasAlertOfType((int)tagID, (int)alarmTypeId) is TagAlertModel oldAlert && oldAlert != null)
+                    if (await TagHasAlertOfType((int)tagID, (int)alertTypeId) is TagAlertModel oldAlert && oldAlert != null)
                     {
                         oldAlert.AlertLimit = (double)pi.GetValue(alert);
                         db.Entry(oldAlert).State = EntityState.Modified;
@@ -323,7 +322,7 @@ namespace RuuviTagApp.Controllers
                     {
                         db.TagAlertModels.Add(new TagAlertModel
                         {
-                            AlertTypeId = (int)alarmTypeId,
+                            AlertTypeId = (int)alertTypeId,
                             TagId = (int)tagID,
                             AlertLimit = (double)pi.GetValue(alert)
                         });
@@ -343,6 +342,28 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Index");
         }
 
+        private async Task<List<string>> CheckTagAlertLimitsValidity(int tagID)
+        {
+            int lastHighAlertTypeId = 0;
+            double lastHighLimit = 0;
+            List<string> inconsistencies = new List<string>();
+            foreach (TagAlertModel alert in await db.TagAlertModels.Where(a => a.TagId == tagID).Include(t => t.TagAlertType).ToListAsync())
+            {
+                if (alert.TagAlertType.TypeName.EndsWith("high"))
+                {
+                    lastHighAlertTypeId = alert.AlertTypeId;
+                    lastHighLimit = alert.AlertLimit;
+                }
+                else if (alert.TagAlertType.TypeName.EndsWith("low") && lastHighAlertTypeId == alert.AlertTypeId - 1 && lastHighLimit < alert.AlertLimit)
+                {
+                    string type = $"{alert.TagAlertType.TypeName.Substring(0, alert.TagAlertType.TypeName.IndexOf("low"))}";
+                    type = char.ToUpper(type[0]) + type.Substring(1);
+                    inconsistencies.Add($"{type} low and high alerts are swapped.");
+                }
+            }
+            return inconsistencies;
+        }
+
         [Authorize]
         public async Task<ActionResult> _GetAllAlerts(int? tagID)
         {
@@ -357,6 +378,7 @@ namespace RuuviTagApp.Controllers
                 return RedirectToAction("Index");
             }
             var alerts = await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync();
+            ViewBag.AlertErrors = await CheckTagAlertLimitsValidity((int)tagID);
             return PartialView(alerts);
         }
 
@@ -379,11 +401,6 @@ namespace RuuviTagApp.Controllers
             db.TagAlertModels.Remove(alert);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        public ActionResult TagNav()
-        {
-            return View();
         }
 
         private async Task<List<WhereOSApiRuuvi>> GetTagData(string macAddress)
@@ -440,21 +457,6 @@ namespace RuuviTagApp.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public ActionResult TemperatureChart()
-        {
-            return View();
-        }
-
-        public ActionResult HumidityChart()
-        {
-            return View();
-        }
-
-        public ActionResult AirpressureChart()
-        {
-            return View();
         }
 
         [Authorize]
@@ -720,7 +722,7 @@ namespace RuuviTagApp.Controllers
             return RedirectToAction("Groups");
         }
 
-        public async Task<ActionResult> _ModalGroupGetTags(int groupID)
+        public async Task<ActionResult> _GroupTagDataPartial(int groupID)
         {
             List<GroupDataModel> groupData = new List<GroupDataModel>();
 
@@ -753,7 +755,5 @@ namespace RuuviTagApp.Controllers
             
             return PartialView(groupData);
         }
-
-
     }
 }
