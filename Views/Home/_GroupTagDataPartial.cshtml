@@ -4,6 +4,7 @@
 {
     <h2 class="mt-1">@item.TagDisplay</h2>
     <div class="RuuviTagData">
+        <p id="oldVersionWarning_@item.TagID" class="text-warning" style="display: none">This RuuviTag is using Data format 3 which is getting older. Read more <a href="https://lab.ruuvi.com/ruuvitag-fw/" target="blank">here</a>.</p>
         <div class="row">
             <div class="col-lg-6">
                 <div class="row" id="ruuviTagTemperature">
@@ -73,8 +74,17 @@
             confPress.data.labels.push(parseDate(row.Time));
             confPress.data.datasets[0].data.push(row.Data.pressure);
         });
+
+        let warningElement = document.getElementById("oldVersionWarning_" + tagid);
         if (tagVersion(data[0].Data.vers)) {
-            console.log('do something to some element?');
+            if (warningElement.style.display != "block") {
+                warningElement.style.display = "block";
+            }
+            //console.log('do something to some element?');
+        } else {
+            if (warningElement.style.display == "block") {
+                warningElement.style.display = "none";
+            }
         }
 
         new Chart(document.getElementById(`tempchart_${tagid}`), confTemp);

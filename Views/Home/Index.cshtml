@@ -278,16 +278,8 @@
                     press.push(row.Data.pressure);
                 });
                 updateCharts(time, temp, hum, press);
-                let warningElement = document.getElementById("oldVersionWarning");
                 if (tagVersion(unpackedTagData[0].Data.vers)) {
-                    if (warningElement.style.display != "block") {
-                        warningElement.style.display = "block";
-                    }
-                    //console.log('do something to some element?');
-                } else {
-                    if (warningElement.style.display == "block") {
-                        warningElement.style.display = "none";
-                    }
+                    console.log('do something to some element?');
                 }
                 document.getElementById("chartarea").style.display = "block";
             }
