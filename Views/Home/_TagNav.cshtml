@@ -12,7 +12,7 @@
                             <h6 class="dropdown-header dropdown-header-ruuvi">RuuviTags</h6>
                             @foreach (var tag in ViewBag.UserTagsList)
                             {
-                                <a class="dropdown-item dropdown-item-ruuvi dropdown-item-ruuvitag" onclick="setSelectedTagId('@tag.TagId')">@(tag.TagName ?? tag.TagMacAddress)</a>
+                                <a class="dropdown-item dropdown-item-ruuvi dropdown-item-ruuvitag" onclick="setSelectedTagId('@tag.TagId', '@(tag.TagName ?? tag.TagMacAddress)')">@(tag.TagName ?? tag.TagMacAddress)</a>
                             }
                             @if (ViewBag.UserTagsListError != null)
                             {
@@ -24,7 +24,7 @@
                                 <h6 class="dropdown-header dropdown-header-ruuvi">Groups</h6>
                                 foreach (var group in ViewBag.UserGroups)
                                 {
-                                    <a class="dropdown-item dropdown-item-ruuvi" onclick="setSelectedGroupId('@group.UserTagListId')">@group.ListName</a>
+                                    <a class="dropdown-item dropdown-item-ruuvi" onclick="setSelectedGroupId('@group.UserTagListId', '@group.ListName')">@group.ListName</a>
                                 }
                             }
                         </div>
