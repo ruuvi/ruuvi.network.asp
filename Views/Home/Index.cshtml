@@ -72,7 +72,6 @@
                 <div class="home-selectedTag" id="home-selectedTag" style="display: none">
                     <h2 id="userSelectionHeader" class="d-inline"></h2>
                     <p id="intervalInfo" style="display: none" class="d-inline">Data interval is 15 minutes</p>
-                    <p id="intervalUpdateInfo" style="display: none" class="text-warning"></p>
                     <p id="oldVersionWarning" class="text-warning" style="display: none">This RuuviTag is using Data format 3 which is getting older. Read more <a href="https://lab.ruuvi.com/ruuvitag-fw/" target="blank">here</a>.</p>
                 </div>
             </div>
@@ -285,6 +284,10 @@
                         warningElement.style.display = "block";
                     }
                     //console.log('do something to some element?');
+                } else {
+                    if (warningElement.style.display == "block") {
+                        warningElement.style.display = "none";
+                    }
                 }
                 document.getElementById("chartarea").style.display = "block";
             }
@@ -407,10 +410,13 @@
                         warningElement.style.display = "block";
                     }
                     //console.log('do something to some element?');
+                } else {
+                    if (warningElement.style.display == "block") {
+                        warningElement.style.display = "none";
+                    }
                 }
 
                 document.getElementById("chartarea").style.display = "block";
-                document.getElementById("intervalUpdateInfo").style.display = "none";
                 setApiCallTime(); // Set api call time for "Updated x ago"
 
                 highlightEye();
@@ -481,7 +487,6 @@
                 $("#groupchartarea").html(data);
             });
             document.getElementById("chartarea").style.display = "none";
-            document.getElementById("intervalUpdateInfo").style.display = "none";
 
             highlightEye();
             displayDataIntervalText();
@@ -496,10 +501,7 @@
                 setSelectedGroupId(selectedGroupId, document.getElementById('userSelectionHeader').textContent);
             }
             let intervalDefaultText = "Data interval is ";
-            let intervalUpdateText = "Please select again to apply new interval.";
             document.getElementById("intervalInfo").innerHTML = intervalDefaultText + selectedInterval.text;
-            document.getElementById("intervalUpdateInfo").innerHTML = intervalUpdateText;
-            document.getElementById("intervalUpdateInfo").style.display = "block";
         }
 
         let tempChartColumn = document.getElementById("col-chart-temperature");
