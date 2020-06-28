@@ -50,20 +50,6 @@
     @* Content visible only when user is logged in *@
     @if (Request.IsAuthenticated)
     {
-        <div id="infoSelectedItem">
-            <p>Select a RuuviTag or a group to display data</p>
-        </div>
-        <div class="home-selectedTag">
-            <h2 id="userSelectionHeader"></h2>
-        </div>
-        <div class="spinner-grow loading-spinner ml-0" role="status" id="loading-tagdata" style="display: none">
-            <span class="sr-only">Loading...</span>
-        </div>
-        <p id="intervalInfo"></p>
-        <p id="intervalUpdateInfo"></p>
-        <p id="lastUpdated-grp" style="display: none" class="mb-1">Not calculated</p>
-
-
         AddTagModel add = Model is AddTagModel ? Model : new AddTagModel();
         @Html.Partial("~/Views/Home/_AddTagModal.cshtml", add)
         if (Model is RuuviTagModel tag)
@@ -76,6 +62,29 @@
         }
         AddAlertModel alert = Model is AddAlertModel ? Model : new AddAlertModel();
         @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alert)
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="infoSelectedItem">
+                    <p>Select a RuuviTag or a group to display data</p>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="home-selectedTag" id="home-selectedTag" style="display: none">
+                    <h2 id="userSelectionHeader" class="d-inline"></h2>
+                    <p id="intervalInfo" style="display: none" class="d-inline">Data interval is 15 minutes</p>
+                    <p id="intervalUpdateInfo" style="display: none" class="text-warning"></p>
+                </div>
+            </div>
+            @*<div class="col-lg-4">
+                <p id="intervalInfo" style="display: none">Data interval is 15 minutes</p>
+            </div>*@
+            <div class="col-lg-12">
+                <div class="spinner-grow loading-spinner ml-0" role="status" id="loading-tagdata" style="display: none">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p id="lastUpdated-grp" style="display: none" class="mb-3">Not calculated</p>
+            </div>
+        </div>
     }@*End of content visible only when user is logged in*@
 
     <div id="chartarea" style="display:none">
@@ -339,6 +348,7 @@
         });
 
         function setSelectedTagId(tagid) {
+            displaySelectedTagHeader();
             document.getElementById("loading-tagdata").style.display = "block";
 
             if (document.getElementById("lastUpdated-grp").style.display = "block") {
@@ -383,12 +393,13 @@
                 }
 
                 document.getElementById("chartarea").style.display = "block";
-                document.getElementById("intervalUpdateInfo").innerHTML = "";
+                document.getElementById("intervalUpdateInfo").style.display = "none";
                 setApiCallTime(); // Set api call time for "Updated x ago"
 
                 highlightEye();
                 highlightIcons();
 
+                displayDataIntervalText();
                 document.getElementById("loading-tagdata").style.display = "none";
             });
         }
@@ -432,6 +443,7 @@
         }
 
         function setSelectedGroupId(groupid) {
+            displaySelectedTagHeader();
             document.getElementById("loading-tagdata").style.display = "block";
             selectedGroupId = groupid;
             if (userHasEmail) {
@@ -451,8 +463,10 @@
                 $("#groupchartarea").html(data);
             });
             document.getElementById("chartarea").style.display = "none";
+            document.getElementById("intervalUpdateInfo").style.display = "none";
 
             highlightEye();
+            displayDataIntervalText();
         }
 
         function setGroupId(selectedGroup) {
@@ -468,9 +482,10 @@
         function setDataInterval(selectedInterval) {
             dataInterval = selectedInterval.dataset.interval;
             let intervalDefaultText = "Data interval is ";
-            let intervalUpdateText = " - Please select a RuuviTag to apply new interval.";
+            let intervalUpdateText = "Please select again to apply new interval.";
             document.getElementById("intervalInfo").innerHTML = intervalDefaultText + selectedInterval.text;
             document.getElementById("intervalUpdateInfo").innerHTML = intervalUpdateText;
+            document.getElementById("intervalUpdateInfo").style.display = "block";
         }
 
         let tempChartColumn = document.getElementById("col-chart-temperature");
@@ -507,6 +522,22 @@
             } else {
                 pressChartColumn.classList.remove("col-lg-12");
                 pressChartColumn.classList.add("col-lg-4");
+            }
+        }
+
+        function displayDataIntervalText() {
+            let textElement = document.getElementById("intervalInfo");
+
+            if (textElement.style.display != "block") {
+                textElement.style.display = "block";
+            }
+        }
+
+        function displaySelectedTagHeader() {
+            let element = document.getElementById("home-selectedTag");
+
+            if (element.style.display != "block") {
+                element.style.display = "block";
             }
         }
     </script>

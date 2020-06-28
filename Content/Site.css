@@ -670,6 +670,7 @@ body {
     background-size: 30px;
     background-position: left top 3px;
     opacity: 1;
+    width: 100%;
 }
 
     .home-selectedTag h2 {
