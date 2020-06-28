@@ -87,7 +87,6 @@
     @:makeChartsForTag(@i.TagID, @Html.Raw(Json.Encode(i.TagData)));
 }
 
-    console.log("Loaded group data!");
     document.getElementById("loading-tagdata").style.display = "none";
     setApiCallTime("grp"); // Set api call time for "Updated x ago"
 </script>

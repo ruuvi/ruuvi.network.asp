@@ -53,13 +53,13 @@
         <div id="infoSelectedItem">
             <p>Select a RuuviTag or a group to display data</p>
         </div>
-
         <div class="home-selectedTag">
             <h2 id="userSelectionHeader"></h2>
+            <div class="spinner-grow loading-spinner ml-0" role="status" id="loading-tagdata" style="display: none">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
-        <div class="spinner-grow loading-spinner ml-0" role="status" id="loading-tagdata" style="display: none">
-            <span class="sr-only">Loading...</span>
-        </div>
+
         <p id="intervalInfo"></p>
         <p id="intervalUpdateInfo"></p>
         <p id="lastUpdated-grp" style="display: none" class="mb-1">Not calculated</p>
@@ -336,7 +336,6 @@
         });
 
         function setSelectedTagId(tagid) {
-            console.log("Loading tag data");
             document.getElementById("loading-tagdata").style.display = "block";
 
             selectedTagId = tagid;
@@ -379,7 +378,7 @@
 
                 highlightEye();
                 highlightIcons();
-                console.log("Loaded tag data!");
+
                 document.getElementById("loading-tagdata").style.display = "none";
             });
         }
@@ -414,7 +413,6 @@
         }
 
         function setSelectedGroupId(groupid) {
-            console.log("Loading group data...");
             document.getElementById("loading-tagdata").style.display = "block";
             selectedGroupId = groupid;
             if (userHasEmail) {
@@ -435,7 +433,6 @@
             });
             document.getElementById("chartarea").style.display = "none";
 
-            //setApiCallTime("grp"); // Set api call time for "Updated x ago"
             highlightEye();
         }
 
