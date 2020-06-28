@@ -55,11 +55,10 @@
         </div>
         <div class="home-selectedTag">
             <h2 id="userSelectionHeader"></h2>
-            <div class="spinner-grow loading-spinner ml-0" role="status" id="loading-tagdata" style="display: none">
-                <span class="sr-only">Loading...</span>
-            </div>
         </div>
-
+        <div class="spinner-grow loading-spinner ml-0" role="status" id="loading-tagdata" style="display: none">
+            <span class="sr-only">Loading...</span>
+        </div>
         <p id="intervalInfo"></p>
         <p id="intervalUpdateInfo"></p>
         <p id="lastUpdated-grp" style="display: none" class="mb-1">Not calculated</p>
@@ -337,6 +336,10 @@
 
         function setSelectedTagId(tagid) {
             document.getElementById("loading-tagdata").style.display = "block";
+
+            if (document.getElementById("lastUpdated-grp").style.display = "block") {
+                document.getElementById("lastUpdated-grp").style.display = "none";
+            }
 
             selectedTagId = tagid;
             $("#groupchartarea").html("");
