@@ -52,7 +52,7 @@ namespace RuuviTagApp
             {
                 addHumid(data.Substring(16, 2));
                 addTemp(data.Substring(18, 4));
-                addTempfrac(data.Substring(20, 2));
+                //addTempfrac(data.Substring(20, 2));
                 addPress(data.Substring(22, 4));
                 addAccX(data.Substring(26, 4));
                 addAccy(data.Substring(30, 4));
