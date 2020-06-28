@@ -23,10 +23,14 @@ namespace RuuviTagApp
         public string moveCounter { get; set; }
         public string moveSeq { get; set; }
         public string MAC { get; set; }
+        public string manuId = "ff9904";
 
         public void UnpackAllData(string data)
         {
-            CutTagToLists(data);
+            if (data.Contains(manuId))
+            {
+                CutTagToLists(data);
+            }
         }
 
         public void CutTagToLists(string data)
