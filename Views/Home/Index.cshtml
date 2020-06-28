@@ -264,6 +264,9 @@
                     press.push(row.Data.pressure);
                 });
                 updateCharts(time, temp, hum, press);
+                if (tagVersion(unpackedTagData[0].Data.vers)) {
+                    console.log('do something to some element?');
+                }
                 document.getElementById("chartarea").style.display = "block";
             }
         });
@@ -374,6 +377,9 @@
 
                 });
                 updateCharts(time, temp, hum, press);
+                if (tagVersion(results[0].Data.vers)) {
+                    console.log('do something to some element?');
+                }
 
                 document.getElementById("chartarea").style.display = "block";
                 document.getElementById("intervalUpdateInfo").innerHTML = "";
@@ -384,6 +390,15 @@
 
                 document.getElementById("loading-tagdata").style.display = "none";
             });
+        }
+
+        function tagVersion(vers) {
+            if (vers === '03') {
+                console.log(vers);
+                return true;
+            } else if (vers === '05') {
+                console.log(vers);
+            }
         }
 
         function updateCharts(labels, temp, hum, press) {

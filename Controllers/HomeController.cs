@@ -405,14 +405,7 @@ namespace RuuviTagApp.Controllers
         {
             string[] intervals = { "5m", "15m", "30m", "1h", "2h" };
             string url = ApiHelper.ApiClient.BaseAddress + macAddress + "?p_aggregation=";
-            if (intervals.ElementAtOrDefault(interval) is string val)
-            {
-                url += val;
-            }
-            else
-            {
-                url += intervals[1];
-            }
+            url += intervals.ElementAtOrDefault(interval) is string val ? val : intervals[1];
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
                 if (response.IsSuccessStatusCode)

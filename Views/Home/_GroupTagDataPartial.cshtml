@@ -75,6 +75,9 @@
             confPress.data.labels.push(parseDate(row.Time));
             confPress.data.datasets[0].data.push(row.Data.pressure);
         });
+        if (tagVersion(data[0].Data.vers)) {
+            console.log('do something to some element?');
+        }
 
         new Chart(document.getElementById(`tempchart_${tagid}`), confTemp);
         new Chart(document.getElementById(`humchart_${tagid}`), confHum);
