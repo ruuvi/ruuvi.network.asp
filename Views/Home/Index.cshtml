@@ -73,6 +73,7 @@
                     <h2 id="userSelectionHeader" class="d-inline"></h2>
                     <p id="intervalInfo" style="display: none" class="d-inline">Data interval is 15 minutes</p>
                     <p id="intervalUpdateInfo" style="display: none" class="text-warning"></p>
+                    <p id="oldVersionWarning" class="text-warning" style="display: none">This RuuviTag is using Data format 3 which is getting older. Read more <a href="https://lab.ruuvi.com/ruuvitag-fw/" target="blank">here</a>.</p>
                 </div>
             </div>
             @*<div class="col-lg-4">
@@ -89,6 +90,10 @@
 
     <div id="chartarea" style="display:none">
         <div class="RuuviTagData">
+            @if (!Request.IsAuthenticated)
+            {
+                <p id="oldVersionWarning" class="text-warning ml-0" style="display: none">This RuuviTag is using Data format 3 which is getting older. Read more <a href="https://lab.ruuvi.com/ruuvitag-fw/" target="blank">here</a>.</p>
+            }
             <div class="row">
                 <div class="col-lg-6">
                     <div class="row" id="ruuviTagTemperature">
@@ -405,10 +410,17 @@
         }
 
         function tagVersion(vers) {
-            if (vers === '03') {
+            let warningElement = document.getElementById("oldVersionWarning");
+            if (vers == '03') {
+                if (warningElement.style.display != "block") {
+                    warningElement.style.display = "block";
+                }
                 console.log(vers);
                 return true;
-            } else if (vers === '05') {
+            } else if (vers == '05') {
+                if (warningElement.style.display == "block") {
+                    warningElement.style.display = "none";
+                }
                 console.log(vers);
             }
         }

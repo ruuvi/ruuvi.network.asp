@@ -852,3 +852,7 @@ hr.GroupCharts {
 .loading-spinner {
     color: #00A99D;
 }
+
+#oldVersionWarning {
+    margin-left: 2.2rem;
+}
