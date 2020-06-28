@@ -451,9 +451,9 @@
             let d = /\/Date\((\d*)\)\//.exec(date);
             if (d) {
                 let time = new Date(+d[1]);
-                let options = { year: '2-digit', month: 'numeric', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+                //let options = { year: '2-digit', month: 'numeric', day: '2-digit', hour: '2-digit', minute: '2-digit' };
                 //let options = { dateStyle: 'short', timeStyle: 'short' };
-                //let options = { timeStyle: 'short' };
+                let options = { timeStyle: 'short' };
                 return time.toLocaleDateString(navigator.language, options);
             }
         }
@@ -486,17 +486,13 @@
             displayDataIntervalText();
         }
 
-        //function setGroupId(selectedGroup) {
-        //    let label = document.getElementById('textForTagToGroup');
-        //    //label.innerHTML = `Add tag to group: ${selectedGroup.text}`;
-        //    label.innerHTML = `${selectedGroup.text}`;
-        //    $('#ListsId').val(selectedGroup.id);
-        //    let container = document.getElementById('addToGroupSubmitDiv');
-        //    container.style.display = 'block';
-        //}
-
         var dataInterval = 1;
         function setDataInterval(selectedInterval) {
+            if (selectedTagId != null) {
+                setSelectedTagId(selectedTagId, document.getElementById('userSelectionHeader').textContent);
+            } else if (selectedGroupId != null) {
+                setSelectedGroupId(selectedGroupId, document.getElementById('userSelectionHeader').textContent);
+            }
             dataInterval = selectedInterval.dataset.interval;
             let intervalDefaultText = "Data interval is ";
             let intervalUpdateText = "Please select again to apply new interval.";
