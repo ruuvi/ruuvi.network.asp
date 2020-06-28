@@ -195,13 +195,14 @@
         function setApiCallTime(v) {
             let date = new Date();
             ApiCallTime = date.getTime();
-
-            if (v == "grp") {
-                LastUpdatedElement = document.getElementById("lastUpdated-grp");
-                document.getElementById("lastUpdated-grp").style.display = "block";
-            } else {
-                LastUpdatedElement = document.getElementById("lastUpdated");
-                document.getElementById("lastUpdated-grp").style.display = "none";
+            if (v != null) {
+                if (v == "grp") {
+                    LastUpdatedElement = document.getElementById("lastUpdated-grp");
+                    document.getElementById("lastUpdated-grp").style.display = "block";
+                } else {
+                    LastUpdatedElement = document.getElementById("lastUpdated");
+                    document.getElementById("lastUpdated-grp").style.display = "none";
+                }
             }
         }
 
@@ -514,7 +515,7 @@
     @if (ViewBag.TagData != null)
     {
         <script>
-            setApiCallTime();
+            setApiCallTime(null);
         </script>
     }
 }
