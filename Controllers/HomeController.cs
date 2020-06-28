@@ -65,6 +65,11 @@ namespace RuuviTagApp.Controllers
                 ViewBag.UserTagsList = userTags;
                 ViewBag.UserGroups = await GetUsersGroupsAsync(userID);
                 ViewBag.UserHasEmail = db.Users.Find(userID).Email != null;
+                if (TempData["ReturnToTag"] is int id)
+                {
+                    ViewBag.ReturnToTag = id;
+                    ViewBag.SetDisplay = userTags.Where(t => t.TagId == id).Select(d => d.TagName ?? d.TagMacAddress);
+                }
 
                 // Add error message in case user hasn't added any tags
                 if (userTags == null || !userTags.Any() || userTags.Count == 0)
@@ -178,8 +183,9 @@ namespace RuuviTagApp.Controllers
                     return RedirectToAction("Index");
                 }
 
-                db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
+                var newTag = db.RuuviTagModels.Add(new RuuviTagModel { UserId = userID, TagMacAddress = tag.GetAddress(), TagName = tag.AddTagName });
                 await db.SaveChangesAsync();
+                TempData["ReturnToTag"] = newTag.TagId;
                 return RedirectToAction("Index");
             }
 
@@ -278,6 +284,7 @@ namespace RuuviTagApp.Controllers
                 TempData["GeneralError"] = "You do not have permission to do that.";
                 return RedirectToAction("Index");
             }
+            TempData["ReturnToTag"] = tagID;
             List<TagAlertType> alertTypes = await db.TagAlertTypes.ToListAsync();
             bool NoAlertsAdded = true;
             List<TagAlertModel> existingAlerts = await db.TagAlertModels.ToListAsync();
@@ -377,6 +384,7 @@ namespace RuuviTagApp.Controllers
                 TempData["GeneralError"] = "You do not have permission to do that.";
                 return RedirectToAction("Index");
             }
+            TempData["ReturnToTag"] = alert.TagId;
             db.TagAlertModels.Remove(alert);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -514,6 +522,7 @@ namespace RuuviTagApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> _TagSettingsModal([Bind(Include = "TagId,TagMacAddress,TagActive,TagName,UserId")] RuuviTagModel tag)
         {
+            TempData["ReturnToTag"] = tag.TagId;
             if (ModelState.IsValid)
             {
                 if (!string.IsNullOrWhiteSpace(tag.TagName) && await TagNameTakenAsync(User.Identity.GetUserId(), tag.TagName))
@@ -555,6 +564,7 @@ namespace RuuviTagApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddTagToList(AddTagToListModel row)
         {
+            TempData["ReturnToTag"] = row.TagsId;
             if (ModelState.IsValid)
             {
                 string userID = User.Identity.GetUserId();

@@ -270,7 +270,7 @@
             userHasEmail = @((ViewBag.UserHasEmail ?? false).ToString().ToLower());
             let hasData = @((ViewBag.TagData != null).ToString().ToLower());
             if (hasData) {
-                const unpackedTagData = @Html.Raw(Json.Encode(ViewBag.TagData));
+                let unpackedTagData = @Html.Raw(Json.Encode(ViewBag.TagData));
                 let time = [], temp = [], hum = [], press = []
                 unpackedTagData.forEach(row => {
                     time.push(parseDate(row.Time));
@@ -287,6 +287,12 @@
                     //console.log('do something to some element?');
                 }
                 document.getElementById("chartarea").style.display = "block";
+            }
+            if (@((ViewBag.ReturnToTag != null).ToString().ToLower())) {
+                let id = @Html.Raw(Json.Encode(ViewBag.ReturnToTag));
+                let display = @Html.Raw(Json.Encode(ViewBag.SetDisplay));
+                setSelectedTagId(id);
+                setDisplay(display);
             }
         });
         $('.svg-btn-new').click(function () {
@@ -316,23 +322,20 @@
         }
 
         // Get user selection from _TagNav dropdown list
-        $(document).ready(function () {
-            $('#TagListDropDown a').on('click', function () {
-                var select = ($(this).text());
-                document.getElementById("btn-tagSettings").classList.remove("disabled"); // Enable button. Otherwise disabled
+        function setDisplay(select) {
+            document.getElementById("btn-tagSettings").classList.remove("disabled"); // Enable button. Otherwise disabled
 
-                if (userHasEmail) {
-                    document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
-                }
+            if (userHasEmail) {
+                document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
+            }
 
-                document.getElementById("userSelectionHeader").style.display = "block"; // Displaying header for selected item
-                document.getElementById("userSelectionHeader").innerHTML = select; // Adding selected item to the header
+            document.getElementById("userSelectionHeader").style.display = "block"; // Displaying header for selected item
+            document.getElementById("userSelectionHeader").innerHTML = select; // Adding selected item to the header
 
-                document.getElementById("infoSelectedItem").style.display = "none";
-            });
-        });
+            document.getElementById("infoSelectedItem").style.display = "none";
+        }
 
-        var selectedTagId, tagIdInModal;
+        var selectedTagId, tagIdInModal, selectedGroupId;
         $('#btn-tagSettings').click(function () {
 
             if (selectedTagId === tagIdInModal) {
@@ -356,8 +359,9 @@
             });
         });
 
-        function setSelectedTagId(tagid) {
+        function setSelectedTagId(tagid, tagdisplay) {
             displaySelectedTagHeader();
+            setDisplay(tagdisplay);
             document.getElementById("loading-tagdata").style.display = "block";
 
             if (document.getElementById("lastUpdated-grp").style.display = "block") {
@@ -448,15 +452,16 @@
             let d = /\/Date\((\d*)\)\//.exec(date);
             if (d) {
                 let time = new Date(+d[1]);
-                let options = { year: '2-digit', month: 'numeric', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+                //let options = { year: '2-digit', month: 'numeric', day: '2-digit', hour: '2-digit', minute: '2-digit' };
                 //let options = { dateStyle: 'short', timeStyle: 'short' };
-                //let options = { timeStyle: 'short' };
+                let options = { timeStyle: 'short' };
                 return time.toLocaleDateString(navigator.language, options);
             }
         }
 
-        function setSelectedGroupId(groupid) {
+        function setSelectedGroupId(groupid, groupname) {
             displaySelectedTagHeader();
+            setDisplay(groupname);
             document.getElementById("loading-tagdata").style.display = "block";
             selectedGroupId = groupid;
             if (userHasEmail) {
@@ -482,18 +487,14 @@
             displayDataIntervalText();
         }
 
-        function setGroupId(selectedGroup) {
-            let label = document.getElementById('textForTagToGroup');
-            //label.innerHTML = `Add tag to group: ${selectedGroup.text}`;
-            label.innerHTML = `${selectedGroup.text}`;
-            $('#ListsId').val(selectedGroup.id);
-            let container = document.getElementById('addToGroupSubmitDiv');
-            container.style.display = 'block';
-        }
-
         var dataInterval = 1;
         function setDataInterval(selectedInterval) {
             dataInterval = selectedInterval.dataset.interval;
+            if (selectedTagId != null) {
+                setSelectedTagId(selectedTagId, document.getElementById('userSelectionHeader').textContent);
+            } else if (selectedGroupId != null) {
+                setSelectedGroupId(selectedGroupId, document.getElementById('userSelectionHeader').textContent);
+            }
             let intervalDefaultText = "Data interval is ";
             let intervalUpdateText = "Please select again to apply new interval.";
             document.getElementById("intervalInfo").innerHTML = intervalDefaultText + selectedInterval.text;
