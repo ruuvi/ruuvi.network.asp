@@ -24,13 +24,13 @@
                 <p>Alert when less than <span id="tempLowValue"></span>&#176;C and more than <span id="tempHighValue"></span>&#176;C</p>
             </div>
             <div class="col-lg-6">
-                <label for="tempLow">Lowest</label>
+                <label for="tempLow" id="tempLowLabel">Lowest</label>
                 <input type="range" class="custom-range range-ruuvi" id="tempLow" min="-163" max="163">
                 <p id="tempLowValue"></p>
             </div>
 
             <div class="col-lg-6">
-                <label for="tempHigh">Highest</label>
+                <label for="tempHigh" id="tempHighLabel">Highest</label>
                 <input type="range" class="custom-range range-ruuvi" id="tempHigh" min="-163" max="163">
                 <p id="tempHighValue"></p>
             </div>
@@ -45,13 +45,13 @@
                 <p>Alert when less than <span id="humLowValue"></span>% and more than <span id="humHighValue"></span>%</p>
             </div>
             <div class="col-lg-6">
-                <label for="humLow">Lowest</label>
+                <label for="humLow" id="humLowLabel">Lowest</label>
                 <input type="range" class="custom-range range-ruuvi" id="humLow" min="0" max="100">
                 <p id="humLowValue"></p>
             </div>
 
             <div class="col-lg-6">
-                <label for="humHigh">Highest</label>
+                <label for="humHigh" id="humHighLabel">Highest</label>
                 <input type="range" class="custom-range range-ruuvi" id="humHigh" min="0" max="100">
                 <p id="humHighValue"></p>
             </div>
@@ -66,13 +66,13 @@
                 <p>Alert when less than <span id="pressLowValue"></span>hPa and more than <span id="pressHighValue"></span>hPa</p>
             </div>
             <div class="col-lg-6">
-                <label for="pressLow">Lowest</label>
+                <label for="pressLow" id="pressLowLabel">Lowest</label>
                 <input type="range" class="custom-range range-ruuvi" id="pressLow" min="300" max="1100" step="10">
                 <p id="pressLowValue"></p>
             </div>
 
             <div class="col-lg-6">
-                <label for="pressHigh">Highest</label>
+                <label for="pressHigh" id="pressHighLabel">Highest</label>
                 <input type="range" class="custom-range range-ruuvi" id="pressHigh" min="300" max="1100" step="10">
                 <p id="pressHighValue"></p>
             </div>
@@ -88,12 +88,16 @@
     // Temperature
     var tempHighSlider = document.getElementById("tempHigh");
     var tempHighOutput = document.getElementById("tempHighValue");
-    //tempHighOutput.innerHTML = tempHighSlider.value;
+    
 
     var tempLowSlider = document.getElementById("tempLow");
     var tempLowOutput = document.getElementById("tempLowValue");
 
-    //tempLowOutput.innerHTML = tempLowSlider.value;
+    tempLowSlider.value = -163;
+    tempHighSlider.value = 163;
+
+    tempLowOutput.innerHTML = tempLowSlider.value;
+    tempHighOutput.innerHTML = tempHighSlider.value;
 
     tempHighSlider.oninput = function () {
         tempHighOutput.innerHTML = this.value;
@@ -111,12 +115,16 @@
         if (parseFloat(tempLowSlider.value) > parseFloat(tempHighSlider.value)) {
             if (!document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
                 document.getElementById("addAlarmBtn").setAttribute("disabled", true);
-                tempLowOutput.classList.add("text-danger");
+                //tempLowOutput.classList.add("text-danger");
+                document.getElementById("tempHighLabel").classList.add("text-danger");
+                document.getElementById("tempLowLabel").classList.add("text-danger");
             }
         } else {
             if (document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
                 document.getElementById("addAlarmBtn").removeAttribute("disabled");
-                tempLowOutput.classList.remove("text-danger");
+                //tempLowOutput.classList.remove("text-danger");
+                document.getElementById("tempHighLabel").classList.remove("text-danger");
+                document.getElementById("tempLowLabel").classList.remove("text-danger");
             }
         }
     }
@@ -124,11 +132,15 @@
     // Humidity
     var humHighSlider = document.getElementById("humHigh");
     var humHighOutput = document.getElementById("humHighValue");
-    humHighOutput.innerHTML = humHighSlider.value;
-
+    
     var humLowSlider = document.getElementById("humLow");
     var humLowOutput = document.getElementById("humLowValue");
+   
+    humLowSlider.value = 0;
+    humHighSlider.value = 100;
+
     humLowOutput.innerHTML = humLowSlider.value;
+    humHighOutput.innerHTML = humHighSlider.value;
 
     humHighSlider.oninput = function () {
         humHighOutput.innerHTML = this.value;
@@ -146,12 +158,16 @@
         if (parseFloat(humLowSlider.value) > parseFloat(humHighSlider.value)) {
             if (!document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
                 document.getElementById("addAlarmBtn").setAttribute("disabled", true);
-                humLowOutput.classList.add("text-danger");
+                //humLowOutput.classList.add("text-danger");
+                document.getElementById("humHighLabel").classList.add("text-danger");
+                document.getElementById("humLowLabel").classList.add("text-danger");
             }
         } else {
             if (document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
                 document.getElementById("addAlarmBtn").removeAttribute("disabled");
-                humLowOutput.classList.remove("text-danger");
+                //humLowOutput.classList.remove("text-danger");
+                document.getElementById("humHighLabel").classList.remove("text-danger");
+                document.getElementById("humLowLabel").classList.remove("text-danger");
             }
         }
     }
@@ -159,11 +175,15 @@
     // Air pressure
     var pressHighSlider = document.getElementById("pressHigh");
     var pressHighOutput = document.getElementById("pressHighValue");
-    pressHighOutput.innerHTML = pressHighSlider.value;
 
     var pressLowSlider = document.getElementById("pressLow");
     var pressLowOutput = document.getElementById("pressLowValue");
+
+    pressLowSlider.value = 300;
+    pressHighSlider.value = 1100;
+    
     pressLowOutput.innerHTML = pressLowSlider.value;
+    pressHighOutput.innerHTML = pressHighSlider.value;
 
     pressHighSlider.oninput = function () {
         pressHighOutput.innerHTML = this.value;
@@ -181,12 +201,16 @@
         if (parseFloat(pressLowSlider.value) > parseFloat(pressHighSlider.value)) {
             if (!document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
                 document.getElementById("addAlarmBtn").setAttribute("disabled", true);
-                pressLowOutput.classList.add("text-danger");
+                //pressLowOutput.classList.add("text-danger");
+                document.getElementById("pressHighLabel").classList.add("text-danger");
+                document.getElementById("pressLowLabel").classList.add("text-danger");
             }
         } else {
             if (document.getElementById("addAlarmBtn").hasAttribute("disabled")) {
                 document.getElementById("addAlarmBtn").removeAttribute("disabled");
-                pressLowOutput.classList.remove("text-danger");
+                //pressLowOutput.classList.remove("text-danger");
+                document.getElementById("pressHighLabel").classList.remove("text-danger");
+                document.getElementById("pressLowLabel").classList.remove("text-danger");
             }
         }
     }
