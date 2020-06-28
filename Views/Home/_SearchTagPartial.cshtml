@@ -8,7 +8,7 @@
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            <label for="tagId">RuuviTag ID <a class="help-link" onclick="toggleHelpSlider()" href="#ruuvitag-id">Need help?</a> </label>
+            <label for="tagId">RuuviTag ID</label><a class="help-link" onclick="toggleHelpSlider()" href="#ruuvitag-id">Need help?</a> 
             @Html.EditorFor(model => model.MacAddress, new { htmlAttributes = new { @class = "form-control", required = true } })
             <small id="tagIdHelp" class="form-text text-muted">RuuviTag ID is same as its MAC address.</small>
             <small id="tagIdFormInfo" class="form-text text-muted">Please enter the ID with or without colons or spaces.</small>

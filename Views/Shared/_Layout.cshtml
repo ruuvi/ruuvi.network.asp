@@ -131,7 +131,7 @@
                 }
                 @ViewBag.Msg
             </div>
-            <p>ALPHA VERSION</p>
+            <p>BETA VERSION</p>
             <div class="footer-ruuvi-logo">
                 <img src="~/Images/web-ruuvi-logo-nega.png" width="130" height="25" alt="Ruuvi logo">
             </div>
@@ -148,7 +148,6 @@
         var helpSliderWidth;
 
         function onLoad() {
-            var displayChartsAsModal = true;
 
             let desktopCharts = document.getElementById("desktopCharts");
             let btnTagTemp = this.document.getElementById("btn-TagTemp");
@@ -157,25 +156,15 @@
 
             if ($(window).width() < 991.98) {
                 helpSliderWidth = "100%";
+                btnTagTemp.classList.add("disabled");
+                btnTagHum.classList.add("disabled");
+                btnTagAir.classList.add("disabled");
             }
             else {
                 helpSliderWidth = "50%";
-                displayChartsAsModal = false;
-            }
-
-            // Choose wether to display charts as modals or not
-            if (desktopCharts != null) { // Basically checking if the user has logged in or not
-                if (displayChartsAsModal) { // If the device screen is small enough, we'll show charts as modals which can be opened by clicking the tag value icon
-                    desktopCharts.style.display = "none";
-                    btnTagTemp.classList.remove("disabled");
-                    btnTagHum.classList.remove("disabled");
-                    btnTagAir.classList.remove("disabled");
-                } else { // If the device screen is wider than medium, disable modal popup buttons and display the charts immediately
-                    desktopCharts.style.display = "block";
-                    btnTagTemp.classList.add("disabled");
-                    btnTagHum.classList.add("disabled");
-                    btnTagAir.classList.add("disabled");
-                }
+                btnTagTemp.classList.remove("disabled");
+                btnTagHum.classList.remove("disabled");
+                btnTagAir.classList.remove("disabled");
             }
         }
 

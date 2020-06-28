@@ -1,0 +1,102 @@
+﻿@model IEnumerable<RuuviTagApp.ViewModels.GroupDataModel>
+
+@foreach (var item in Model)
+{
+    <h2 class="mt-1">@item.TagDisplay</h2>
+    <div class="RuuviTagData">
+        <p id="oldVersionWarning_@item.TagID" class="text-warning" style="display: none">This RuuviTag is using Data format 3 which is getting older. Read more <a href="https://lab.ruuvi.com/ruuvitag-fw/" target="blank">here</a>.</p>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row" id="ruuviTagTemperature">
+                    <div class="col-lg-12 col-sm-12">
+                        <a class="btn btn-tagdata-temp" id="btn-TagTemp-grp"></a>
+                        <p id="tagTempNow_@item.TagID" class="tagdata-value"></p> <span class="celsius">&#176;C</span>
+                        <p class="tagdata-header">Temperature</p>
+                        <hr class="tagdata-hr" />
+                    </div>
+                </div>
+                <div class="row" id="ruuviTagHumidity">
+                    <div class="col-lg-12 col-sm-12">
+                        <a class="btn btn-tagdata-hum" id="btn-TagHum-grp"></a>
+                        <p id="tagHumNow_@item.TagID" class="tagdata-value"></p> <span class="percent">%</span>
+                        <p class="tagdata-header">Humidity</p>
+                        <hr class="tagdata-hr" />
+                    </div>
+                </div>
+                <div class="row" id="ruuviTagAirPressure">
+                    <div class="col-lg-12 col-sm-12">
+                        <a class="btn btn-tagdata-air" id="btn-TagAir-grp"></a>
+                        <p id="tagPressNow_@item.TagID" class="tagdata-value"></p> <span class="hpa">hPa</span>
+                        <p class="tagdata-header">Air pressure</p>
+                        <hr class="tagdata-hr" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 ruuvi-eye-home d-none d-md-block" id="RuuviEyeBg" onmouseover="highlightEye()"></div>
+        </div>
+        <div id="desktopCharts">
+            <div class="row" id="desktopChartsRow">
+                <div class="col-lg-4 mt-sm-3">
+                    <h1 class="tagdata-header">Temperature</h1>
+                    <canvas id="tempchart_@item.TagID"></canvas>
+                </div>
+                <div class="col-lg-4 mt-sm-3">
+                    <h1 class="tagdata-header">Humidity</h1>
+                    <canvas id="humchart_@item.TagID"></canvas>
+                </div>
+                <div class="col-lg-4 mt-sm-3">
+                    <h1 class="tagdata-header">Air pressure</h1>
+                    <canvas id="presschart_@item.TagID"></canvas>
+                </div>
+            </div>
+        </div>
+        <hr class="GroupCharts" />
+    </div>
+}
+
+<script>
+    function makeChartsForTag(tagid, data) {
+        document.getElementById(`tagTempNow_${tagid}`).innerHTML = data[data.length - 1].Data.temperature;
+        document.getElementById(`tagHumNow_${tagid}`).innerHTML = data[data.length - 1].Data.humidity;
+        document.getElementById(`tagPressNow_${tagid}`).innerHTML = data[data.length - 1].Data.pressure;
+
+        let confTemp = new ChartConfig('Temperature').make();
+        let confHum = new ChartConfig('Humidity').make();
+        let confPress = new ChartConfig('Pressure').make();
+
+        data.forEach(row => {
+            confTemp.data.labels.push(parseDate(row.Time));
+            confTemp.data.datasets[0].data.push(row.Data.temperature);
+
+            confHum.data.labels.push(parseDate(row.Time));
+            confHum.data.datasets[0].data.push(row.Data.humidity);
+
+            confPress.data.labels.push(parseDate(row.Time));
+            confPress.data.datasets[0].data.push(row.Data.pressure);
+        });
+
+        let warningElement = document.getElementById("oldVersionWarning_" + tagid);
+        if (tagVersion(data[0].Data.vers)) {
+            if (warningElement.style.display != "block") {
+                warningElement.style.display = "block";
+            }
+            //console.log('do something to some element?');
+        } else {
+            if (warningElement.style.display == "block") {
+                warningElement.style.display = "none";
+            }
+        }
+
+        new Chart(document.getElementById(`tempchart_${tagid}`), confTemp);
+        new Chart(document.getElementById(`humchart_${tagid}`), confHum);
+        new Chart(document.getElementById(`presschart_${tagid}`), confPress);
+    }
+
+@foreach (var i in Model)
+{
+    @:makeChartsForTag(@i.TagID, @Html.Raw(Json.Encode(i.TagData)));
+}
+
+    document.getElementById("loading-tagdata").style.display = "none";
+    setApiCallTime("grp"); // Set api call time for "Updated x ago"
+</script>
