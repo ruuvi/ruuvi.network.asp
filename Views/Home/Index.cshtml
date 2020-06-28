@@ -488,12 +488,12 @@
 
         var dataInterval = 1;
         function setDataInterval(selectedInterval) {
+            dataInterval = selectedInterval.dataset.interval;
             if (selectedTagId != null) {
                 setSelectedTagId(selectedTagId, document.getElementById('userSelectionHeader').textContent);
             } else if (selectedGroupId != null) {
                 setSelectedGroupId(selectedGroupId, document.getElementById('userSelectionHeader').textContent);
             }
-            dataInterval = selectedInterval.dataset.interval;
             let intervalDefaultText = "Data interval is ";
             let intervalUpdateText = "Please select again to apply new interval.";
             document.getElementById("intervalInfo").innerHTML = intervalDefaultText + selectedInterval.text;
