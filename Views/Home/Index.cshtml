@@ -77,8 +77,8 @@
                 </div>
             </div>
             @*<div class="col-lg-4">
-                <p id="intervalInfo" style="display: none">Data interval is 15 minutes</p>
-            </div>*@
+                    <p id="intervalInfo" style="display: none">Data interval is 15 minutes</p>
+                </div>*@
             <div class="col-lg-12">
                 <div class="spinner-grow loading-spinner ml-0" role="status" id="loading-tagdata" style="display: none">
                     <span class="sr-only">Loading...</span>
@@ -279,8 +279,12 @@
                     press.push(row.Data.pressure);
                 });
                 updateCharts(time, temp, hum, press);
+                let warningElement = document.getElementById("oldVersionWarning");
                 if (tagVersion(unpackedTagData[0].Data.vers)) {
-                    console.log('do something to some element?');
+                    if (warningElement.style.display != "block") {
+                        warningElement.style.display = "block";
+                    }
+                    //console.log('do something to some element?');
                 }
                 document.getElementById("chartarea").style.display = "block";
             }
@@ -393,8 +397,12 @@
 
                 });
                 updateCharts(time, temp, hum, press);
+                let warningElement = document.getElementById("oldVersionWarning");
                 if (tagVersion(results[0].Data.vers)) {
-                    console.log('do something to some element?');
+                    if (warningElement.style.display != "block") {
+                        warningElement.style.display = "block";
+                    }
+                    //console.log('do something to some element?');
                 }
 
                 document.getElementById("chartarea").style.display = "block";
@@ -410,17 +418,10 @@
         }
 
         function tagVersion(vers) {
-            let warningElement = document.getElementById("oldVersionWarning");
             if (vers == '03') {
-                if (warningElement.style.display != "block") {
-                    warningElement.style.display = "block";
-                }
                 console.log(vers);
                 return true;
             } else if (vers == '05') {
-                if (warningElement.style.display == "block") {
-                    warningElement.style.display = "none";
-                }
                 console.log(vers);
             }
         }
