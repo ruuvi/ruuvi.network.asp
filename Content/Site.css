@@ -847,3 +847,7 @@ hr.GroupCharts {
     margin-bottom: 2rem;
     margin-top: 2rem;
 }
+
+.loading-spinner {
+    color: #00A99D;
+}
