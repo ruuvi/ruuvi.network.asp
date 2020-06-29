@@ -131,7 +131,6 @@
                 }
                 @ViewBag.Msg
             </div>
-            <p>BETA VERSION</p>
             <div class="footer-ruuvi-logo">
                 <img src="~/Images/web-ruuvi-logo-nega.png" width="130" height="25" alt="Ruuvi logo">
             </div>
@@ -150,21 +149,25 @@
         function onLoad() {
 
             let desktopCharts = document.getElementById("desktopCharts");
-            let btnTagTemp = this.document.getElementById("btn-TagTemp");
-            let btnTagHum = this.document.getElementById("btn-TagHum");
-            let btnTagAir = this.document.getElementById("btn-TagAir");
+            let btnTagTemp = document.getElementById("btn-TagTemp");
+            let btnTagHum = document.getElementById("btn-TagHum");
+            let btnTagAir = document.getElementById("btn-TagAir");
 
             if ($(window).width() < 991.98) {
                 helpSliderWidth = "100%";
-                btnTagTemp.classList.add("disabled");
-                btnTagHum.classList.add("disabled");
-                btnTagAir.classList.add("disabled");
+                if (btnTagTemp = document.getElementById("btn-TagTemp")) {
+                    btnTagTemp.classList.add("disabled");
+                    btnTagHum.classList.add("disabled");
+                    btnTagAir.classList.add("disabled");
+                }
             }
             else {
                 helpSliderWidth = "50%";
-                btnTagTemp.classList.remove("disabled");
-                btnTagHum.classList.remove("disabled");
-                btnTagAir.classList.remove("disabled");
+                if (btnTagTemp = document.getElementById("btn-TagTemp")) {
+                    btnTagTemp.classList.remove("disabled");
+                    btnTagHum.classList.remove("disabled");
+                    btnTagAir.classList.remove("disabled");
+                }
             }
         }
 
