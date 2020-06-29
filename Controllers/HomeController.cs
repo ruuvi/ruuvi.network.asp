@@ -272,126 +272,131 @@ namespace RuuviTagApp.Controllers
                                                                                      where r.TagId == tagsId && r.ListId == listsId
                                                                                      select r).FirstOrDefaultAsync() != null;
 
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddTagAlert(AddAlertModel alert, int? tagID)
-        {
-            if (tagID == null)
-            {
-                TempData["GeneralError"] = "Could not add alert due to missing ID. Please try again.";
-                return RedirectToAction("Index");
-            }
-            if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
-            {
-                TempData["GeneralError"] = "You do not have permission to do that.";
-                return RedirectToAction("Index");
-            }
-            TempData["ReturnToTag"] = tagID;
-            List<TagAlertType> alertTypes = await db.TagAlertTypes.ToListAsync();
-            bool NoAlertsAdded = true;
-            List<TagAlertModel> existingAlerts = await db.TagAlertModels.ToListAsync();
-            foreach (PropertyInfo pi in alert.GetType().GetProperties())
-            {
-                if (pi.GetValue(alert) != null)
-                {
-                    int? alertTypeId = alertTypes
-                        .Where(at => string.Equals(at.TypeName, pi.Name, StringComparison.OrdinalIgnoreCase))
-                        .Select(at => at.AlertTypeId).FirstOrDefault();
-                    if (alertTypeId == null)
-                    {
-                        continue;
-                    }
-                    if (await TagHasAlertOfType((int)tagID, (int)alertTypeId) is TagAlertModel oldAlert && oldAlert != null)
-                    {
-                        oldAlert.AlertLimit = (double)pi.GetValue(alert);
-                        db.Entry(oldAlert).State = EntityState.Modified;
-                    }
-                    else
-                    {
-                        db.TagAlertModels.Add(new TagAlertModel
-                        {
-                            AlertTypeId = (int)alertTypeId,
-                            TagId = (int)tagID,
-                            AlertLimit = (double)pi.GetValue(alert)
-                        });
-                    }
-                    if (NoAlertsAdded)
-                    {
-                        NoAlertsAdded = false;
-                    }
-                }
-            }
-            if (NoAlertsAdded)
-            {
-                TempData["GeneralError"] = "No alerts were added.";
-                return RedirectToAction("Index");
-            }
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        // Tag alert functionality is disabled due to alert bot, which would send the alerts to users, not getting finished in time.
+        // All of this works if such bot is created in the future.
+        #region Tag Alert Functionality
+        //[Authorize]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> AddTagAlert(AddAlertModel alert, int? tagID)
+        //{
+        //    if (tagID == null)
+        //    {
+        //        TempData["GeneralError"] = "Could not add alert due to missing ID. Please try again.";
+        //        return RedirectToAction("Index");
+        //    }
+        //    if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
+        //    {
+        //        TempData["GeneralError"] = "You do not have permission to do that.";
+        //        return RedirectToAction("Index");
+        //    }
+        //    TempData["ReturnToTag"] = tagID;
+        //    List<TagAlertType> alertTypes = await db.TagAlertTypes.ToListAsync();
+        //    bool NoAlertsAdded = true;
+        //    List<TagAlertModel> existingAlerts = await db.TagAlertModels.ToListAsync();
+        //    foreach (PropertyInfo pi in alert.GetType().GetProperties())
+        //    {
+        //        if (pi.GetValue(alert) != null)
+        //        {
+        //            int? alertTypeId = alertTypes
+        //                .Where(at => string.Equals(at.TypeName, pi.Name, StringComparison.OrdinalIgnoreCase))
+        //                .Select(at => at.AlertTypeId).FirstOrDefault();
+        //            if (alertTypeId == null)
+        //            {
+        //                continue;
+        //            }
+        //            if (await TagHasAlertOfType((int)tagID, (int)alertTypeId) is TagAlertModel oldAlert && oldAlert != null)
+        //            {
+        //                oldAlert.AlertLimit = (double)pi.GetValue(alert);
+        //                db.Entry(oldAlert).State = EntityState.Modified;
+        //            }
+        //            else
+        //            {
+        //                db.TagAlertModels.Add(new TagAlertModel
+        //                {
+        //                    AlertTypeId = (int)alertTypeId,
+        //                    TagId = (int)tagID,
+        //                    AlertLimit = (double)pi.GetValue(alert)
+        //                });
+        //            }
+        //            if (NoAlertsAdded)
+        //            {
+        //                NoAlertsAdded = false;
+        //            }
+        //        }
+        //    }
+        //    if (NoAlertsAdded)
+        //    {
+        //        TempData["GeneralError"] = "No alerts were added.";
+        //        return RedirectToAction("Index");
+        //    }
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
 
-        private async Task<List<string>> CheckTagAlertLimitsValidity(int tagID)
-        {
-            int lastHighAlertTypeId = 0;
-            double lastHighLimit = 0;
-            List<string> inconsistencies = new List<string>();
-            foreach (TagAlertModel alert in await db.TagAlertModels.Where(a => a.TagId == tagID).Include(t => t.TagAlertType).ToListAsync())
-            {
-                if (alert.TagAlertType.TypeName.EndsWith("high"))
-                {
-                    lastHighAlertTypeId = alert.AlertTypeId;
-                    lastHighLimit = alert.AlertLimit;
-                }
-                else if (alert.TagAlertType.TypeName.EndsWith("low") && lastHighAlertTypeId == alert.AlertTypeId - 1 && lastHighLimit < alert.AlertLimit)
-                {
-                    string type = $"{alert.TagAlertType.TypeName.Substring(0, alert.TagAlertType.TypeName.IndexOf("low"))}";
-                    type = char.ToUpper(type[0]) + type.Substring(1);
-                    inconsistencies.Add($"{type} low and high alerts are swapped.");
-                }
-            }
-            return inconsistencies;
-        }
+        //private async Task<List<string>> CheckTagAlertLimitsValidity(int tagID)
+        //{
+        //    int lastHighAlertTypeId = 0;
+        //    double lastHighLimit = 0;
+        //    List<string> inconsistencies = new List<string>();
+        //    foreach (TagAlertModel alert in await db.TagAlertModels.Where(a => a.TagId == tagID).Include(t => t.TagAlertType).ToListAsync())
+        //    {
+        //        if (alert.TagAlertType.TypeName.EndsWith("high"))
+        //        {
+        //            lastHighAlertTypeId = alert.AlertTypeId;
+        //            lastHighLimit = alert.AlertLimit;
+        //        }
+        //        else if (alert.TagAlertType.TypeName.EndsWith("low") && lastHighAlertTypeId == alert.AlertTypeId - 1 && lastHighLimit < alert.AlertLimit)
+        //        {
+        //            string type = $"{alert.TagAlertType.TypeName.Substring(0, alert.TagAlertType.TypeName.IndexOf("low"))}";
+        //            type = char.ToUpper(type[0]) + type.Substring(1);
+        //            inconsistencies.Add($"{type} low and high alerts are swapped.");
+        //        }
+        //    }
+        //    return inconsistencies;
+        //}
 
-        [Authorize]
-        public async Task<ActionResult> _GetAllAlerts(int? tagID)
-        {
-            if (tagID == null)
-            {
-                TempData["GeneralError"] = "Unable to get alerts due to missing ID. Please try again.";
-                return RedirectToAction("Index");
-            }
-            if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
-            {
-                TempData["GeneralError"] = "You do not have permission to do that.";
-                return RedirectToAction("Index");
-            }
-            var alerts = await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync();
-            ViewBag.AlertErrors = await CheckTagAlertLimitsValidity((int)tagID);
-            return PartialView(alerts);
-        }
+        //[Authorize]
+        //public async Task<ActionResult> _GetAllAlerts(int? tagID)
+        //{
+        //    if (tagID == null)
+        //    {
+        //        TempData["GeneralError"] = "Unable to get alerts due to missing ID. Please try again.";
+        //        return RedirectToAction("Index");
+        //    }
+        //    if (!await UserHasTagIdAsync(User.Identity.GetUserId(), (int)tagID))
+        //    {
+        //        TempData["GeneralError"] = "You do not have permission to do that.";
+        //        return RedirectToAction("Index");
+        //    }
+        //    var alerts = await db.TagAlertModels.Where(t => t.TagId == tagID).ToListAsync();
+        //    ViewBag.AlertErrors = await CheckTagAlertLimitsValidity((int)tagID);
+        //    return PartialView(alerts);
+        //}
 
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<ActionResult> RemoveAlert(int? alertID)
-        {
-            if (alertID == null)
-            {
-                TempData["GeneralError"] = "Unable to remove alert due to missig ID. Please try again.";
-                return RedirectToAction("Index");
-            }
-            TagAlertModel alert = db.TagAlertModels.Find(alertID);
-            if (!string.Equals(User.Identity.GetUserId(), alert.RuuviTagModel.UserId))
-            {
-                TempData["GeneralError"] = "You do not have permission to do that.";
-                return RedirectToAction("Index");
-            }
-            TempData["ReturnToTag"] = alert.TagId;
-            db.TagAlertModels.Remove(alert);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        //[Authorize]
+        //[ValidateAntiForgeryToken]
+        //[HttpPost]
+        //public async Task<ActionResult> RemoveAlert(int? alertID)
+        //{
+        //    if (alertID == null)
+        //    {
+        //        TempData["GeneralError"] = "Unable to remove alert due to missig ID. Please try again.";
+        //        return RedirectToAction("Index");
+        //    }
+        //    TagAlertModel alert = db.TagAlertModels.Find(alertID);
+        //    if (!string.Equals(User.Identity.GetUserId(), alert.RuuviTagModel.UserId))
+        //    {
+        //        TempData["GeneralError"] = "You do not have permission to do that.";
+        //        return RedirectToAction("Index");
+        //    }
+        //    TempData["ReturnToTag"] = alert.TagId;
+        //    db.TagAlertModels.Remove(alert);
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
+
+        #endregion
 
         private async Task<List<WhereOSApiRuuvi>> GetTagData(string macAddress)
         {
