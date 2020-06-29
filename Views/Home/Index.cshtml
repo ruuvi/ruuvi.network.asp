@@ -13,13 +13,13 @@
 {
     @Html.Partial("~/Views/Home/_TagNav.cshtml")
 
-    if (!ViewBag.UserHasEmail)
-    {
-        <script>
-            document.getElementById("btn-tagAlerts").classList.add("disabled");
-            document.getElementById("btn-tagAlerts").style.display = "none";
-        </script>
-    }
+    @*if (!ViewBag.UserHasEmail)
+        {
+            <script>
+                document.getElementById("btn-tagAlerts").classList.add("disabled");
+                document.getElementById("btn-tagAlerts").style.display = "none";
+            </script>
+        }*@
 
 } @*End of tag navbar*@
 
@@ -61,7 +61,7 @@
             <div id="tagSettingsModal"></div>
         }
         @*AddAlertModel alert = Model is AddAlertModel ? Model : new AddAlertModel();
-        @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alert)*@
+            @Html.Partial("~/Views/Home/_TagAlertsModal.cshtml", alert)*@
         <div class="row">
             <div class="col-lg-12">
                 <div id="infoSelectedItem">
@@ -278,9 +278,9 @@
                     press.push(row.Data.pressure);
                 });
                 updateCharts(time, temp, hum, press);
-                if (tagVersion(unpackedTagData[0].Data.vers)) {
-                    console.log('do something to some element?');
-                }
+                //if (tagVersion(unpackedTagData[0].Data.vers)) {
+                //    console.log('do something to some element?');
+                //}
                 document.getElementById("chartarea").style.display = "block";
             }
             if (@((ViewBag.ReturnToTag != null).ToString().ToLower())) {
@@ -320,9 +320,9 @@
         function setDisplay(select) {
             document.getElementById("btn-tagSettings").classList.remove("disabled"); // Enable button. Otherwise disabled
 
-            if (userHasEmail) {
-                document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
-            }
+            //if (userHasEmail) {
+            //    document.getElementById("btn-tagAlerts").classList.remove("disabled"); // Enable button. Otherwise disabled
+            //}
 
             document.getElementById("userSelectionHeader").style.display = "block"; // Displaying header for selected item
             document.getElementById("userSelectionHeader").innerHTML = select; // Adding selected item to the header
@@ -347,12 +347,12 @@
             });
         });
 
-        $('#btn-tagAlerts').click(function () {
-            let url = '/Home/_GetAllAlerts/?tagID=' + selectedTagId;
-            $.get(url, (data) => {
-                $('#existingAlerts').html(data);
-            });
-        });
+        //$('#btn-tagAlerts').click(function () {
+        //    let url = '/Home/_GetAllAlerts/?tagID=' + selectedTagId;
+        //    $.get(url, (data) => {
+        //        $('#existingAlerts').html(data);
+        //    });
+        //});
 
         function setSelectedTagId(tagid, tagdisplay) {
             displaySelectedTagHeader();
@@ -370,10 +370,8 @@
                 $('#addAlarmBtn').val(tagid);
 
                 // Checking if buttons are hidde (because a group was selected), and displaying them
-                let alertBtn = document.getElementById("btn-tagAlerts");
                 let settingsBtn = document.getElementById("btn-tagSettings");
-                if (alertBtn.style.display == "none" || settingsBtn.style.display == "none") {
-                    alertBtn.style.display = "block";
+                if (settingsBtn.style.display == "none") {
                     settingsBtn.style.display = "block";
                 }
             }
@@ -461,9 +459,7 @@
             selectedGroupId = groupid;
             if (userHasEmail) {
                 //Hiding buttons in case user selected a group instead of a tag
-                let alertBtn = document.getElementById("btn-tagAlerts");
                 let settingsBtn = document.getElementById("btn-tagSettings");
-                alertBtn.style.display = "none";
                 settingsBtn.style.display = "none";
             }
             let url;
