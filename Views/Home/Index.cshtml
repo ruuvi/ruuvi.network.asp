@@ -484,6 +484,15 @@
             displayDataIntervalText();
         }
 
+        function setGroupId(selectedGroup) {
+            let label = document.getElementById('textForTagToGroup');
+            //label.innerHTML = `Add tag to group: ${selectedGroup.text}`;
+            label.innerHTML = `${selectedGroup.text}`;
+            $('#ListsId').val(selectedGroup.id);
+            let container = document.getElementById('addToGroupSubmitDiv');
+            container.style.display = 'block';
+        }
+
         var dataInterval = 1;
         function setDataInterval(selectedInterval) {
             dataInterval = selectedInterval.dataset.interval;
