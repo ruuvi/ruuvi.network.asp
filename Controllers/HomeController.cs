@@ -256,6 +256,9 @@ namespace RuuviTagApp.Controllers
         private async Task<bool> TagNameTakenAsync(string userID, string name) => await (from t in db.RuuviTagModels
                                                                                          where t.UserId == userID && t.TagName == name
                                                                                          select t).FirstOrDefaultAsync() != null;
+        private async Task<bool> TagNameTakenAsync(string userID, string name, int tagID) => await (from t in db.RuuviTagModels
+                                                                                                    where t.UserId == userID && t.TagName == name && t.TagId != tagID
+                                                                                                    select t).FirstOrDefaultAsync() != null;
 
         private async Task<TagAlertModel> TagHasAlertOfType(int tagID, int typeID) => await (from a in db.TagAlertModels
                                                                                              where a.TagId == tagID && a.AlertTypeId == typeID
@@ -525,7 +528,7 @@ namespace RuuviTagApp.Controllers
             TempData["ReturnToTag"] = tag.TagId;
             if (ModelState.IsValid)
             {
-                if (!string.IsNullOrWhiteSpace(tag.TagName) && await TagNameTakenAsync(User.Identity.GetUserId(), tag.TagName))
+                if (!string.IsNullOrWhiteSpace(tag.TagName) && await TagNameTakenAsync(User.Identity.GetUserId(), tag.TagName, tag.TagId))
                 {
                     TempData["TagErrorList"] = new List<string> { "Couldn't change tag name, since you already have a tag with that name!" };
                     TempData["ShowTagSettings"] = true;
@@ -710,6 +713,10 @@ namespace RuuviTagApp.Controllers
 
             foreach (TagListRowModel row in await db.TagListRowModels.Where(r => r.ListId == groupID).Include(t => t.RuuviTagModel).ToListAsync())
             {
+                if (!row.RuuviTagModel.TagActive)
+                {
+                    continue;
+                }
                 List<WhereOSApiRuuvi> apiResponse;
 
                 if (interval == null)
